@@ -1,0 +1,92 @@
+[gd_scene load_steps=21 format=3 uid="uid://cojmk8o3r4is5"]
+
+[ext_resource type="Script" path="res://scenes/mapas/mapa2.gd" id="1_83lwk"]
+[ext_resource type="PackedScene" uid="uid://btesytd7rl6fi" path="res://scenes/Sides/left_side_pine.tscn" id="2_wh7ia"]
+[ext_resource type="PackedScene" uid="uid://d351yvxlp6nnx" path="res://scenes/Sides/left_side_pine_2.tscn" id="3_orf03"]
+[ext_resource type="PackedScene" uid="uid://bkgeeqxc18euc" path="res://scenes/Sides/left_side_pine_3.tscn" id="4_yltni"]
+[ext_resource type="PackedScene" uid="uid://bpb73bxcy10s8" path="res://scenes/Sides/right_side_pine.tscn" id="5_30sov"]
+[ext_resource type="PackedScene" uid="uid://dgn0fw0arvim1" path="res://scenes/Sides/right_side_pine_2.tscn" id="6_402sa"]
+[ext_resource type="PackedScene" uid="uid://dicfladlrr4k5" path="res://scenes/Sides/right_side_pine_3.tscn" id="7_utswh"]
+[ext_resource type="Texture2D" uid="uid://banrg20r6g4f6" path="res://assets/textures/terrain/rock_face_diff_4k.jpg" id="8_5bnym"]
+[ext_resource type="PackedScene" uid="uid://qsxlamksq0kn" path="res://scenes/enemies/map2/zombi_espada.tscn" id="8_o8da0"]
+[ext_resource type="PackedScene" uid="uid://c83bd5yynepig" path="res://scenes/enemies/map2/zombi_crawl.tscn" id="9_cxeqx"]
+[ext_resource type="PackedScene" uid="uid://c3jn00vyfmdvq" path="res://scenes/enemies/map2/zombi_crawl2.tscn" id="10_x7ksd"]
+[ext_resource type="PackedScene" uid="uid://srk6plafhlfd" path="res://scenes/enemies/map2/Dragon_Negro.tscn" id="12_6adso"]
+[ext_resource type="PackedScene" uid="uid://mis3o761onwi" path="res://scenes/pickups/panel/panel.tscn" id="13_qp3q1"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_11ey0"]
+sky_top_color = Color(1, 0.270588, 0, 1)
+sky_horizon_color = Color(1, 0.270588, 0, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+sun_angle_max = 20.0
+
+[sub_resource type="Sky" id="Sky_dwk4x"]
+sky_material = SubResource("ProceduralSkyMaterial_11ey0")
+
+[sub_resource type="Environment" id="Environment_qql7r"]
+background_mode = 2
+sky = SubResource("Sky_dwk4x")
+tonemap_mode = 2
+glow_enabled = true
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(1, 0.388235, 0.278431, 1)
+fog_density = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ayuj2"]
+albedo_texture = ExtResource("8_5bnym")
+emission = Color(0.179594, 0.0725512, 0.0149807, 1)
+emission_energy_multiplier = 3.87
+uv1_scale = Vector3(0.1, 0.1, 0.1)
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_qkqrm"]
+material = SubResource("StandardMaterial3D_ayuj2")
+size = Vector3(20, 0.2, 10000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6tong"]
+size = Vector3(20, 0.2, 10000)
+
+[sub_resource type="Curve3D" id="Curve3D_0nq1v"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_83lwk")
+left = Array[PackedScene]([ExtResource("2_wh7ia"), ExtResource("3_orf03"), ExtResource("4_yltni")])
+right = Array[PackedScene]([ExtResource("5_30sov"), ExtResource("6_402sa"), ExtResource("7_utswh")])
+enemies = Array[PackedScene]([ExtResource("8_o8da0"), ExtResource("9_cxeqx"), ExtResource("10_x7ksd")])
+final = ExtResource("12_6adso")
+panel = ExtResource("13_qp3q1")
+
+[node name="Suelo" type="StaticBody3D" parent="."]
+collision_layer = 8
+collision_mask = 3
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Suelo"]
+environment = SubResource("Environment_qql7r")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Suelo"]
+transform = Transform3D(-0.866025, -0.321394, 0.383022, 0, 0.766044, 0.642788, -0.5, 0.55667, -0.663414, 0, 0.848499, 0)
+light_color = Color(1, 0.627451, 0.478431, 1)
+light_energy = 1.2
+shadow_enabled = true
+shadow_opacity = 0.4
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Suelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4990)
+mesh = SubResource("BoxMesh_qkqrm")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Suelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4990)
+shape = SubResource("BoxShape3D_6tong")
+
+[node name="Spawn" type="Marker3D" parent="Suelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Enemigos" type="Node3D" parent="Suelo"]
+
+[node name="Paneles" type="Node3D" parent="Suelo"]
+
+[node name="Laterales" type="Node3D" parent="Suelo"]
+
+[node name="Path3D" type="Path3D" parent="Suelo"]
+curve = SubResource("Curve3D_0nq1v")

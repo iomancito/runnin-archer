@@ -1,0 +1,39 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://w2mhmf4cdlof"
+path.s3tc="res://.godot/imported/red_dragon_Map #26-Map #26.png-5c5b33db6f66b08f2b274f318a262a00.s3tc.ctex"
+path.etc2="res://.godot/imported/red_dragon_Map #26-Map #26.png-5c5b33db6f66b08f2b274f318a262a00.etc2.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "df3f893771d2a4d66455f27f5059b43f"
+}
+
+[deps]
+
+source_file="res://scenes/enemies/map1/red_dragon/red_dragon_Map #26-Map #26.png"
+dest_files=["res://.godot/imported/red_dragon_Map #26-Map #26.png-5c5b33db6f66b08f2b274f318a262a00.s3tc.ctex", "res://.godot/imported/red_dragon_Map #26-Map #26.png-5c5b33db6f66b08f2b274f318a262a00.etc2.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

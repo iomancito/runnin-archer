@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://ci8are2f14c4u"]
+
+[ext_resource type="Script" path="res://assets/weapons/arrow_normal.gd" id="1_rmgt1"]
+[ext_resource type="PackedScene" uid="uid://c2rukg7wicruv" path="res://assets/weapons/arrow.tscn" id="2_6b2m3"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xa3ib"]
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_rmgt1")
+
+[node name="arrow2" parent="." instance=ExtResource("2_6b2m3")]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.0214625, 0, 0.687371)
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_xa3ib")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

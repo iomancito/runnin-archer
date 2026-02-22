@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3 uid="uid://bkgeeqxc18euc"]
+
+[ext_resource type="PackedScene" uid="uid://30ju72ifm3bt" path="res://assets/externos/Nature/vegetation_pack/vegetacion_3.tscn" id="1_ys25q"]
+[ext_resource type="PackedScene" uid="uid://c1qe83bfqvlm8" path="res://assets/externos/Nature/Rock_Medium_1.gltf" id="2_mppxd"]
+[ext_resource type="PackedScene" uid="uid://b6jjrm3he1jxa" path="res://assets/externos/Nature/Rock_Medium_2.gltf" id="3_offij"]
+[ext_resource type="PackedScene" uid="uid://t8eno7gf37c4" path="res://assets/externos/Nature/Rock_Medium_3.gltf" id="4_pxh1y"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yjg8k"]
+size = Vector3(1, 1, 52)
+
+[node name="RockSide_4" type="Node3D"]
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0, 0, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 13.14)
+collision_layer = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.76837e-07, 0, 3.23833)
+shape = SubResource("BoxShape3D_yjg8k")
+
+[node name="Vegetacion_5" parent="." instance=ExtResource("1_ys25q")]
+transform = Transform3D(1.13328, 0, 0, 0, 1, 0, 0, 0, 0.453906, -5.79522, 0, 2.23762)
+
+[node name="Vegetacion_4" parent="." instance=ExtResource("1_ys25q")]
+transform = Transform3D(-0.964686, 0, -0.204086, 0, 0.744782, 0, 0.263402, 0, -0.747447, -7.90046, 0, 9.33952)
+
+[node name="Rock_Medium_12" parent="." instance=ExtResource("2_mppxd")]
+transform = Transform3D(1.74068, 0, 0, 0, 2.45334, 0, 0, 0, 3.25558, -8.24887, -0.988082, 4.1842)
+
+[node name="Rock_Medium_22" parent="." instance=ExtResource("3_offij")]
+transform = Transform3D(1.4587, 0, 0, 0, 3.1362, 0, 0, 0, 2.15533, -8.43616, -0.755416, 18.7737)
+
+[node name="Rock_Medium_32" parent="." instance=ExtResource("4_pxh1y")]
+transform = Transform3D(1.40231, 0, 0, 0, 2.3933, 0, 0, 0, 2.24997, -8.20907, -0.690512, 11.3881)
+
+[node name="Rock_Medium_13" parent="." instance=ExtResource("2_mppxd")]
+transform = Transform3D(1.31472, 0, 0, 0, 1.36421, 0, 0, 0, 3.01489, -8.07407, -0.601279, 24.3761)
+
+[node name="Fin" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.04825e-08, 0, 28.8262)
+
+[node name="VisibleOnScreenEnabler3D" type="VisibleOnScreenEnabler3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5436, 0, -0.104101)
+aabb = AABB(-1, -1, -1, 20, 20, 50)

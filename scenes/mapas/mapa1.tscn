@@ -1,0 +1,86 @@
+[gd_scene load_steps=22 format=3 uid="uid://cjd3g7hqq1t7t"]
+
+[ext_resource type="Script" uid="uid://c8qgu5pi3lit0" path="res://scenes/mapas/mapa1.gd" id="1_2rnlj"]
+[ext_resource type="PackedScene" uid="uid://b1lsnlh3xn2mi" path="res://scenes/Sides/left_side_vegetation.tscn" id="2_0ie6b"]
+[ext_resource type="PackedScene" uid="uid://l041sock6jnw" path="res://scenes/Sides/left_side_vegetation_2.tscn" id="3_eup5s"]
+[ext_resource type="PackedScene" uid="uid://bkorach4jb8hu" path="res://scenes/Sides/left_side_vegetation_3.tscn" id="4_fnncu"]
+[ext_resource type="PackedScene" uid="uid://cxx70xqn6mw17" path="res://scenes/Sides/right_side_vegetation_1.tscn" id="5_o3i78"]
+[ext_resource type="PackedScene" uid="uid://8f0v1i7b0inr" path="res://scenes/Sides/right_side_vegetation.tscn" id="5_pl7by"]
+[ext_resource type="PackedScene" uid="uid://b6std1sanl20d" path="res://scenes/Sides/right_side_vegetation_3.tscn" id="7_sls8e"]
+[ext_resource type="PackedScene" uid="uid://b0o5s231d2nri" path="res://scenes/enemies/map1/goblin/goblin.tscn" id="8_k70d7"]
+[ext_resource type="PackedScene" uid="uid://ca8ii0i166cd" path="res://scenes/enemies/map1/orc/orc.tscn" id="9_wdh78"]
+[ext_resource type="PackedScene" uid="uid://cy723dp4ty665" path="res://scenes/enemies/map1/troll/troll.tscn" id="10_cu7uv"]
+[ext_resource type="PackedScene" uid="uid://mis3o761onwi" path="res://scenes/pickups/panel/panel.tscn" id="10_pthwl"]
+[ext_resource type="PackedScene" uid="uid://b628ejv37o24i" path="res://scenes/enemies/map1/ogre/Ogro_.tscn" id="11_mvyri"]
+[ext_resource type="PackedScene" uid="uid://e2oh4cirifon" path="res://scenes/enemies/map1/red_dragon/Dragon_Rojo.tscn" id="12_4ter5"]
+[ext_resource type="Texture2D" uid="uid://jtwyakh2jf4l" path="res://assets/textures/terrain/grass.jpg" id="14_u1ve2"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_11ey0"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_dwk4x"]
+sky_material = SubResource("ProceduralSkyMaterial_11ey0")
+
+[sub_resource type="Environment" id="Environment_qql7r"]
+background_mode = 2
+sky = SubResource("Sky_dwk4x")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ayuj2"]
+albedo_texture = ExtResource("14_u1ve2")
+emission = Color(0.179594, 0.0725512, 0.0149807, 1)
+emission_energy_multiplier = 3.87
+uv1_scale = Vector3(0.1, 0.1, 0.1)
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_qkqrm"]
+material = SubResource("StandardMaterial3D_ayuj2")
+size = Vector3(15, 0.2, 10100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6tong"]
+size = Vector3(20, 0.2, 10000)
+
+[sub_resource type="Curve3D" id="Curve3D_umyao"]
+bake_interval = 0.1
+
+[node name="Mapa1" type="Node3D"]
+script = ExtResource("1_2rnlj")
+left = Array[PackedScene]([ExtResource("2_0ie6b"), ExtResource("3_eup5s"), ExtResource("4_fnncu")])
+right = Array[PackedScene]([ExtResource("5_pl7by"), ExtResource("5_o3i78"), ExtResource("7_sls8e")])
+enemies = Array[PackedScene]([ExtResource("8_k70d7"), ExtResource("9_wdh78"), ExtResource("10_cu7uv")])
+boss = Array[PackedScene]([ExtResource("11_mvyri")])
+final = ExtResource("12_4ter5")
+panel = ExtResource("10_pthwl")
+
+[node name="Suelo" type="StaticBody3D" parent="."]
+collision_layer = 8
+collision_mask = 3
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Suelo"]
+environment = SubResource("Environment_qql7r")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Suelo"]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Suelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4990)
+mesh = SubResource("BoxMesh_qkqrm")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Suelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4990)
+shape = SubResource("BoxShape3D_6tong")
+
+[node name="Spawn" type="Marker3D" parent="Suelo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Enemigos" type="Node3D" parent="Suelo"]
+
+[node name="Paneles" type="Node3D" parent="Suelo"]
+
+[node name="Laterales" type="Node3D" parent="Suelo"]
+
+[node name="Path3D" type="Path3D" parent="Suelo"]
+curve = SubResource("Curve3D_umyao")

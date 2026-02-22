@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c2rukg7wicruv"]
+
+[ext_resource type="PackedScene" uid="uid://bnrtynert1yek" path="res://assets/weapons/arrow.glb" id="1_54uu3"]
+
+[node name="arrow2" instance=ExtResource("1_54uu3")]
+
+[node name="Arrow_Cube_020" parent="." index="0"]
+sorting_offset = -1.0

@@ -1,0 +1,38 @@
+[gd_scene load_steps=2 format=3 uid="uid://byubf50o0nxxw"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_2frqx"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.126389, 0, 0.991981, 0, 1, 0, -0.991981, 0, -0.126389, 2.55283, 0, 1.43658)
+
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
+ignore_occlusion_culling = true
+visibility_range_end = 10.0
+visibility_range_end_margin = 1.0
+visibility_range_fade_mode = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MultiMeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.892809)
+visibility_parent = NodePath("..")
+mesh = SubResource("SphereMesh_2frqx")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="MultiMeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.66918)
+visibility_parent = NodePath("..")
+mesh = SubResource("SphereMesh_2frqx")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="MultiMeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.81197)
+visibility_parent = NodePath("..")
+mesh = SubResource("SphereMesh_2frqx")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="MultiMeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.59087)
+visibility_parent = NodePath("..")
+mesh = SubResource("SphereMesh_2frqx")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="MultiMeshInstance3D"]
+visibility_parent = NodePath("..")
+mesh = SubResource("SphereMesh_2frqx")

@@ -1,0 +1,62 @@
+[gd_scene load_steps=11 format=3 uid="uid://bw2fvkjvh0cge"]
+
+[ext_resource type="PackedScene" uid="uid://bkx27wyf1q4sg" path="res://assets/externos/Nature/DeadTree_2.gltf" id="1_w3oxc"]
+[ext_resource type="PackedScene" uid="uid://c6jgau6m4jncm" path="res://assets/externos/Nature/DeadTree_3.gltf" id="2_mfykn"]
+[ext_resource type="PackedScene" uid="uid://dxvqqh5jdkn14" path="res://assets/externos/Nature/DeadTree_4.gltf" id="3_i576r"]
+[ext_resource type="PackedScene" uid="uid://5cwx6jh6qwkr" path="res://assets/externos/Nature/DeadTree_5.gltf" id="4_mg7ix"]
+[ext_resource type="PackedScene" uid="uid://c1qe83bfqvlm8" path="res://assets/externos/Nature/Rock_Medium_1.gltf" id="5_1ba8g"]
+[ext_resource type="PackedScene" uid="uid://b6jjrm3he1jxa" path="res://assets/externos/Nature/Rock_Medium_2.gltf" id="6_e8tck"]
+[ext_resource type="PackedScene" uid="uid://t8eno7gf37c4" path="res://assets/externos/Nature/Rock_Medium_3.gltf" id="7_rnimt"]
+[ext_resource type="PackedScene" uid="uid://bkbi1he434slw" path="res://assets/externos/Nature/Grass_Wispy_Short.gltf" id="8_p6vq5"]
+[ext_resource type="PackedScene" uid="uid://dxi0vqmlk7n16" path="res://assets/externos/Nature/Grass_Wispy_Tall.gltf" id="9_0mvd4"]
+[ext_resource type="PackedScene" uid="uid://b1ky4uy8m1mdc" path="res://assets/externos/Nature/Grass_Common_Short.gltf" id="10_4qpor"]
+
+[node name="WasterLand_2" type="Node3D"]
+
+[node name="DeadTree_22" parent="." instance=ExtResource("1_w3oxc")]
+transform = Transform3D(-0.151019, 0, -0.988531, 0, 1, 0, 0.988531, 0, -0.151019, 0, 0, 0)
+
+[node name="DeadTree_32" parent="." instance=ExtResource("2_mfykn")]
+transform = Transform3D(0.52989, 0, -0.848067, 0, 1, 0, 0.848067, 0, 0.52989, 1.22371, 0, 4.7354)
+
+[node name="DeadTree_42" parent="." instance=ExtResource("3_i576r")]
+transform = Transform3D(0.849267, 0, 0.527964, 0, 1, 0, -0.527964, 0, 0.849267, -0.128538, 0, 10.4534)
+
+[node name="DeadTree_52" parent="." instance=ExtResource("4_mg7ix")]
+transform = Transform3D(0.743973, 0, -0.668209, 0, 1, 0, 0.668209, 0, 0.743973, -1.21028, 0, -5.41928)
+
+[node name="Rock_Medium_12" parent="." instance=ExtResource("5_1ba8g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4357, 9.53674e-07, -7.91344)
+
+[node name="Rock_Medium_22" parent="." instance=ExtResource("6_e8tck")]
+transform = Transform3D(0.784398, 0, 0.620258, 0, 1, 0, -0.620258, 0, 0.784398, -0.924006, 0, -2.74117)
+
+[node name="Rock_Medium_32" parent="." instance=ExtResource("7_rnimt")]
+transform = Transform3D(0.583683, 0, -0.811982, 0, 1, 0, 0.811982, 0, 0.583683, -2.01788, 0, 1.62062)
+
+[node name="Rock_Medium_13" parent="." instance=ExtResource("5_1ba8g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0773926, 9.53674e-07, 6.05437)
+
+[node name="Rock_Medium_23" parent="." instance=ExtResource("6_e8tck")]
+transform = Transform3D(-0.00171963, 0, 0.999999, 0, 0.699146, 0, -0.985249, 0, -0.00174537, -2.26137, 0, 8.70755)
+
+[node name="Rock_Medium_33" parent="." instance=ExtResource("7_rnimt")]
+transform = Transform3D(0.779492, 0, -0.74231, 0, 1.25178, 0, 1.08438, 0, 0.5336, -0.444361, -4.76837e-07, 12.3813)
+
+[node name="Grass_Wispy_Short2" parent="." instance=ExtResource("8_p6vq5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0894041, 0, -5.69008)
+
+[node name="Grass_Wispy_Tall2" parent="." instance=ExtResource("9_0mvd4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.320264, 0, -6.59338)
+
+[node name="Grass_Wispy_Short3" parent="." instance=ExtResource("8_p6vq5")]
+transform = Transform3D(0.838709, 0, 1.08887, 0, 1.39098, 0, -0.544581, 0, 1.67697, 0.919677, 0, 0.228235)
+
+[node name="Grass_Wispy_Tall3" parent="." instance=ExtResource("9_0mvd4")]
+transform = Transform3D(0.838709, 0, 0.54458, 0, 1, 0, -0.54458, 0, 0.838709, 0.48714, 0, -1.37951)
+
+[node name="Grass_Common_Short2" parent="." instance=ExtResource("10_4qpor")]
+transform = Transform3D(0.983092, 0, 0, 0, 0.742844, 0, 0, 0, 1, 0.278085, -4.76837e-07, 4.26048)
+
+[node name="Grass_Wispy_Short4" parent="." instance=ExtResource("8_p6vq5")]
+transform = Transform3D(0.911097, 0, 0.635927, 0, 1.71692, 0, -0.451995, 0, 1.28185, 1.99879, 0, 5.27526)

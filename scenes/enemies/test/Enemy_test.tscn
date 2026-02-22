@@ -1,0 +1,37 @@
+[gd_scene load_steps=7 format=3 uid="uid://bx3t2br6fgy8"]
+
+[ext_resource type="Script" path="res://scenes/enemies/Enemy.gd" id="1_2axm5"]
+[ext_resource type="PackedScene" uid="uid://vrm7ya21kl2d" path="res://scenes/pickups/moneda/moneda.tscn" id="2_3v70c"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ymtc5"]
+radius = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hltdv"]
+albedo_color = Color(0.820366, 0.820366, 0.820366, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_jwb40"]
+material = SubResource("StandardMaterial3D_hltdv")
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_d4hjl"]
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+collision_layer = 2
+script = ExtResource("1_2axm5")
+moneda = ExtResource("2_3v70c")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.99262, 0)
+shape = SubResource("CylinderShape3D_ymtc5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.00152, 0)
+mesh = SubResource("CylinderMesh_jwb40")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.994418, 0)
+shape = SubResource("CylinderShape3D_d4hjl")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

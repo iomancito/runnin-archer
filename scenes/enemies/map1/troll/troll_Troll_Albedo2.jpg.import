@@ -1,0 +1,39 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://dewv5bt0gjm8v"
+path.s3tc="res://.godot/imported/troll_Troll_Albedo2.jpg-d1eb7f2dd6a3bdd4e105a21e211f33f8.s3tc.ctex"
+path.etc2="res://.godot/imported/troll_Troll_Albedo2.jpg-d1eb7f2dd6a3bdd4e105a21e211f33f8.etc2.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "1748461f77f13c9001bb46e633780c9d"
+}
+
+[deps]
+
+source_file="res://scenes/enemies/map1/troll/troll_Troll_Albedo2.jpg"
+dest_files=["res://.godot/imported/troll_Troll_Albedo2.jpg-d1eb7f2dd6a3bdd4e105a21e211f33f8.s3tc.ctex", "res://.godot/imported/troll_Troll_Albedo2.jpg-d1eb7f2dd6a3bdd4e105a21e211f33f8.etc2.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

@@ -1,0 +1,43 @@
+[gd_scene load_steps=8 format=3 uid="uid://clai66cievmp"]
+
+[ext_resource type="PackedScene" uid="uid://dit5h72xvx84d" path="res://assets/externos/Nature/CommonTree_2.gltf" id="1_a3rwy"]
+[ext_resource type="PackedScene" uid="uid://c41ew3kwy2tpr" path="res://assets/externos/Nature/CommonTree_3.gltf" id="2_5a4pe"]
+[ext_resource type="PackedScene" uid="uid://bcw1rbh2dc8fu" path="res://assets/externos/Nature/CommonTree_4.gltf" id="3_i8mkb"]
+[ext_resource type="PackedScene" uid="uid://bpttr8lkluufd" path="res://assets/externos/Nature/Fern_1.gltf" id="4_eahy5"]
+[ext_resource type="PackedScene" uid="uid://b1ky4uy8m1mdc" path="res://assets/externos/Nature/Grass_Common_Short.gltf" id="5_f15wx"]
+[ext_resource type="PackedScene" uid="uid://dgojc85nyj8rl" path="res://assets/externos/Nature/Grass_Common_Tall.gltf" id="6_6y2a0"]
+[ext_resource type="PackedScene" uid="uid://babpvyv800h2g" path="res://assets/externos/Nature/Flower_3_Group.gltf" id="7_dfya7"]
+
+[node name="Vegetancion_2" type="Node3D"]
+
+[node name="CommonTree_22" parent="." instance=ExtResource("1_a3rwy")]
+
+[node name="CommonTree_32" parent="." instance=ExtResource("2_5a4pe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.469425, 0, -1.86773)
+
+[node name="CommonTree_42" parent="." instance=ExtResource("3_i8mkb")]
+transform = Transform3D(0.691475, 0, -0.7224, 0, 1, 0, 0.7224, 0, 0.691475, 0.200965, 0, -3.01307)
+
+[node name="Fern_12" parent="." instance=ExtResource("4_eahy5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.20515)
+
+[node name="Fern_13" parent="." instance=ExtResource("4_eahy5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.503813, 0, -0.85226)
+
+[node name="Fern_14" parent="." instance=ExtResource("4_eahy5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.503813, 0, 1.46154)
+
+[node name="Fern_15" parent="." instance=ExtResource("4_eahy5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.828188, 0, 0.618027)
+
+[node name="Fern_16" parent="." instance=ExtResource("4_eahy5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.828188, 0, -1.07543)
+
+[node name="Grass_Common_Short2" parent="." instance=ExtResource("5_f15wx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.63351)
+
+[node name="Grass_Common_Tall2" parent="." instance=ExtResource("6_6y2a0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.771313, 0, -3.24813)
+
+[node name="Flower_3_Group2" parent="." instance=ExtResource("7_dfya7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.851438, 0, -2.88244)

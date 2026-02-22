@@ -1,0 +1,57 @@
+[gd_scene load_steps=12 format=3 uid="uid://30ju72ifm3bt"]
+
+[ext_resource type="PackedScene" uid="uid://ddr2mmbn1gu4i" path="res://assets/externos/Nature/Pine_1.gltf" id="1_nfdkk"]
+[ext_resource type="PackedScene" uid="uid://dnvivwbkiny6o" path="res://assets/externos/Nature/Pine_2.gltf" id="2_15rd2"]
+[ext_resource type="PackedScene" uid="uid://4imb45rum8k8" path="res://assets/externos/Nature/Pine_3.gltf" id="3_g4pgq"]
+[ext_resource type="PackedScene" uid="uid://dtffmvel14uak" path="res://assets/externos/Nature/Pebble_Round_1.gltf" id="4_drduc"]
+[ext_resource type="PackedScene" uid="uid://bapeifx7slp7s" path="res://assets/externos/Nature/Plant_1.gltf" id="5_jjl8i"]
+[ext_resource type="PackedScene" uid="uid://cleu4tjtibkxa" path="res://assets/externos/Nature/RockPath_Round_Thin.gltf" id="6_u87mu"]
+[ext_resource type="PackedScene" uid="uid://d0wm6hxy1igt1" path="res://assets/externos/Nature/Mushroom_Common.gltf" id="7_dlgiw"]
+[ext_resource type="PackedScene" uid="uid://b1ky4uy8m1mdc" path="res://assets/externos/Nature/Grass_Common_Short.gltf" id="8_pc8af"]
+[ext_resource type="PackedScene" uid="uid://dgojc85nyj8rl" path="res://assets/externos/Nature/Grass_Common_Tall.gltf" id="9_ogokc"]
+[ext_resource type="PackedScene" uid="uid://bkbi1he434slw" path="res://assets/externos/Nature/Grass_Wispy_Short.gltf" id="10_u0jvy"]
+[ext_resource type="PackedScene" uid="uid://dxi0vqmlk7n16" path="res://assets/externos/Nature/Grass_Wispy_Tall.gltf" id="11_fki3s"]
+
+[node name="Vegetacion_3" type="Node3D"]
+
+[node name="Pine_12" parent="." instance=ExtResource("1_nfdkk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.63648)
+
+[node name="Pine_22" parent="." instance=ExtResource("2_15rd2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.934437, 0, -0.269985)
+
+[node name="Pine_32" parent="." instance=ExtResource("3_g4pgq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.609816, 0, -2.93835)
+
+[node name="Pebble_Round_12" parent="." instance=ExtResource("4_drduc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0854806, -3.33333)
+
+[node name="Pebble_Round_13" parent="." instance=ExtResource("4_drduc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.145068, -0.0870841, -2.94884)
+
+[node name="Plant_12" parent="." instance=ExtResource("5_jjl8i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.276177, -0.0917857, -3.18047)
+
+[node name="RockPath_Round_Thin2" parent="." instance=ExtResource("6_u87mu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.432283, -0.0835869, -1.54831)
+
+[node name="Mushroom_Common2" parent="." instance=ExtResource("7_dlgiw")]
+transform = Transform3D(0.659543, 0, 0.751667, 0, 1, 0, -0.751667, 0, 0.659543, -0.128587, -0.0642577, -1.93072)
+
+[node name="Grass_Common_Short2" parent="." instance=ExtResource("8_pc8af")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.532908)
+
+[node name="Grass_Common_Tall2" parent="." instance=ExtResource("9_ogokc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.02068)
+
+[node name="Grass_Common_Short3" parent="." instance=ExtResource("8_pc8af")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.232812, 0, 0.402176)
+
+[node name="Grass_Common_Tall3" parent="." instance=ExtResource("9_ogokc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.232812, 0, 0.914405)
+
+[node name="Grass_Wispy_Short2" parent="." instance=ExtResource("10_u0jvy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.500067, 0, 2.30262)
+
+[node name="Grass_Wispy_Tall2" parent="." instance=ExtResource("11_fki3s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.500067, 0, 3.13946)

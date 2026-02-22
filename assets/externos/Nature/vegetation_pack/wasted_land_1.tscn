@@ -1,0 +1,30 @@
+[gd_scene load_steps=7 format=3 uid="uid://drpuyrc1q0g7i"]
+
+[ext_resource type="PackedScene" uid="uid://ct3hx6jyikovf" path="res://assets/externos/Nature/DeadTree_1.gltf" id="1_4a603"]
+[ext_resource type="PackedScene" uid="uid://bkx27wyf1q4sg" path="res://assets/externos/Nature/DeadTree_2.gltf" id="2_r6dyx"]
+[ext_resource type="PackedScene" uid="uid://c6jgau6m4jncm" path="res://assets/externos/Nature/DeadTree_3.gltf" id="3_u5gqr"]
+[ext_resource type="PackedScene" uid="uid://t8eno7gf37c4" path="res://assets/externos/Nature/Rock_Medium_3.gltf" id="4_uruue"]
+[ext_resource type="PackedScene" uid="uid://b6jjrm3he1jxa" path="res://assets/externos/Nature/Rock_Medium_2.gltf" id="5_17ca4"]
+[ext_resource type="PackedScene" uid="uid://c1qe83bfqvlm8" path="res://assets/externos/Nature/Rock_Medium_1.gltf" id="6_xx1ca"]
+
+[node name="WastedLand_1" type="Node3D"]
+
+[node name="DeadTree_12" parent="." instance=ExtResource("1_4a603")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0219864, 0, 2.89192)
+
+[node name="DeadTree_22" parent="." instance=ExtResource("2_r6dyx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.618224, 0, -5.65436)
+
+[node name="DeadTree_32" parent="." instance=ExtResource("3_u5gqr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.989071, 0, -1.65569)
+
+[node name="Rock_Medium_32" parent="." instance=ExtResource("4_uruue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25149, 0, -5.09833)
+
+[node name="Rock_Medium_22" parent="." instance=ExtResource("5_17ca4")]
+
+[node name="Rock_Medium_23" parent="." instance=ExtResource("5_17ca4")]
+transform = Transform3D(0.462957, 0, -0.885077, 0, 0.633084, 0, 0.880346, 0, 0.465445, -1.82974, 0, 2.38509)
+
+[node name="Rock_Medium_12" parent="." instance=ExtResource("6_xx1ca")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.469771, 0.171132, 6.02736)
