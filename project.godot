@@ -21,6 +21,7 @@ boot_splash/stretch_mode=4
 [autoload]
 
 Progreso="*res://scripts/progreso.gd"
+Logros="*res://scripts/logros.gd"
 SignalLens="*res://addons/signal_lens/autoload/signal_lens_autoload.gd"
 
 [debug]

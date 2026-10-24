@@ -7,6 +7,8 @@ var vida_max = 1
 var gold = 1
 var daño_contacto = 1 #daño al chocar con el player
 var mapa : int = 1
+#tipo de Balance.ENEMIGOS (los logros distinguen a los mini jefes)
+var tipo : String = ""
 #miembro de una horda (vida, daño y oro reducidos, ver Balance.HORDA)
 var horda : bool = false
 
@@ -22,13 +24,14 @@ func _ready() -> void:
 	update_hp()
 
 #vida, daño y oro según el tipo de enemigo, la distancia recorrida y el mapa (ver Balance)
-func setup(tipo : String, z : float, m : int, en_horda : bool = false) -> void:
+func setup(t : String, z : float, m : int, en_horda : bool = false) -> void:
+	tipo = t
 	mapa = m
 	horda = en_horda
 	add_to_group(ArcoEfectos.GRUPO_ENEMIGOS)
-	set_vida(Balance.vida_enemigo(tipo, z, m, horda))
-	daño_contacto = Balance.daño_enemigo(tipo, m, horda)
-	gold = Balance.oro_enemigo(tipo, m, horda)
+	set_vida(Balance.vida_enemigo(t, z, m, horda))
+	daño_contacto = Balance.daño_enemigo(t, m, horda)
+	gold = Balance.oro_enemigo(t, m, horda)
 	update_hp()
 
 func update_hp() -> void:
@@ -72,6 +75,7 @@ func recompensa(cantidad : int = gold) -> void:
 	Progreso.p_gold += cantidad
 	Progreso.run_gold += cantidad
 	Progreso.run_kills += 1
+	Logros.baja(self, cantidad)
 	popup_texto("+%d" % cantidad, Color(1.0, 0.84, 0.3))
 
 #texto flotante que sube y se desvanece

@@ -107,6 +107,20 @@ const ORDEN_ARCOS = ["thorn", "sunfire", "storm", "dragon"]
 #valor neutro de cada parámetro si el arco no lo tiene (o sin arco especial)
 const ARCO_NEUTRO = {"daño": 1.0, "cadencia": 1.0}
 
+#--- Logros (definiciones en scripts/logros.gd) ---
+#bajas totales: la primera y los tres niveles de cazador
+const LOGRO_BAJAS = [1, 500, 5000, 25000]
+#oro ganado en total
+const LOGRO_ORO = [1000, 25000, 100000]
+const LOGRO_BOSSES = 25
+const LOGRO_MINIJEFES = 25
+const LOGRO_HORDA = 1000
+#fracción de vida máxima por debajo de la cual matar al boss cuenta como "por los pelos"
+const LOGRO_VIDA_AGONICA = 0.1
+#tiempo límite de un mapa: lo que se tarda en recorrerlo a la velocidad base + este margen
+#(el player solo se para ante el boss, así que el margen es el tiempo para matarlo)
+const LOGRO_MARGEN_TIEMPO = 15.0
+
 static func costes(base : float, crecimiento : float, niveles : int) -> Array[int]:
 	var r : Array[int] = []
 	for i in niveles:

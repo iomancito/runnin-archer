@@ -29,7 +29,8 @@ El tema está generado por un script; para retocarlo es más cómodo editar el `
 | Escena / script | Contenido | Señales |
 |---|---|---|
 | `Splash` (en `main.tscn`) | Imagen de inicio + barra "Loading %" | — |
-| `main_menu.tscn` | Título, oro, mapa más lejano, selector de dificultad (las bloqueadas deshabilitadas, con pista para desbloquear la siguiente), PLAY / SHOP / EXIT, RESET PROGRESS | `play_pressed`, `shop_pressed`, `exit_pressed` |
+| `main_menu.tscn` | Título, oro, mapa más lejano, selector de dificultad (las bloqueadas deshabilitadas, con pista para desbloquear la siguiente), PLAY / SHOP + ACHIEVEMENTS / EXIT, RESET PROGRESS | `play_pressed`, `shop_pressed`, `achievements_pressed`, `exit_pressed` |
+| `achievements.tscn` + `achievement_toast.gd` | Logros (pestañas GENERAL / CHALLENGES) y aviso al desbloquear. Ver [logros.md](logros.md) | `back_pressed` |
 | `shop.tscn` + `shop_card.tscn` + `bow_card.tscn` | Pestañas UPGRADES (tarjetas de mejora, reset) y BOWS (arcos con imagen, habilidad, nivel y estado) | `back_pressed`, `arco_equipado` |
 | `game_hud.tscn` | Vida, oro, barra de distancia al boss, barra del boss, botón de pausa, destello rojo al recibir daño | `pause_pressed` |
 | `pause_menu.tscn` | RESUME / QUIT RUN | `resume_pressed`, `menu_pressed` |
@@ -44,7 +45,7 @@ Componentes reutilizables en `scenes/gui/components/`: `gold_pill.tscn` (oro con
 
 - Arrastrar el dedo a izquierda/derecha mueve al arquero (`Player._input`).
 - **Pausa**: botón II del HUD, botón atrás de Android, o automática al salir de la app.
-- **Botón atrás**: en la tienda vuelve al menú; en partida pausa; en el menú cierra el juego.
+- **Botón atrás**: en la tienda o en los logros vuelve al menú; en partida pausa; en el menú cierra el juego.
 - En el editor, el ratón emula el táctil, Enter pausa y Escape hace de botón atrás.
 
 ## Feedback en el mundo 3D

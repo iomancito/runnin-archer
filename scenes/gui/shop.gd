@@ -119,6 +119,7 @@ func _on_comprar_arco(id : String) -> void:
 	var era_otro = Progreso.arco != id
 	if Progreso.comprar_arco(id):
 		arco_cards[id].pulse()
+		Logros.comprueba()
 		if era_otro:
 			arco_equipado.emit(id)
 	actualiza_arcos()
@@ -135,6 +136,7 @@ func subir_lvl_pasiva(ref) -> bool:
 		recalcula_stats()
 		Progreso.p_gold -= ref.get_coste()
 		Progreso.save_game()
+		Logros.comprueba()
 	return ret
 
 #primer toque arma el reset, el segundo lo confirma

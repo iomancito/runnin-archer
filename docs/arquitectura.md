@@ -26,7 +26,7 @@ Toda esta orquestación está en [`main.gd`](../main.gd).
 | `MapContainer` (pausable) | Aquí se instancia el mapa actual |
 | `ArrowContainer` (pausable) | Flechas disparadas por el player |
 | `Camera3D` | Sigue al player en x/z desde `_physics_process` de `main.gd` |
-| `HUD` (Control, `ALWAYS`, tema `ui_theme.tres`) | `GameHUD`, `MainMenu`, `Shop`, `PauseMenu`, `Results`, `Splash`, `fade` |
+| `HUD` (Control, `ALWAYS`, tema `ui_theme.tres`) | `GameHUD`, `MainMenu`, `Shop`, `PauseMenu`, `Results`, `Achievements`, `AchievementToast`, `Splash`, `fade` |
 
 El player se instancia como hijo de `Main` con `process_mode = PAUSABLE` (si no, heredaría `ALWAYS` y seguiría corriendo en pausa).
 
@@ -35,6 +35,7 @@ El player se instancia como hijo de `Main` con `process_mode = PAUSABLE` (si no,
 | Nombre | Script | Función |
 |---|---|---|
 | `Progreso` | [`scripts/progreso.gd`](../scripts/progreso.gd) | Oro, mejoras, dificultad, mapas superados, guardado. Ver [progreso-y-tienda.md](progreso-y-tienda.md) |
+| `Logros` | [`scripts/logros.gd`](../scripts/logros.gd) | Logros, estadísticas totales y cronómetro del mapa. Ver [logros.md](logros.md) |
 | `SignalLens` | addon | Depurador de señales del editor (pasivo) |
 
 ## Clases estáticas de configuración

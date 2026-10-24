@@ -10,6 +10,7 @@ signal mapa_cargado
 @onready var game_hud : GameHUD = %GameHUD
 @onready var menu_principal : MainMenu = %MainMenu
 @onready var menu_mejoras : Shop = %Shop
+@onready var menu_logros : AchievementsScreen = %Achievements
 @onready var pause_menu : PauseMenu = %PauseMenu
 @onready var results : Results = %Results
 @onready var fade = %fade
@@ -37,6 +38,8 @@ func _ready() -> void:
 	get_tree().set_quit_on_go_back(false)
 	menu_principal.play_pressed.connect(iniciar_partida)
 	menu_principal.shop_pressed.connect(show_mejoras)
+	menu_principal.achievements_pressed.connect(show_logros)
+	menu_logros.back_pressed.connect(show_principal)
 	menu_principal.exit_pressed.connect(salir)
 	menu_mejoras.back_pressed.connect(show_principal)
 	menu_mejoras.arco_equipado.connect(_precalentar_arco)
@@ -126,6 +129,8 @@ func load_map(map_index: int):
 	spawn_player()
 	current_map.call_deferred("set_boss", self)
 	Progreso.reset_run()
+	#enemigos del plan + boss final (logro de matarlos a todos)
+	Logros.empieza_mapa(current_map.plan.size() + 1)
 	game_hud.start_run(map_index, player, current_map.get_boss(), current_map.boss_name)
 
 func muere_boss(s : Node3D) -> void :
@@ -135,11 +140,13 @@ func muere_boss(s : Node3D) -> void :
 	var stats = run_stats(100)
 	game_hud.hide()
 	get_tree().paused = true
+	Logros.mapa_superado(Progreso.current_map, Progreso.dificultad, Progreso.run_kills, player)
 	if Progreso.current_map == 3:
 		Progreso.current_map = 1
 		var primera_vez = not Progreso.dificultad in Progreso.completadas
 		var nueva = Progreso.completa_dificultad()
 		Progreso.save_game()
+		Logros.comprueba()
 		#el arco de esta dificultad pasa a la tienda la primera vez que se completa
 		var arco_nuevo = ""
 		if primera_vez:
@@ -151,6 +158,7 @@ func muere_boss(s : Node3D) -> void :
 	Progreso.current_map += 1
 	Progreso.max_map = max(Progreso.max_map, Progreso.current_map)
 	Progreso.save_game()
+	Logros.comprueba()
 	results.show_cleared(Progreso.current_map - 1, stats)
 
 func siguiente_mapa() -> void:
@@ -181,6 +189,7 @@ func player_dead() -> void:
 	Progreso.current_map = 1
 	partida_iniciada = false
 	Progreso.save_game()
+	Logros.termina_partida()
 	var stats = run_stats(game_hud.distance_bar.value)
 	game_hud.hide()
 	#congela la escena detrás de la pantalla de resultados
@@ -208,6 +217,7 @@ func abandonar_partida() -> void:
 	partida_iniciada = false
 	Progreso.current_map = 1
 	Progreso.save_game()
+	Logros.termina_partida()
 	limpiar_mundo()
 	show_principal()
 
@@ -233,7 +243,7 @@ func _notification(what: int) -> void:
 
 #botón atrás de android / escape
 func _on_back() -> void:
-	if menu_mejoras.visible:
+	if menu_mejoras.visible or menu_logros.visible:
 		show_principal()
 	elif is_playing():
 		pause_game()
@@ -251,10 +261,15 @@ func show_principal() -> void:
 	fade.fade_in_out(0.5,1.5)
 	await get_tree().create_timer(0.6).timeout
 	menu_mejoras.hide()
+	menu_logros.hide()
 	menu_principal.show()
 
 func show_mejoras() -> void:
 	menu_mejoras.show()
+	menu_principal.hide()
+
+func show_logros() -> void:
+	menu_logros.show()
 	menu_principal.hide()
 
 func show_game() -> void:

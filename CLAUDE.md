@@ -20,6 +20,7 @@ Runner vertical en Godot 4.7 para **móviles Android** (retrato, renderer Mobile
 | [docs/enemigos.md](docs/enemigos.md) | Clases `Enemy` y `Boss`, cómo añadir un tipo de enemigo |
 | [docs/arcos.md](docs/arcos.md) | Arcos especiales: habilidades, precios, compra, efectos visuales, cómo añadir un arco |
 | [docs/progreso-y-tienda.md](docs/progreso-y-tienda.md) | Autoload `Progreso`, guardado y migraciones, tienda, resets |
+| [docs/logros.md](docs/logros.md) | Autoload `Logros`: lista de logros, detección, guardado, pantalla, cómo añadir uno |
 | [docs/interfaz.md](docs/interfaz.md) | Tema, escalado, pantallas y señales, controles, splash, cómo añadir una pantalla |
 | [docs/rendimiento.md](docs/rendimiento.md) | Medidas en el móvil, optimizaciones aplicadas, cómo medir |
 | [docs/android.md](docs/android.md) | Herramientas, compilar e instalar, preset de exportación, icono, tests sin pantalla, adb |

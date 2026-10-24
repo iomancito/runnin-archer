@@ -65,7 +65,7 @@ Si haces un cambio incompatible: sube `SAVE_VERSION` y añade la conversión en 
 
 ## Reset total (menú principal)
 
-Botón **RESET PROGRESS**: primer toque "TAP AGAIN TO ERASE ALL" durante 3 s, el segundo llama a `Progreso.reset_all()` → 0 de oro, sin mejoras, mapa 1 en todas las dificultades y solo Easy desbloqueada.
+Botón **RESET PROGRESS**: primer toque "TAP AGAIN TO ERASE ALL" durante 3 s, el segundo llama a `Progreso.reset_all()` → 0 de oro, sin mejoras, mapa 1 en todas las dificultades y solo Easy desbloqueada. Los logros no se borran (ver [logros.md](logros.md)).
 
 ## Mejoras durante la partida
 

@@ -25,4 +25,5 @@ func _on_right_area_body_entered(body: Node3D) -> void:
 
 func upgrade_skill_player(body : Node3D, valor : int) -> void:
 	body.mejora(Balance.PUERTAS[valor][1], Balance.PUERTAS[valor][2])
+	Logros.puerta(body)
 	queue_free()

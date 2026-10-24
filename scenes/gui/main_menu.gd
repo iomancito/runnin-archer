@@ -2,6 +2,7 @@ class_name MainMenu extends Control
 
 signal play_pressed
 signal shop_pressed
+signal achievements_pressed
 signal exit_pressed
 
 @onready var progress_label : Label = %ProgressLabel
@@ -16,6 +17,7 @@ var reset_armed : bool = false
 func _ready() -> void:
 	play_button.pressed.connect(func(): play_pressed.emit())
 	%ShopButton.pressed.connect(func(): shop_pressed.emit())
+	%AchievementsButton.pressed.connect(func(): achievements_pressed.emit())
 	%ExitButton.pressed.connect(func(): exit_pressed.emit())
 	#en web/iOS no se puede cerrar la app
 	%ExitButton.visible = OS.get_name() not in ["Web", "iOS"]

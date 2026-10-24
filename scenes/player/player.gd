@@ -202,6 +202,8 @@ func recibe_daño(d : int) -> void:
 	if is_dead:
 		return
 	vida -= d
+	if d > 0:
+		Logros.golpe()
 	vida_changed.emit(vida, stats["p_vida"])
 	if vida <= 0:
 		is_dead = true
