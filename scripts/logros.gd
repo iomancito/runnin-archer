@@ -83,8 +83,8 @@ func _define() -> void:
 	#retos por mapa y dificultad
 	for d in Balance.ORDEN_DIFICULTADES:
 		var nombre = Balance.DIFICULTADES[d].nombre
+		var limite = _tiempo_txt(tiempo_limite(d))
 		for m in [1, 2, 3]:
-			var limite = _tiempo_txt(tiempo_limite(m))
 			_add(_id_reto("exterminator", d, m), "Exterminator %d" % m, "Clear map %d on %s killing every enemy" % [m, nombre], d)
 			_add(_id_reto("swift", d, m), "Swift Hunter %d" % m, "Clear map %d on %s in under %s" % [m, nombre, limite], d)
 			_add(_id_reto("perfect", d, m), "Perfect Hunt %d" % m, "Clear map %d on %s killing every enemy in under %s" % [m, nombre, limite], d)
@@ -111,10 +111,8 @@ func _mejoras_al_maximo() -> Array:
 			n += 1
 	return [n, tienda.size()]
 
-#segundos para recorrer el mapa a velocidad base (el avance por tick es p_speed / ticks) + margen del boss
-func tiempo_limite(m : int) -> float:
-	var metros_seg = Progreso.BASE_STATS["p_speed"] / float(Engine.physics_ticks_per_second)
-	return ceilf(Niveles.MAPAS[m].largo / metros_seg + Balance.LOGRO_MARGEN_TIEMPO)
+func tiempo_limite(d : String) -> float:
+	return Balance.LOGRO_TIEMPO.get(d, Balance.LOGRO_TIEMPO["medium"])
 
 func _tiempo_txt(seg : float) -> String:
 	return "%d:%02d" % [int(seg) / 60, int(seg) % 60]
@@ -221,7 +219,7 @@ func puerta(player : Player) -> void:
 func mapa_superado(m : int, d : String, bajas : int, player : Player) -> void:
 	corriendo = false
 	var todos = bajas >= total_mapa
-	var rapido = tiempo <= tiempo_limite(m)
+	var rapido = tiempo <= tiempo_limite(d)
 	if todos:
 		desbloquea(_id_reto("exterminator", d, m))
 	if rapido:

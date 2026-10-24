@@ -55,6 +55,9 @@ static func tienda() -> Array:
 		["vida", "Max HP", "%d", "p_vida", 5, costes(8, 1.4, 10)],
 		["range", "Range", "%d m", "f_max_distancia", 2, costes(8, 1.4, 10)],
 		["dodge", "Dodge Speed", "%d", "p_side_speed", 10, costes(6, 1.4, 10)],
+		#correr más acorta el mapa pero también el tiempo para disparar a cada enemigo
+		["run_speed", "Run Speed", "%d", "p_speed", 10, costes(10, 1.4, 10)],
+		["arrow_speed", "Arrow Speed", "%d", "f_velocidad", 40, costes(6, 1.4, 10)],
 		["gold_bonus", "Gold Bonus", "+%d%%", "p_oro", 10, costes(15, 1.4, 10)],
 	]
 
@@ -117,9 +120,10 @@ const LOGRO_MINIJEFES = 25
 const LOGRO_HORDA = 1000
 #fracción de vida máxima por debajo de la cual matar al boss cuenta como "por los pelos"
 const LOGRO_VIDA_AGONICA = 0.1
-#tiempo límite de un mapa: lo que se tarda en recorrerlo a la velocidad base + este margen
-#(el player solo se para ante el boss, así que el margen es el tiempo para matarlo)
-const LOGRO_MARGEN_TIEMPO = 15.0
+#tiempo límite (s) de Swift Hunter / Perfect Hunt por dificultad, igual en los 3 mapas.
+#Recorrer un mapa lleva 300 s a velocidad base y 200 s con Run Speed al máximo; el player
+#solo se para ante el boss: hace falta mejorar la carrera y matar al boss rápido
+const LOGRO_TIEMPO = {"easy": 240.0, "medium": 240.0, "hard": 250.0, "hell": 260.0}
 
 static func costes(base : float, crecimiento : float, niveles : int) -> Array[int]:
 	var r : Array[int] = []

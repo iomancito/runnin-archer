@@ -12,7 +12,8 @@ daño por enemigo = (alcance / velocidad de carrera) × cadencia × daño × fle
 
 - Velocidad de carrera base: `p_speed = 200` → 200/60 = **3,33 m/s** (la velocidad se multiplica por `delta` de física).
 - Con los stats base: (10 m / 3,33) × 1,0 × 1 × 1 ≈ **3** de daño por enemigo.
-- Con la tienda al máximo: (30 / 3,33) × 2,0 × 11 × 5 ≈ **990**.
+- Con la tienda al máximo: (30 / 3,33) × 2,0 × 11 × 5 ≈ **990** (con Run Speed al máximo, 5 m/s: ≈ 660).
+- **Run Speed** acorta el mapa (necesario para los logros de tiempo) pero reduce el daño por enemigo; **Arrow Speed** no entra en la fórmula: las flechas llegan antes, útil contra enemigos que se mueven.
 
 El color del número de vida de cada enemigo usa esta misma fórmula (`Enemy.threat_color()`): **verde** = lo mata, **amarillo** = le hace al menos la mitad, **rojo** = mejor esquivar.
 
@@ -90,9 +91,11 @@ Cada entrada: `[nombre (clave de guardado), título, formato, stat, incremento, 
 | Max HP | `p_vida` | +5 | 10 | 8 → 165 |
 | Range | `f_max_distancia` | +2 m | 10 | 8 → 165 |
 | Dodge Speed | `p_side_speed` | +10 | 10 | 6 → 124 |
+| Run Speed | `p_speed` | +10 (200 → 300, 3,33 → 5 m/s) | 10 | 10 → 207 |
+| Arrow Speed | `f_velocidad` | +40 (600 → 1000) | 10 | 6 → 124 |
 | Gold Bonus | `p_oro` | +10 % | 10 | 15 → 310 |
 
-Total para maximizar todo: ~5750 de oro. Un mapa 1 completo en medio da ~300.
+Total para maximizar todo: ~6820 de oro. Un mapa 1 completo en medio da ~300.
 
 > Cambiar el `nombre` de una mejora rompe los niveles guardados (se guardan por nombre). Si se cambia la tienda de forma incompatible, añade una migración en `Progreso` (ver [progreso-y-tienda.md](progreso-y-tienda.md)).
 

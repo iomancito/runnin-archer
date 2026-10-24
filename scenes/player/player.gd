@@ -82,6 +82,8 @@ func cargar_datos_progreso() -> void:
 	$Timer.wait_time = 1 / stats["p_attack_speed"]
 	vida = stats["p_vida"]
 	_ajusta_animacion_disparo()
+	#la animación de carrera va a la par de la velocidad (Run Speed de la tienda)
+	set_running_speed(stats["p_speed"] / float(Progreso.BASE_STATS["p_speed"]))
 	$Timer.start()
 
 #la animación de disparo dura 0.73 s: con más cadencia se acelera para no cortarse

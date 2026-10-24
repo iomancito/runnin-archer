@@ -1,10 +1,10 @@
 # Logros
 
-Autoload `Logros` ([`scripts/logros.gd`](../scripts/logros.gd)). 70 logros en dos pestañas de la pantalla **ACHIEVEMENTS** del menú principal. Los umbrales están en [`Balance`](../scripts/balance.gd) (`LOGRO_*`).
+Autoload `Logros` ([`scripts/logros.gd`](../scripts/logros.gd)). 72 logros en dos pestañas de la pantalla **ACHIEVEMENTS** del menú principal. Los umbrales están en [`Balance`](../scripts/balance.gd) (`LOGRO_*`).
 
 ## Lista
 
-**General** (34):
+**General** (36):
 
 | Logros | Condición |
 |---|---|
@@ -13,7 +13,7 @@ Autoload `Logros` ([`scripts/logros.gd`](../scripts/logros.gd)). 70 logros en do
 | Map 1-3 Cleared | Vencer al boss de ese mapa en cualquier dificultad |
 | Apprentice, Ranger, Veteran, Hellwalker | Superar los 3 mapas en Easy / Medium / Hard / Hell |
 | Getting Stronger | Comprar una mejora |
-| Master of *X* (×7) | Una mejora de la tienda al máximo |
+| Master of *X* (×9) | Una mejora de la tienda al máximo |
 | Fully Upgraded | Todas las mejoras al máximo |
 | Special Delivery, Bow Master, Collector | Comprar un arco especial / subirlo al nivel 5 / haber tenido los 4 |
 | Dragon Hunter, Giant Slayer, Horde Breaker | 25 bosses / 25 mini jefes / 1.000 enemigos de horda |
@@ -30,7 +30,7 @@ Autoload `Logros` ([`scripts/logros.gd`](../scripts/logros.gd)). 70 logros en do
 | Swift Hunter *N* | Superarlo por debajo del tiempo límite |
 | Perfect Hunt *N* | Las dos cosas en la misma partida |
 
-**Tiempo límite** = `largo` del mapa / velocidad base + `LOGRO_MARGEN_TIEMPO` (15 s) → 5:15 en los 3 mapas. Como el player solo se para ante el boss, el margen es en la práctica el tiempo para matarlo. El cronómetro corre en `_physics_process` del autoload, así que se para con el árbol en pausa (menú de pausa, resultados, app en segundo plano).
+**Tiempo límite** por dificultad en `Balance.LOGRO_TIEMPO`, igual en los 3 mapas: Easy y Medium 4:00, Hard 4:10, Hell 4:20. Recorrer un mapa lleva 300 s a velocidad base y 200 s con Run Speed al máximo, y el player solo se para ante el boss: hace falta subir Run Speed (~6-7 niveles) y matar al boss rápido. El cronómetro corre en `_physics_process` del autoload, así que se para con el árbol en pausa (menú de pausa, resultados, app en segundo plano).
 
 ## Cómo se detectan
 
@@ -53,7 +53,7 @@ Al arrancar se llama a `comprueba()` sin avisos, así una partida antigua recibe
 
 ## Interfaz
 
-- `scenes/gui/achievements.tscn` (`AchievementsScreen`): pestañas GENERAL / CHALLENGES (esta con una cabecera por dificultad) y contador `N / 70`. Los conseguidos se ven normales con medalla dorada; los pendientes, oscurecidos (`COLOR_PENDIENTE`), con su progreso si es un contador.
+- `scenes/gui/achievements.tscn` (`AchievementsScreen`): pestañas GENERAL / CHALLENGES (esta con una cabecera por dificultad) y contador `N / 72`. Los conseguidos se ven normales con medalla dorada; los pendientes, oscurecidos (`COLOR_PENDIENTE`), con su progreso si es un contador.
 - `scenes/gui/achievement_toast.gd`: aviso arriba al desbloquear; en cola si llegan varios (cada uno más corto).
 - `scenes/gui/components/medal_icon.gd`: medalla dibujada (sin texturas).
 
