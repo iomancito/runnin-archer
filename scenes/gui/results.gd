@@ -23,11 +23,14 @@ func show_cleared(map_index : int, stats : Dictionary) -> void:
 	_fill("MAP %d CLEARED!" % map_index, "The boss has fallen. Onwards!", Color(1, 0.82, 0.3), stats)
 	_buttons(true, false, false)
 
-#desbloqueada: dificultad recién desbloqueada al ganar ("" si ninguna)
-func show_victory(stats : Dictionary, desbloqueada : String = "") -> void:
-	var texto = "You defeated every boss. Legendary archer!"
+#desbloqueada: dificultad recién desbloqueada; arco: arco nuevo en la tienda ("" si ninguno)
+func show_victory(stats : Dictionary, desbloqueada : String = "", arco : String = "") -> void:
+	var lineas = []
 	if desbloqueada != "":
-		texto = "%s difficulty unlocked!" % Balance.DIFICULTADES[desbloqueada].nombre
+		lineas.append("%s difficulty unlocked!" % Balance.DIFICULTADES[desbloqueada].nombre)
+	if arco != "":
+		lineas.append("New bow in the shop: %s" % Balance.ARCOS[arco].nombre)
+	var texto = "You defeated every boss. Legendary archer!" if lineas.is_empty() else "\n".join(lineas)
 	_fill("VICTORY!", texto, Color(1, 0.82, 0.3), stats)
 	_buttons(false, false, true)
 

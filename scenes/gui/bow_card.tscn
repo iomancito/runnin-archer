@@ -1,0 +1,104 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/gui/bow_card.gd" id="1_card"]
+[ext_resource type="Script" path="res://scenes/gui/components/coin_icon.gd" id="2_coin"]
+
+[node name="BowCard" type="PanelContainer"]
+size_flags_horizontal = 3
+theme_type_variation = &"CardPanel"
+script = ExtResource("1_card")
+
+[node name="HBox" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Imagen" type="TextureRect" parent="HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_vertical = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBox" type="VBoxContainer" parent="HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="Cabecera" type="HBoxContainer" parent="HBox/VBox"]
+layout_mode = 2
+
+[node name="Nombre" type="Label" parent="HBox/VBox/Cabecera"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
+theme_override_font_sizes/font_size = 30
+text = "Bow"
+
+[node name="Equipado" type="Label" parent="HBox/VBox/Cabecera"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"GoldLabel"
+theme_override_font_sizes/font_size = 22
+text = "EQUIPPED"
+
+[node name="Estado" type="Label" parent="HBox/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+theme_override_font_sizes/font_size = 22
+text = "Level 1 / 5"
+
+[node name="Descripcion" type="Label" parent="HBox/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "Ability"
+autowrap_mode = 3
+
+[node name="Pips" type="HBoxContainer" parent="HBox/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Boton" type="Button" parent="HBox/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"PrimaryButton"
+
+[node name="CostBox" type="HBoxContainer" parent="HBox/VBox/Boton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Accion" type="Label" parent="HBox/VBox/Boton/CostBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "BUY"
+
+[node name="Moneda" type="Control" parent="HBox/VBox/Boton/CostBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("2_coin")
+
+[node name="Coste" type="Label" parent="HBox/VBox/Boton/CostBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "0"

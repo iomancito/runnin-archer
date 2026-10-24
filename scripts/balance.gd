@@ -65,11 +65,75 @@ const PUERTAS = [
 #tope de flechas por disparo (tienda + puertas)
 const MAX_FLECHAS = 7
 
+#--- Arcos especiales: se compran en la tienda tras superar los 3 mapas de su dificultad ---
+## Solo se tiene un arco a la vez: comprar el mismo lo sube de nivel; comprar otro lo equipa
+## en nivel 1 y se pierden las mejoras del anterior. Cada valor es [nivel 1, suma por nivel].
+## Un arco superior es mejor a igual nivel, pero un arco inferior mejorado puede superarlo.
+const ARCO_NIVEL_MAX = 5
+const ARCOS = {
+	"thorn": {
+		"nombre": "Thorn Bow", "modelo": 3, "dificultad": "easy", "coste": [150, 1.6],
+		"daño": [1.10, 0.05],
+		"perfora": [1, 1], #enemigos extra que atraviesa cada flecha
+	},
+	"sunfire": {
+		"nombre": "Sunfire Bow", "modelo": 2, "dificultad": "medium", "coste": [400, 1.6],
+		"daño": [1.20, 0.05],
+		"explosion_radio": [1.5, 0.25], #metros
+		"explosion_daño": [0.4, 0.15], #fracción del daño de la flecha a los de alrededor
+	},
+	"storm": {
+		"nombre": "Storm Bow", "modelo": 5, "dificultad": "hard", "coste": [1000, 1.6],
+		"daño": [1.30, 0.05],
+		"cadencia": [1.15, 0.0],
+		"cadena_saltos": [2, 1], #enemigos a los que salta el rayo
+		"cadena_daño": [0.5, 0.1],
+		"cadena_radio": [7.0, 0.0],
+	},
+	"dragon": {
+		"nombre": "Dragonbone Bow", "modelo": 4, "dificultad": "hell", "coste": [2500, 1.6],
+		"daño": [1.50, 0.05],
+		"quemadura_dps": [0.4, 0.15], #fracción del daño de la flecha por segundo
+		"quemadura_seg": [3.0, 0.0],
+		"daño_boss": [0.3, 0.15], #daño extra contra bosses
+	},
+}
+const ORDEN_ARCOS = ["thorn", "sunfire", "storm", "dragon"]
+#valor neutro de cada parámetro si el arco no lo tiene (o sin arco especial)
+const ARCO_NEUTRO = {"daño": 1.0, "cadencia": 1.0}
+
 static func costes(base : float, crecimiento : float, niveles : int) -> Array[int]:
 	var r : Array[int] = []
 	for i in niveles:
 		r.append(int(round(base * pow(crecimiento, i))))
 	return r
+
+#valor de un parámetro del arco a un nivel (1..ARCO_NIVEL_MAX); "" = arco original
+static func arco_valor(id : String, clave : String, nivel : int) -> float:
+	if id == "" or not ARCOS.has(id) or not ARCOS[id].has(clave) or nivel < 1:
+		return ARCO_NEUTRO.get(clave, 0.0)
+	var v = ARCOS[id][clave]
+	return v[0] + v[1] * (nivel - 1)
+
+#precio de comprar el nivel indicado del arco
+static func arco_coste(id : String, nivel : int) -> int:
+	var c = ARCOS[id].coste
+	return int(round(c[0] * pow(c[1], nivel - 1)))
+
+#texto de la habilidad para la tienda (valores al nivel indicado)
+static func arco_descripcion(id : String, nivel : int) -> String:
+	var v = func(clave): return arco_valor(id, clave, nivel)
+	var texto = ""
+	match id:
+		"thorn":
+			texto = "Arrows pierce %d enemies" % v.call("perfora")
+		"sunfire":
+			texto = "Explode on hit: %d%% damage in %.1f m" % [v.call("explosion_daño") * 100, v.call("explosion_radio")]
+		"storm":
+			texto = "Lightning chains to %d enemies (%d%% damage)\nFire rate x%.2f" % [v.call("cadena_saltos"), v.call("cadena_daño") * 100, v.call("cadencia")]
+		"dragon":
+			texto = "Burns %d%% damage/s for %ds\n+%d%% damage to bosses" % [v.call("quemadura_dps") * 100, v.call("quemadura_seg"), v.call("daño_boss") * 100]
+	return texto + "\nDamage x%.2f" % v.call("daño")
 
 static func _mult(mapa : int, i : int) -> float:
 	return MAPAS.get(mapa, MAPAS[1])[i]

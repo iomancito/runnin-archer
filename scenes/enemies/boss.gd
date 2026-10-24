@@ -13,6 +13,7 @@ var _espera : float = 0.0
 
 func setup_boss(m : int) -> void:
 	mapa = m
+	add_to_group(ArcoEfectos.GRUPO_ENEMIGOS)
 	set_vida(Balance.boss_vida(m))
 	daño_ataque = Balance.boss_daño(m)
 	intervalo = Balance.boss_intervalo()

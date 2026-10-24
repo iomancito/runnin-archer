@@ -34,6 +34,7 @@ Móvil de pruebas: **OPPO CPH2065** (MediaTek Dimensity 800U, GPU **Mali-G57 MC4
 | Shaders precompilados mostrando cada modelo una vez tras la pantalla de inicio | `Mapa.precalentar()` |
 | El mapa se monta con la pantalla en negro | `main.gd` → `show_game()` |
 | Texturas limitadas a 1024 px al importar | `.import` de cada textura |
+| Efectos de los arcos en pool, sin luces dinámicas, ruido convertido a PNG; solo se precalientan los del arco equipado | [`arco_efectos.gd`](../scenes/player/arco_efectos.gd) (ver [arcos.md](arcos.md)) |
 
 ## Cómo medir en el móvil
 
@@ -49,4 +50,5 @@ Cuidados:
 - `TIME_PROCESS` incluye la espera a la GPU: un "process" alto suele ser GPU.
 - Cambiar ajustes del `Environment` en tiempo de ejecución recompila shaders y da números falsos: comparar **builds estáticas** durante 20-30 s.
 - Las medidas varían ±2 ms entre ejecuciones.
+- Comprobar que el **ahorro de batería** está desactivado (`adb shell settings get global low_power`): limita la CPU a 925 MHz de 2000.
 - El perfilador por pasadas de GPU no está disponible en builds exportadas (solo 2 marcas de tiempo).

@@ -5,7 +5,7 @@ signal gold_changed(gold : int) #actualiza el oro en el hud
 signal progress_reset #se ha borrado todo el progreso
 
 const SAVE_PATH : String = "user://save.json"
-const SAVE_VERSION : int = 4
+const SAVE_VERSION : int = 5
 #versión 1: la tienda costaba 1-5 de oro por nivel (se reembolsa al migrar)
 const COSTES_V1 : Array[int] = [1, 2, 3, 4, 5]
 
@@ -41,6 +41,11 @@ var dificultad : String = "easy":
 #dificultades disponibles: se empieza solo con la primera y superar los 3 mapas
 #en una dificultad desbloquea la siguiente (Balance.ORDEN_DIFICULTADES)
 var desbloqueadas : Array = [Balance.ORDEN_DIFICULTADES[0]]
+#dificultades con los 3 mapas superados (cada una permite comprar su arco)
+var completadas : Array = []
+#arco especial equipado ("" = original) y su nivel; solo se tiene uno a la vez
+var arco : String = ""
+var arco_nivel : int = 0
 #mapa más alto alcanzado en cada dificultad
 var max_maps : Dictionary = {}
 #mapa más alto alcanzado en la dificultad actual
@@ -79,9 +84,12 @@ func siguiente_dificultad(d : String) -> String:
 		return ""
 	return Balance.ORDEN_DIFICULTADES[i + 1]
 
-#se han superado los 3 mapas en la dificultad actual: desbloquea la siguiente.
+#se han superado los 3 mapas en la dificultad actual: la marca como completada
+#(su arco pasa a la tienda) y desbloquea la siguiente.
 #Devuelve la dificultad recién desbloqueada o "" si ya lo estaba / no hay más
 func completa_dificultad() -> String:
+	if not dificultad in completadas:
+		completadas.append(dificultad)
 	var nueva = siguiente_dificultad(dificultad)
 	if nueva == "" or esta_desbloqueada(nueva):
 		return ""
@@ -95,6 +103,9 @@ func reset_all() -> void:
 	max_maps.clear()
 	desbloqueadas = [Balance.ORDEN_DIFICULTADES[0]]
 	dificultad = Balance.ORDEN_DIFICULTADES[0]
+	completadas.clear()
+	arco = ""
+	arco_nivel = 0
 	current_map = 1
 	oro_resto = 0.0
 	p_gold = 0
@@ -109,6 +120,9 @@ func save_game() -> void:
 		"max_maps": max_maps,
 		"dificultad": dificultad,
 		"desbloqueadas": desbloqueadas,
+		"completadas": completadas,
+		"arco": arco,
+		"arco_nivel": arco_nivel,
 		"skin": progreso_permanente["a_skin"]
 	}
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -155,6 +169,17 @@ func load_game() -> void:
 				desbloqueadas.append(d)
 	if not esta_desbloqueada(dificultad):
 		dificultad = desbloqueadas[0]
+	completadas.clear()
+	var saved_completadas = data.get("completadas", [])
+	if typeof(saved_completadas) == TYPE_ARRAY:
+		for d in saved_completadas:
+			if Balance.DIFICULTADES.has(d) and not d in completadas:
+				completadas.append(d)
+	arco = data.get("arco", "")
+	arco_nivel = clampi(int(data.get("arco_nivel", 0)), 0, Balance.ARCO_NIVEL_MAX)
+	if not Balance.ARCOS.has(arco) or arco_nivel == 0:
+		arco = ""
+		arco_nivel = 0
 	if int(data.get("version", 1)) < 2:
 		_migra_v1()
 
@@ -168,6 +193,44 @@ func _migra_v1() -> void:
 	p_gold += reembolso
 	aviso = "Shop rebalanced: upgrades refunded (+%d gold)" % reembolso
 	save_game()
+
+#--- Arcos especiales ---
+
+#nivel que tiene el jugador de ese arco (0 si no es el equipado)
+func nivel_arco(id : String) -> int:
+	return arco_nivel if arco == id else 0
+
+func arco_disponible(id : String) -> bool:
+	return Balance.ARCOS[id].dificultad in completadas
+
+#precio de la siguiente compra de ese arco (subir nivel o comprarlo de nuevo en nivel 1)
+func coste_arco(id : String) -> int:
+	return Balance.arco_coste(id, nivel_arco(id) + 1)
+
+func puede_comprar_arco(id : String) -> bool:
+	return arco_disponible(id) and nivel_arco(id) < Balance.ARCO_NIVEL_MAX and p_gold >= coste_arco(id)
+
+#comprar el arco equipado lo mejora; comprar otro lo equipa en nivel 1 y se pierde el anterior
+func comprar_arco(id : String) -> bool:
+	if not puede_comprar_arco(id):
+		return false
+	var coste = coste_arco(id)
+	if arco == id:
+		arco_nivel += 1
+	else:
+		arco = id
+		arco_nivel = 1
+	p_gold -= coste
+	save_game()
+	return true
+
+#stats con los que empieza el player: mejoras permanentes + arco equipado
+func stats_partida() -> Dictionary:
+	var s = progreso_permanente.duplicate()
+	s["arco"] = arco
+	s["arco_nivel"] = arco_nivel
+	s["p_attack_speed"] = s["p_attack_speed"] * Balance.arco_valor(arco, "cadencia", arco_nivel)
+	return s
 
 #oro de un enemigo con el bonus de la tienda aplicado
 func oro_con_bonus(cantidad : int) -> int:

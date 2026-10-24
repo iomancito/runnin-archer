@@ -89,6 +89,10 @@ Total para maximizar todo: ~5750 de oro. Un mapa 1 completo en medio da ~300.
 
 > Cambiar el `nombre` de una mejora rompe los niveles guardados (se guardan por nombre). Si se cambia la tienda de forma incompatible, añade una migración en `Progreso` (ver [progreso-y-tienda.md](progreso-y-tienda.md)).
 
+## Arcos especiales (`ARCOS`)
+
+4 arcos con habilidad propia, comprables tras superar cada dificultad. Valores, precios y reglas en [arcos.md](arcos.md).
+
 ## Puertas de mejora durante la partida (`PUERTAS`)
 
 `[texto, stat, incremento]`: Damage +1, Fire rate +0,15/s, Arrows +1, Range +3 m, Dodge speed +15, Max HP +10 (también cura). `MAX_FLECHAS = 7` limita las flechas por disparo. Las aplica `Player.mejora(stat, valor)`.

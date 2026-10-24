@@ -22,6 +22,7 @@ func _ready() -> void:
 #vida, daño y oro según el tipo de enemigo, la distancia recorrida y el mapa (ver Balance)
 func setup(tipo : String, z : float, m : int) -> void:
 	mapa = m
+	add_to_group(ArcoEfectos.GRUPO_ENEMIGOS)
 	set_vida(Balance.vida_enemigo(tipo, z, m))
 	daño_contacto = Balance.daño_enemigo(tipo, m)
 	gold = Balance.oro_enemigo(tipo, m)
@@ -38,6 +39,7 @@ func threat_color() -> Color:
 	var stats = Progreso.player.stats if is_instance_valid(Progreso.player) else Progreso.progreso_permanente
 	var ventana = stats["f_max_distancia"] / max(stats["p_speed"] / 60.0, 0.1)
 	var daño = ventana * stats["p_attack_speed"] * stats["f_daño"] * stats["f_cantidad"]
+	daño *= Balance.arco_valor(stats.get("arco", ""), "daño", stats.get("arco_nivel", 0))
 	if daño >= vida:
 		return COLOR_FACIL
 	elif daño * 2.0 >= vida:
@@ -85,6 +87,41 @@ func popup_texto(texto : String, color : Color) -> void:
 	tw.tween_property(label, "global_position:y", label.global_position.y + 1.5, 0.8).set_ease(Tween.EASE_OUT)
 	tw.tween_property(label, "modulate:a", 0.0, 0.8).set_delay(0.3)
 	tw.chain().tween_callback(label.queue_free)
+
+#fuego de dragón: daño por segundo durante unos segundos (renovar la quemadura reinicia el tiempo).
+#Cuenta ticks del Timer, que se detiene en pausa y fuera de cámara igual que el enemigo
+const INTERVALO_QUEMADURA : float = 0.5
+var _quemadura_dps : float = 0.0
+var _quemadura_ticks : int = 0
+var _fuego : Node3D
+func quemar(dps : float, segundos : float) -> void:
+	_quemadura_dps = max(_quemadura_dps if _quemadura_ticks > 0 else 0.0, dps)
+	_quemadura_ticks = ceili(segundos / INTERVALO_QUEMADURA)
+	var timer : Timer = get_node_or_null("Quemadura")
+	if timer == null:
+		timer = Timer.new()
+		timer.name = "Quemadura"
+		timer.wait_time = INTERVALO_QUEMADURA
+		timer.timeout.connect(_tick_quemadura)
+		add_child(timer)
+	if timer.is_stopped():
+		timer.start()
+	if not is_instance_valid(_fuego):
+		_fuego = ArcoEfectos.empieza_quemadura(self)
+	if has_node("Label3D"):
+		$Label3D.outline_modulate = Color(1.0, 0.45, 0.05)
+
+func _tick_quemadura() -> void:
+	if _quemadura_ticks <= 0 or vida <= 0:
+		$Quemadura.stop()
+		_quemadura_dps = 0.0
+		ArcoEfectos.termina_quemadura(_fuego)
+		_fuego = null
+		if has_node("Label3D"):
+			$Label3D.outline_modulate = Color.BLACK
+		return
+	_quemadura_ticks -= 1
+	recibe_daño(max(1, roundi(_quemadura_dps * INTERVALO_QUEMADURA)))
 
 func set_vida(v :int) -> void:
 	vida = v

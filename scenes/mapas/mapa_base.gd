@@ -135,6 +135,8 @@ func precalentar() -> void:
 	muestra.free()
 	add_child(moneda)
 	moneda.global_position = Vector3(4, 0, z)
+	#efectos del arco equipado (los de otro arco se precalientan al comprarlo en la tienda)
+	ArcoEfectos.precalentar(Progreso.arco, self, Vector3(0, 0, z + 2.0))
 	#números flotantes (+oro, -daño) y de vida: sus glifos se rasterizan la primera vez
 	for tam in [[96, 24], [110, 26], [100, 30]]:
 		var l = Label3D.new()

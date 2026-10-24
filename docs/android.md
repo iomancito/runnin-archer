@@ -31,9 +31,16 @@ $A logcat -s godot:*                                                            
 
 - Solo `arm64-v8a`.
 - **Exporta solo las escenas necesarias** (`export_filter="scenes"`) más todos los `*.gd` (`include_filter`). El APK pasó de 440 MB a ~86 MB.
-- Lista `export_files`: `main.tscn`, los 3 mapas, `panel.tscn`, `Piedra.tscn`, `shop_card.tscn`, `icon.svg`.
+- Lista `export_files`: `main.tscn`, los 3 mapas, `panel.tscn`, `Piedra.tscn`, `shop_card.tscn`, `bow_card.tscn`, los 4 efectos de BinbunVFX, `icon.svg`.
+- `include_filter`: `*.gd,assets/images/bows/*.png`.
 
-> **Importante:** Godot no sigue los `load()`/`preload()` de los scripts al calcular dependencias. Cualquier escena o recurso que **solo se cargue desde código** debe añadirse a `export_files`, o en el móvil faltará (pasó con `shop_card.tscn`: pantalla negra). Tras instalar, buscar `does not exist` en logcat.
+> **Importante:** Godot no sigue los `load()`/`preload()` de los scripts al calcular dependencias. Lo que **solo se cargue desde código** hay que añadirlo a mano, o en el móvil faltará (pasó con `shop_card.tscn`: pantalla negra):
+> - **escenas** → `export_files` (esta lista **solo admite escenas**: los PNG puestos ahí se ignoran);
+> - **otros recursos** (imágenes…) → `include_filter`.
+>
+> Tras instalar, buscar `does not exist` o `No loader found` en logcat.
+>
+> Escenas copiadas de otro proyecto (como los efectos de BinbunVFX) traen `uid` de ese proyecto en sus `ext_resource`: en el editor funcionan por la ruta, pero el exportador no incluye sus dependencias. Hay que quitar esos `uid`.
 
 ## Icono y pantalla de inicio
 
@@ -63,7 +70,18 @@ $A shell input keyevent 4                       # botón atrás
 $A shell run-as com.example.runningarcher cat files/save.json   # leer el guardado
 ```
 
-Las coordenadas de los botones del menú cambian si se añaden elementos: comprobar con una captura antes de automatizar toques.
+Las coordenadas de los botones del menú cambian si se añaden elementos: comprobar con una captura antes de automatizar toques (ahora PLAY está en y≈1437 y SHOP en y≈1640).
+
+Para probar con una partida concreta sin perder la del móvil: copiar `files/save.json`, escribir la de prueba con ruta absoluta y restaurarla al terminar:
+
+```bash
+F=/data/data/com.example.runningarcher/files/save.json
+$A shell run-as com.example.runningarcher cat $F > copia.json
+echo '{...}' | $A shell "run-as com.example.runningarcher sh -c 'cat > $F'"
+cat copia.json | $A shell "run-as com.example.runningarcher sh -c 'cat > $F'"
+```
+
+El **ahorro de batería** (`adb shell settings get global low_power` = 1) limita la CPU a menos de la mitad: el arranque pasa de ~7 s a ~15-19 s. Tenerlo en cuenta al medir.
 
 ## Carpeta de solo lectura
 

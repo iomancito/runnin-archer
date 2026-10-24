@@ -30,7 +30,7 @@ El tema está generado por un script; para retocarlo es más cómodo editar el `
 |---|---|---|
 | `Splash` (en `main.tscn`) | Imagen de inicio + barra "Loading %" | — |
 | `main_menu.tscn` | Título, oro, mapa más lejano, selector de dificultad (las bloqueadas deshabilitadas, con pista para desbloquear la siguiente), PLAY / SHOP / EXIT, RESET PROGRESS | `play_pressed`, `shop_pressed`, `exit_pressed` |
-| `shop.tscn` + `shop_card.tscn` | Tarjetas de mejora, reset de mejoras | `back_pressed` |
+| `shop.tscn` + `shop_card.tscn` + `bow_card.tscn` | Pestañas UPGRADES (tarjetas de mejora, reset) y BOWS (arcos con imagen, habilidad, nivel y estado) | `back_pressed`, `arco_equipado` |
 | `game_hud.tscn` | Vida, oro, barra de distancia al boss, barra del boss, botón de pausa, destello rojo al recibir daño | `pause_pressed` |
 | `pause_menu.tscn` | RESUME / QUIT RUN | `resume_pressed`, `menu_pressed` |
 | `results.tscn` | Derrota / mapa superado / victoria con distancia, bajas y oro | `next_pressed`, `retry_pressed`, `shop_pressed`, `menu_pressed` |

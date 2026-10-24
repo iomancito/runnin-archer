@@ -36,6 +36,7 @@ func _ready() -> void:
 	menu_principal.shop_pressed.connect(show_mejoras)
 	menu_principal.exit_pressed.connect(salir)
 	menu_mejoras.back_pressed.connect(show_principal)
+	menu_mejoras.arco_equipado.connect(_precalentar_arco)
 	game_hud.pause_pressed.connect(pause_game)
 	pause_menu.resume_pressed.connect(pause_game)
 	pause_menu.menu_pressed.connect(abandonar_partida)
@@ -91,6 +92,16 @@ func _carga_inicial() -> void:
 	await get_tree().create_timer(0.2).timeout
 	fade.fade_out(0.8)
 
+#efectos del arco recién equipado delante de la cámara, tapados por la tienda, unos frames
+func _precalentar_arco(id : String) -> void:
+	var nodo = Node3D.new()
+	add_child(nodo)
+	var camara = $Camera3D.global_position
+	ArcoEfectos.precalentar(id, nodo, Vector3(camara.x, 0, camara.z + 8))
+	for i in 3:
+		await get_tree().process_frame
+	nodo.queue_free()
+
 func _progreso_carga(porcentaje : float) -> void:
 	%Barra.value = porcentaje
 	%Texto.text = "Loading %d%%" % int(porcentaje)
@@ -123,9 +134,16 @@ func muere_boss(s : Node3D) -> void :
 	get_tree().paused = true
 	if Progreso.current_map == 3:
 		Progreso.current_map = 1
+		var primera_vez = not Progreso.dificultad in Progreso.completadas
 		var nueva = Progreso.completa_dificultad()
 		Progreso.save_game()
-		results.show_victory(stats, nueva)
+		#el arco de esta dificultad pasa a la tienda la primera vez que se completa
+		var arco_nuevo = ""
+		if primera_vez:
+			for id in Balance.ORDEN_ARCOS:
+				if Balance.ARCOS[id].dificultad == Progreso.dificultad:
+					arco_nuevo = id
+		results.show_victory(stats, nueva, arco_nuevo)
 		return
 	Progreso.current_map += 1
 	Progreso.max_map = max(Progreso.max_map, Progreso.current_map)
@@ -140,7 +158,7 @@ func spawn_player() -> void:
 	var player_instancia = player_scene.instantiate()
 	player = player_instancia
 	#los stats se asignan antes de add_child para que _ready() del player los use
-	player.stats = Progreso.progreso_permanente.duplicate()
+	player.stats = Progreso.stats_partida()
 	#Main procesa siempre (menús en pausa), el player debe pausarse
 	player.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(player_instancia)

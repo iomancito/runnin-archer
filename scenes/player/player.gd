@@ -66,7 +66,9 @@ func _ready() -> void:
 	name = "player"
 	velocidad_flechas = generar_secuencia(1000) #velocidad lateral flechas
 	cargar_datos_progreso()
-	set_bow(1)
+	#modelo del arco especial equipado (1 = original)
+	var arco = stats.get("arco", "")
+	set_bow(Balance.ARCOS[arco].modelo if Balance.ARCOS.has(arco) else 1)
 
 func generar_secuencia(x: int) -> Array[int]:
 	var resultado : Array[int]
@@ -171,10 +173,11 @@ func set_attack_speed(s : float) -> void:
 ##								CAMBIO DE MODELO DEL ARCO
 
 func set_bow(n : int) -> void:
-	if active_bow > 0 and active_bow < 6:
-		bow_dictionay[active_bow].hide()
+	for k in bow_dictionay:
+		bow_dictionay[k].visible = k == n
 	active_bow = n
-	bow_dictionay[active_bow].show()
+	#el modelo del arquero trae su propio arco: se oculta con los arcos especiales
+	$Armature_004/Skeleton3D/Erika_Archer_Bow_Mesh_004.visible = n == 1
 
 #######################################################################################################
 ##			INCREMENTOS DE ESTADÍSTICAS DEL PLAYER
