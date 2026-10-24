@@ -6,6 +6,12 @@ signal exit_pressed
 
 @onready var progress_label : Label = %ProgressLabel
 @onready var play_button : Button = %PlayButton
+@onready var reset_button : Button = %ResetButton
+
+#segundos para confirmar el borrado
+const RESET_CONFIRM_TIME : float = 3.0
+const RESET_TEXT : String = "RESET PROGRESS"
+var reset_armed : bool = false
 
 func _ready() -> void:
 	play_button.pressed.connect(func(): play_pressed.emit())
@@ -13,13 +19,57 @@ func _ready() -> void:
 	%ExitButton.pressed.connect(func(): exit_pressed.emit())
 	#en web/iOS no se puede cerrar la app
 	%ExitButton.visible = OS.get_name() not in ["Web", "iOS"]
+	reset_button.pressed.connect(_on_reset_pressed)
+	for d in Balance.ORDEN_DIFICULTADES:
+		var b = Button.new()
+		b.text = Balance.DIFICULTADES[d].nombre.to_upper()
+		b.custom_minimum_size = Vector2(110, 72)
+		b.focus_mode = Control.FOCUS_NONE
+		b.add_theme_font_size_override("font_size", 24)
+		b.pressed.connect(_on_dificultad_pressed.bind(d))
+		%DiffRow.add_child(b)
 	visibility_changed.connect(_refresh)
 	_refresh()
 	_pulse_play()
 
 func _refresh() -> void:
+	reset_armed = false
+	reset_button.text = RESET_TEXT
 	if visible:
-		progress_label.text = "Furthest map: %d / 3" % Progreso.max_map
+		progress_label.text = "Furthest map (%s): %d / 3" % [Balance.dif().nombre, Progreso.max_map]
+		_marca_dificultad()
+		if Progreso.aviso != "":
+			progress_label.text += "\n" + Progreso.aviso
+			Progreso.aviso = ""
+
+func _on_dificultad_pressed(d : String) -> void:
+	Progreso.dificultad = d
+	Progreso.save_game()
+	_refresh()
+
+#resalta la dificultad elegida (verde, o rojo en Hell)
+func _marca_dificultad() -> void:
+	for i in Balance.ORDEN_DIFICULTADES.size():
+		var d = Balance.ORDEN_DIFICULTADES[i]
+		var b : Button = %DiffRow.get_child(i)
+		if d != Progreso.dificultad:
+			b.theme_type_variation = &""
+		else:
+			b.theme_type_variation = &"DangerButton" if d == "hell" else &"PrimaryButton"
+
+#primer toque arma el borrado, el segundo lo confirma
+func _on_reset_pressed() -> void:
+	if not reset_armed:
+		reset_armed = true
+		reset_button.text = "TAP AGAIN TO ERASE ALL"
+		await get_tree().create_timer(RESET_CONFIRM_TIME).timeout
+		if reset_armed:
+			reset_armed = false
+			reset_button.text = RESET_TEXT
+		return
+	Progreso.reset_all()
+	_refresh()
+	progress_label.text += "\nProgress erased"
 
 #latido suave del botón PLAY
 func _pulse_play() -> void:

@@ -5,6 +5,8 @@ class_name Enemy extends CharacterBody3D
 var vida = 1
 var vida_max = 1
 var gold = 1
+var daño_contacto = 1 #daño al chocar con el player
+var mapa : int = 1
 
 #colores del número de vida según lo difícil que es matarlo
 const COLOR_FACIL = Color(0.55, 1.0, 0.45)
@@ -17,20 +19,28 @@ func _ready() -> void:
 	change_live.connect(update_hp)
 	update_hp()
 
+#vida, daño y oro según el tipo de enemigo, la distancia recorrida y el mapa (ver Balance)
+func setup(tipo : String, z : float, m : int) -> void:
+	mapa = m
+	set_vida(Balance.vida_enemigo(tipo, z, m))
+	daño_contacto = Balance.daño_enemigo(tipo, m)
+	gold = Balance.oro_enemigo(tipo, m)
+	update_hp()
+
 func update_hp() -> void:
 	if not has_node("Label3D"):
 		return
 	$Label3D.text = str(vida)
 	$Label3D.modulate = threat_color()
 
-#segundos que tardaría el player en matarlo -> verde / amarillo / rojo
+#daño que el player le hace antes de chocar -> verde (lo mata) / amarillo (casi) / rojo (esquivar)
 func threat_color() -> Color:
 	var stats = Progreso.player.stats if is_instance_valid(Progreso.player) else Progreso.progreso_permanente
-	var dps = stats["f_daño"] * stats["p_attack_speed"] * min(stats["f_cantidad"], 3)
-	var segundos = vida / max(dps, 0.01)
-	if segundos <= 2.0:
+	var ventana = stats["f_max_distancia"] / max(stats["p_speed"] / 60.0, 0.1)
+	var daño = ventana * stats["p_attack_speed"] * stats["f_daño"] * stats["f_cantidad"]
+	if daño >= vida:
 		return COLOR_FACIL
-	elif segundos <= 6.0:
+	elif daño * 2.0 >= vida:
 		return COLOR_MEDIO
 	return COLOR_DIFICIL
 
@@ -53,6 +63,7 @@ func die() -> void:
 func recompensa(cantidad : int = gold) -> void:
 	if cantidad <= 0:
 		return
+	cantidad = Progreso.oro_con_bonus(cantidad)
 	Progreso.p_gold += cantidad
 	Progreso.run_gold += cantidad
 	Progreso.run_kills += 1
@@ -84,7 +95,7 @@ func set_gold(g : int) -> void:
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is Player:
-		body.recibe_daño(vida)
+		body.recibe_daño(daño_contacto)
 		#chocar con el enemigo no da oro
 		gold = 0
 		die()

@@ -13,9 +13,17 @@ signal mapa_cargado
 @onready var pause_menu : PauseMenu = %PauseMenu
 @onready var results : Results = %Results
 @onready var fade = %fade
+@onready var splash : TextureRect = %Splash
+
+#segundos mínimos que se ve la pantalla de inicio aunque la carga acabe antes
+const SPLASH_MIN : float = 3.0
 
 var player
 var partida_iniciada : bool = false
+
+const RUTAS_MAPAS : Array[String] = ["res://scenes/mapas/mapa1.tscn", "res://scenes/mapas/mapa2.tscn", "res://scenes/mapas/mapa3.tscn"]
+#escenas de mapa ya cargadas (guardar la referencia evita que se descarguen)
+var escenas_mapas : Dictionary = {}
 
 var current_map: Node3D
 # En vez de índices, almacena referencias directas:
@@ -35,7 +43,57 @@ func _ready() -> void:
 	results.retry_pressed.connect(func(): limpiar_mundo(); iniciar_partida())
 	results.shop_pressed.connect(func(): limpiar_mundo(); show_mejoras())
 	results.menu_pressed.connect(func(): limpiar_mundo(); show_principal())
-	fade.fade_in_out(0.1, 2)
+	_carga_inicial()
+
+#pantalla de carga al arrancar: carga los mapas en segundo plano y compila sus shaders
+#mostrando una vez cada modelo, para que la partida no se congele al empezar
+func _carga_inicial() -> void:
+	var inicio = Time.get_ticks_msec()
+	splash.show()
+	fade.hide()
+	for ruta in RUTAS_MAPAS:
+		ResourceLoader.load_threaded_request(ruta)
+	var pendientes = RUTAS_MAPAS.duplicate()
+	while not pendientes.is_empty():
+		var progreso = 0.0
+		for ruta in RUTAS_MAPAS:
+			var p = []
+			var estado = ResourceLoader.load_threaded_get_status(ruta, p)
+			if estado == ResourceLoader.THREAD_LOAD_LOADED or estado == ResourceLoader.THREAD_LOAD_FAILED:
+				pendientes.erase(ruta)
+				progreso += 1.0
+			elif not p.is_empty():
+				progreso += p[0]
+		_progreso_carga(progreso / RUTAS_MAPAS.size() * 70)
+		await get_tree().process_frame
+	for i in RUTAS_MAPAS.size():
+		escenas_mapas[i + 1] = ResourceLoader.load_threaded_get(RUTAS_MAPAS[i])
+	var camara_inicial = $Camera3D.global_position
+	for n in escenas_mapas:
+		_progreso_carga(70 + n * 10)
+		await get_tree().process_frame
+		var mapa = escenas_mapas[n].instantiate()
+		map_container.add_child(mapa)
+		mapa.precalentar()
+		$Camera3D.global_position = Vector3(0, camara_inicial.y, mapa.get_spawn_point().z - 3)
+		#unos frames dibujando el mapa (tapado por la pantalla negra)
+		for i in 3:
+			await get_tree().process_frame
+		mapa.queue_free()
+	$Camera3D.global_position = camara_inicial
+	_progreso_carga(100)
+	var restante = SPLASH_MIN - (Time.get_ticks_msec() - inicio) / 1000.0
+	if restante > 0:
+		await get_tree().create_timer(restante).timeout
+	#se oscurece la imagen y el menú principal entra con un fundido
+	await fade.fade_in(0.6)
+	splash.hide()
+	await get_tree().create_timer(0.2).timeout
+	fade.fade_out(0.8)
+
+func _progreso_carga(porcentaje : float) -> void:
+	%Barra.value = porcentaje
+	%Texto.text = "Loading %d%%" % int(porcentaje)
 
 func iniciar_partida() -> void:
 	show_game()
@@ -46,7 +104,9 @@ func load_map(map_index: int):
 		current_map.queue_free()
 
 	# Cargar nuevo mapa (ej: map1.tscn, map2.tscn)
-	var map_scene = load("res://scenes/mapas/mapa{index}.tscn".format({"index": map_index}))
+	var map_scene = escenas_mapas.get(map_index)
+	if map_scene == null:
+		map_scene = load("res://scenes/mapas/mapa{index}.tscn".format({"index": map_index}))
 	current_map = map_scene.instantiate()
 	map_container.add_child(current_map)
 	spawn_player()
@@ -177,9 +237,13 @@ func show_mejoras() -> void:
 	menu_principal.hide()
 
 func show_game() -> void:
+	#el mapa se monta con la pantalla en negro: el parón de construirlo no se ve
+	await fade.fade_in(0.25)
 	menu_mejoras.hide()
 	menu_principal.hide()
-	fade.fade_in_out(0.2, 1.5)
 	load_map(Progreso.current_map)
 	game_hud.show()
 	partida_iniciada = true
+	await get_tree().process_frame
+	await get_tree().process_frame
+	fade.fade_out(0.6)

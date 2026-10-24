@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cuwfat5jqb56d"]
+[gd_scene load_steps=11 format=3 uid="uid://cuwfat5jqb56d"]
 
 [ext_resource type="Script" uid="uid://b61pt8iirmtqh" path="res://main.gd" id="1_3cdxv"]
 [ext_resource type="PackedScene" uid="uid://usjyg6j4mk04" path="res://scenes/player/player.tscn" id="2_c25tm"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/gui/shop.tscn" id="9_shop"]
 [ext_resource type="PackedScene" path="res://scenes/gui/pause_menu.tscn" id="10_pause"]
 [ext_resource type="PackedScene" path="res://scenes/gui/results.tscn" id="11_results"]
+[ext_resource type="Texture2D" path="res://assets/images/splash.png" id="12_splash"]
 
 [node name="Main" type="Node3D"]
 process_mode = 3
@@ -61,6 +62,46 @@ layout_mode = 1
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
+
+[node name="Splash" type="TextureRect" parent="HUD"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_splash")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Carga" type="VBoxContainer" parent="HUD/Splash"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 70.0
+offset_top = -150.0
+offset_right = -70.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 10
+
+[node name="Texto" type="Label" parent="HUD/Splash/Carga"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+theme_override_font_sizes/font_size = 30
+text = "Loading..."
+horizontal_alignment = 1
+
+[node name="Barra" type="ProgressBar" parent="HUD/Splash/Carga"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+show_percentage = false
 
 [node name="fade" parent="HUD" instance=ExtResource("5_lquwl")]
 unique_name_in_owner = true

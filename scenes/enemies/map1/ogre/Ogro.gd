@@ -2,9 +2,6 @@ class_name Ogro extends Enemy
 
 @export var panel : PackedScene = load("res://scenes/pickups/panel/panel.tscn")
 
-func _ready() -> void:
-	gold = 5
-	
 func die() -> void:
 	recompensa()
 	var moneda_i = moneda.instantiate()

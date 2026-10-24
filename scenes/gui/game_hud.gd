@@ -26,7 +26,7 @@ func start_run(map_index : int, p : Node3D, b : Enemy, boss_name : String) -> vo
 	player = p
 	boss = b
 	start_z = player.global_position.z
-	map_label.text = "MAP %d" % map_index
+	map_label.text = "MAP %d · %s" % [map_index, Balance.dif().nombre.to_upper()]
 	distance_bar.value = 0
 	boss_name_label.text = boss_name.to_upper()
 	boss_box.hide()

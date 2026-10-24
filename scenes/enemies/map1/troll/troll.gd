@@ -23,6 +23,7 @@ func throw_projectile():
 		get_parent().add_child(projectile)
 		projectile.global_position = proyectile_pos
 		projectile.set_velocity(launch_vel/15) 
+		projectile.daño = Balance.daño_roca(mapa)
 
 func calculate_launch_velocity(start_pos: Vector3, target_pos: Vector3, target_vel: Vector3) -> Vector3:
 	var delta = target_pos - start_pos

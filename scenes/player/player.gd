@@ -79,7 +79,19 @@ func generar_secuencia(x: int) -> Array[int]:
 func cargar_datos_progreso() -> void:
 	$Timer.wait_time = 1 / stats["p_attack_speed"]
 	vida = stats["p_vida"]
+	_ajusta_animacion_disparo()
 	$Timer.start()
+
+#la animación de disparo dura 0.73 s: con más cadencia se acelera para no cortarse
+var _escala_disparo_base : float = -1.0
+var _escala_caminar_base : float = -1.0
+func _ajusta_animacion_disparo() -> void:
+	if _escala_disparo_base < 0:
+		_escala_disparo_base = animation_tree.get(SHOOT_SPEED)
+		_escala_caminar_base = animation_tree.get(WALKING_SHOOT_SPEED)
+	var factor = max(1.0, stats["p_attack_speed"] * 0.8)
+	animation_tree.set(SHOOT_SPEED, _escala_disparo_base * factor)
+	animation_tree.set(WALKING_SHOOT_SPEED, _escala_caminar_base * factor)
 
 #######################################################################################################
 ##		FÍSICAS Y EVENTOS
@@ -167,37 +179,20 @@ func set_bow(n : int) -> void:
 #######################################################################################################
 ##			INCREMENTOS DE ESTADÍSTICAS DEL PLAYER
 #######################################################################################################
-#incrementa la velocidad de movimiento
-# s el valor a incrementar
-#incrementa la velocidad de la animación proporcionalmente speed/old_speed
-func increase_move_speed(s : float) -> void:
-	var old_speed = stats["p_speed"]
-	stats["p_speed"] += s
-	set_running_speed(stats["p_speed"]/old_speed)
-
-#incrementa la velocidad de ataque, s es la frecuencia
-func increase_attack_speed(s : float = 0.1) -> void:
-	var old_speed = stats["p_attack_speed"]
-	stats["p_attack_speed"] += s
-	$Timer.wait_time = 1 / stats["p_attack_speed"]
-	set_attack_speed(stats["p_attack_speed"] / old_speed)
-#incremeta el daño de la flecha
-func increase_arrow_damage(d :int = 1) -> void:
-	stats["f_daño"] += d
-	
-#incrementa la velocidad de movimiento lateral
-func increas_side_speed(s : float = 5) -> void:
-	stats["p_side_speed"] += s
-
-#incrementa la velocidad de la flecha
-func increase_arrow_speed(s : float = 10) -> void:
-	stats["f_velocidad"] += s
-#incrementa la distancia máxima de la flecha
-func increase_arrow_distance(s : float = 0.2) -> void:
-	stats["f_max_distancia"] += s
-
-func increase_arrow_number(i : int = 1) -> void:
-	stats["f_cantidad"] += i
+#aplica una mejora durante la partida (puertas): stat de stats y cuánto suma
+func mejora(stat : String, valor : float) -> void:
+	var base = stats[stat]
+	stats[stat] = type_convert(base + valor, typeof(base))
+	match stat:
+		"p_attack_speed":
+			$Timer.wait_time = 1 / stats["p_attack_speed"]
+			_ajusta_animacion_disparo()
+		"f_cantidad":
+			stats["f_cantidad"] = min(stats["f_cantidad"], Balance.MAX_FLECHAS)
+		"p_vida":
+			#más vida máxima también cura esa cantidad
+			vida += int(valor)
+			vida_changed.emit(vida, stats["p_vida"])
 	
 #reduce la vida del player
 func recibe_daño(d : int) -> void:

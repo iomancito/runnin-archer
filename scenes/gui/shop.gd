@@ -14,15 +14,9 @@ var cards : Array[ShopCard] = []
 var reset_armed : bool = false
 
 func _ready() -> void:
-	#nombre (clave de guardado), título, formato del valor, stat, incremento por nivel
-	_add("arrow_distance", "Range", "%d m", "f_max_distancia", 4)
-	_add("arrow_speed", "Arrow Speed", "%d", "f_velocidad", 30)
-	_add("side_walk_speed", "Dodge Speed", "%d", "p_side_speed", 5)
-	_add("walk_speed", "Run Speed", "%d", "p_speed", 20)
-	_add("attack_speed", "Fire Rate", "%.1f/s", "p_attack_speed", 0.2)
-	_add("damage", "Damage", "%d", "f_daño", 2)
-	_add("arrow_number", "Arrows", "%d", "f_cantidad", 1)
-	_add("vida", "Max HP", "%d", "p_vida", 10)
+	#mejoras, incrementos y precios definidos en Balance
+	for d in Balance.tienda():
+		_add(d[0], d[1], d[2], d[3], d[4], d[5])
 	#niveles guardados
 	for p in pasivas_array:
 		p.nivel = clampi(Progreso.niveles.get(p.nombre, 0), 0, p.nivel_max)
@@ -35,11 +29,12 @@ func _ready() -> void:
 	%BackButton.pressed.connect(func(): back_pressed.emit())
 	reset_button.pressed.connect(_on_reset_pressed)
 	Progreso.gold_changed.connect(func(_g): actualiza_txt())
+	Progreso.progress_reset.connect(_on_progress_reset)
 	visibility_changed.connect(_on_visibility_changed)
 	actualiza_txt()
 
-func _add(nombre : String, titulo : String, formato : String, stat : String, incremento : float) -> void:
-	var p = Pasiva.new(nombre, [1,2,3,4,5], 0, 5, stat, incremento)
+func _add(nombre : String, titulo : String, formato : String, stat : String, incremento : float, costes : Array) -> void:
+	var p = Pasiva.new(nombre, costes, 0, costes.size(), stat, incremento)
 	p.titulo = titulo
 	p.formato = formato
 	pasivas_array.append(p)
@@ -109,6 +104,13 @@ func reset_pasivas() -> void:
 	Progreso.save_game()
 	actualiza_txt()
 
+#reset total desde el menú principal: niveles a 0 sin reembolso
+func _on_progress_reset() -> void:
+	for p in pasivas_array:
+		p.nivel = 0
+	recalcula_stats()
+	actualiza_txt()
+
 func _on_visibility_changed() -> void:
 	reset_armed = false
 	if visible:
@@ -125,7 +127,7 @@ class Pasiva:
 	var stat : String #clave en Progreso.progreso_permanente
 	var incremento : float #cuanto suma cada nivel
 	
-	func _init(nom : String = "", cost : Array[int] = [],niv : int = 0, nivmax : int = 0, st : String = "", inc : float = 0) -> void:
+	func _init(nom : String = "", cost : Array = [],niv : int = 0, nivmax : int = 0, st : String = "", inc : float = 0) -> void:
 		nombre = nom
 		costes = cost.duplicate()
 		nivel = niv
