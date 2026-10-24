@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://ca8ii0i166cd" path="res://scenes/enemies/map1/orc/orc.tscn" id="9_wdh78"]
 [ext_resource type="PackedScene" uid="uid://cy723dp4ty665" path="res://scenes/enemies/map1/troll/troll.tscn" id="10_cu7uv"]
 [ext_resource type="PackedScene" uid="uid://mis3o761onwi" path="res://scenes/pickups/panel/panel.tscn" id="10_pthwl"]
-[ext_resource type="PackedScene" uid="uid://b628ejv37o24i" path="res://scenes/enemies/map1/ogre/Ogro_.tscn" id="11_mvyri"]
+[ext_resource type="PackedScene" uid="uid://b628ejv37o24i" path="res://scenes/enemies/map1/ogre/Ogro.tscn" id="11_mvyri"]
 [ext_resource type="PackedScene" uid="uid://e2oh4cirifon" path="res://scenes/enemies/map1/red_dragon/Dragon_Rojo.tscn" id="12_4ter5"]
 [ext_resource type="Texture2D" uid="uid://jtwyakh2jf4l" path="res://assets/textures/terrain/grass.jpg" id="14_u1ve2"]
 

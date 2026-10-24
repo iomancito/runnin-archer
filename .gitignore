@@ -4,3 +4,6 @@
 /android/
 /addons/
 /assets/Nature/
+
+# Godot editor backup files
+*.tmp
