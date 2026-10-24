@@ -7,6 +7,8 @@ var vida_max = 1
 var gold = 1
 var daño_contacto = 1 #daño al chocar con el player
 var mapa : int = 1
+#miembro de una horda (vida, daño y oro reducidos, ver Balance.HORDA)
+var horda : bool = false
 
 #colores del número de vida según lo difícil que es matarlo
 const COLOR_FACIL = Color(0.55, 1.0, 0.45)
@@ -20,12 +22,13 @@ func _ready() -> void:
 	update_hp()
 
 #vida, daño y oro según el tipo de enemigo, la distancia recorrida y el mapa (ver Balance)
-func setup(tipo : String, z : float, m : int) -> void:
+func setup(tipo : String, z : float, m : int, en_horda : bool = false) -> void:
 	mapa = m
+	horda = en_horda
 	add_to_group(ArcoEfectos.GRUPO_ENEMIGOS)
-	set_vida(Balance.vida_enemigo(tipo, z, m))
-	daño_contacto = Balance.daño_enemigo(tipo, m)
-	gold = Balance.oro_enemigo(tipo, m)
+	set_vida(Balance.vida_enemigo(tipo, z, m, horda))
+	daño_contacto = Balance.daño_enemigo(tipo, m, horda)
+	gold = Balance.oro_enemigo(tipo, m, horda)
 	update_hp()
 
 func update_hp() -> void:

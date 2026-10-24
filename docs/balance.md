@@ -50,26 +50,33 @@ Se multiplican por mapa y por dificultad igual que los enemigos. Al tocar al bos
 
 ## Dificultad (`DIFICULTADES`)
 
-| | Vida | Daño | Densidad | Oro | Intervalo boss |
-|---|---|---|---|---|---|
-| `easy` | ×0,6 | ×0,5 | ×0,75 | ×0,6 | ×1,3 |
-| `medium` | ×1 | ×1 | ×1 | ×1 | ×1 |
-| `hard` | ×1,7 | ×1,5 | ×1,25 | ×1,6 | ×0,9 |
-| `hell` | ×3 | ×2,5 | ×1,5 | ×2,5 | ×0,75 |
+| | Vida | Daño | Densidad | Oro | Intervalo boss | Hordas |
+|---|---|---|---|---|---|---|
+| `easy` | ×0,6 | ×0,5 | ×0,75 | ×0,6 | ×1,3 | no |
+| `medium` | ×1 | ×1 | ×1 | ×1 | ×1 | no |
+| `hard` | ×1,7 | ×1,5 | ×1,25 | ×1,6 | ×0,9 | ×1 |
+| `hell` | ×3 | ×2,5 | ×1,5 | ×2,5 | ×0,75 | ×1,6 |
 
 - **Densidad** divide la separación entre filas de enemigos del generador (más densidad = más enemigos).
+- **Hordas** divide la separación entre hordas del mapa (0 = sin hordas). Ver abajo.
 - Más dificultad da más oro, para que merezca la pena rejugar.
 - La dificultad elegida se guarda en `Progreso.dificultad` y se copia a `Balance.dificultad`; `Balance.dif()` devuelve sus multiplicadores.
 - Se empieza solo con Easy; superar los 3 mapas en una dificultad desbloquea la siguiente (ver [progreso-y-tienda.md](progreso-y-tienda.md)).
 
-Resultado aproximado (generador, 20 partidas de media):
+Resultado aproximado (generador, 20 partidas de media; oro si mata a todos, sin contar bosses):
 
 | | Easy | Medium | Hard | Hell |
 |---|---|---|---|---|
-| Enemigos mapa 1 (oro si mata todos) | 64 (150) | 84 (300) | 103 (538) | 125 (972) |
+| Enemigos mapa 1 (de ellos en hordas) | 66 | 87 | 180 (89) | 251 (152) |
+| Oro mapa 1 | 94 | 199 | 426 | 737 |
+| Máximo de enemigos vivos a la vez, mapa 1 | 13 | 17 | 40 | 63 |
 | Boss mapa 1: vida / golpe | 210 / 2 cada 3,2 s | 350 / 3 cada 2,5 s | 595 / 5 cada 2,2 s | 1050 / 8 cada 1,9 s |
-| Enemigos mapa 2 (oro) | 87 (195) | 117 (415) | 145 (582) | 168 (1126) |
+| Enemigos mapa 2 (de ellos en hordas) | 87 | 120 | 226 (97) | 284 (152) |
 | Boss mapa 2: vida / golpe | 630 / 3 cada 3,2 s | 1050 / 5 cada 2,5 s | 1785 / 7 cada 2,2 s | 3150 / 12 cada 1,9 s |
+
+## Hordas (`HORDA`)
+
+En Hard y Hell aparecen grupos compactos de enemigos débiles (goblins en los mapas 1 y 3, zombis en el 2) pegados a una pared, con al menos 2 carriles libres para esquivarlos. Cada miembro tiene los valores de su tipo multiplicados por `HORDA` (vida, daño y oro ×0,5): con los stats base hay que esquivarlas; con varias flechas o un arco especial (perforar, explosión, rayo) se barren y dan mucho oro. Dónde y cómo son: `hordas` en [`niveles.gd`](../scripts/niveles.gd) (ver [mapas.md](mapas.md)).
 
 ## Tienda (`tienda()`)
 
@@ -116,3 +123,4 @@ En `Progreso.BASE_STATS`: velocidad 200, lateral 150, cadencia 1,0/s, vida 10, 1
 - **Bosses**: `BOSS_*`.
 - **Progresión más lenta/rápida**: el crecimiento `1.4` de `costes()` o los `base`.
 - **Cantidad de enemigos**: separación en [`niveles.gd`](../scripts/niveles.gd) o la densidad por dificultad.
+- **Hordas**: `hordas` de cada dificultad (frecuencia), `HORDA` (lo fuerte que es cada miembro) y `hordas` de cada mapa en `niveles.gd` (tamaño y separación).

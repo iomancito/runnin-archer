@@ -17,6 +17,9 @@ signal mapa_cargado
 
 #segundos mínimos que se ve la pantalla de inicio aunque la carga acabe antes
 const SPLASH_MIN : float = 3.0
+#metros que la cámara va por detrás del player (negativo: por delante, mirando hacia abajo);
+#en x queda fija en el centro del camino: su FOV horizontal (main.tscn) abarca las dos paredes
+const CAMARA_DETRAS : float = -1.5
 
 var player
 var partida_iniciada : bool = false
@@ -76,7 +79,7 @@ func _carga_inicial() -> void:
 		var mapa = escenas_mapas[n].instantiate()
 		map_container.add_child(mapa)
 		mapa.precalentar()
-		$Camera3D.global_position = Vector3(0, camara_inicial.y, mapa.get_spawn_point().z - 3)
+		$Camera3D.global_position = Vector3(0, camara_inicial.y, mapa.get_spawn_point().z - CAMARA_DETRAS)
 		#unos frames dibujando el mapa (tapado por la pantalla negra)
 		for i in 3:
 			await get_tree().process_frame
@@ -169,8 +172,7 @@ func spawn_player() -> void:
 
 func _physics_process(delta: float) -> void:
 	if is_playing() and is_instance_valid(player):
-		$Camera3D.global_position.z = player.global_position.z -3
-		$Camera3D.global_position.x = player.global_position.x
+		$Camera3D.global_position.z = player.global_position.z - CAMARA_DETRAS
 
 func on_player_position_updated(player_pos) -> void:
 	pass#print(player_pos)

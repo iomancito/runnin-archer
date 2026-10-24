@@ -20,12 +20,17 @@ const VIDA_POR_METRO = 1.0 / 400.0
 #multiplicadores por mapa: [vida, daño, oro]
 const MAPAS = {1: [1.0, 1.0, 1.0], 2: [3.0, 1.5, 1.5], 3: [7.0, 2.0, 2.0]}
 
+#--- Hordas: grupos compactos de enemigos débiles (diseño en Niveles, frecuencia por dificultad) ---
+#multiplicadores de cada miembro de una horda sobre los valores normales de su tipo
+const HORDA = {"vida": 0.5, "daño": 0.5, "oro": 0.5}
+
 #--- Dificultad: multiplica vida, daño, densidad de enemigos y oro (también de los bosses) ---
+## hordas: multiplica la frecuencia de las hordas del mapa (0 = sin hordas)
 const DIFICULTADES = {
-	"easy": {"nombre": "Easy", "vida": 0.6, "daño": 0.5, "densidad": 0.75, "oro": 0.6, "boss_intervalo": 1.3},
-	"medium": {"nombre": "Medium", "vida": 1.0, "daño": 1.0, "densidad": 1.0, "oro": 1.0, "boss_intervalo": 1.0},
-	"hard": {"nombre": "Hard", "vida": 1.7, "daño": 1.5, "densidad": 1.25, "oro": 1.6, "boss_intervalo": 0.9},
-	"hell": {"nombre": "Hell", "vida": 3.0, "daño": 2.5, "densidad": 1.5, "oro": 2.5, "boss_intervalo": 0.75},
+	"easy": {"nombre": "Easy", "vida": 0.6, "daño": 0.5, "densidad": 0.75, "oro": 0.6, "boss_intervalo": 1.3, "hordas": 0.0},
+	"medium": {"nombre": "Medium", "vida": 1.0, "daño": 1.0, "densidad": 1.0, "oro": 1.0, "boss_intervalo": 1.0, "hordas": 0.0},
+	"hard": {"nombre": "Hard", "vida": 1.7, "daño": 1.5, "densidad": 1.25, "oro": 1.6, "boss_intervalo": 0.9, "hordas": 1.0},
+	"hell": {"nombre": "Hell", "vida": 3.0, "daño": 2.5, "densidad": 1.5, "oro": 2.5, "boss_intervalo": 0.75, "hordas": 1.6},
 }
 const ORDEN_DIFICULTADES = ["easy", "medium", "hard", "hell"]
 
@@ -138,14 +143,18 @@ static func arco_descripcion(id : String, nivel : int) -> String:
 static func _mult(mapa : int, i : int) -> float:
 	return MAPAS.get(mapa, MAPAS[1])[i]
 
-static func vida_enemigo(tipo : String, z : float, mapa : int) -> int:
-	return int(ceil(ENEMIGOS[tipo].vida * (1.0 + max(z, 0.0) * VIDA_POR_METRO) * _mult(mapa, 0) * dif().vida))
+#horda: el enemigo es miembro de una horda (valores reducidos según HORDA)
+static func vida_enemigo(tipo : String, z : float, mapa : int, horda : bool = false) -> int:
+	var h = HORDA.vida if horda else 1.0
+	return int(ceil(ENEMIGOS[tipo].vida * (1.0 + max(z, 0.0) * VIDA_POR_METRO) * _mult(mapa, 0) * dif().vida * h))
 
-static func daño_enemigo(tipo : String, mapa : int) -> int:
-	return int(ceil(ENEMIGOS[tipo].daño * _mult(mapa, 1) * dif().daño))
+static func daño_enemigo(tipo : String, mapa : int, horda : bool = false) -> int:
+	var h = HORDA.daño if horda else 1.0
+	return int(ceil(ENEMIGOS[tipo].daño * _mult(mapa, 1) * dif().daño * h))
 
-static func oro_enemigo(tipo : String, mapa : int) -> int:
-	return max(1, int(round(ENEMIGOS[tipo].oro * _mult(mapa, 2) * dif().oro)))
+static func oro_enemigo(tipo : String, mapa : int, horda : bool = false) -> int:
+	var h = HORDA.oro if horda else 1.0
+	return max(1, int(round(ENEMIGOS[tipo].oro * _mult(mapa, 2) * dif().oro * h)))
 
 static func daño_roca(mapa : int) -> int:
 	return int(ceil(ROCA_TROLL_DAÑO * _mult(mapa, 1) * dif().daño))

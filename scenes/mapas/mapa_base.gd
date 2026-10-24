@@ -17,7 +17,7 @@ class_name Mapa extends Node3D
 #spawn del player
 @onready var spawn_point = $Suelo/Spawn
 
-#metros por delante del player a los que aparecen los enemigos (la cámara ve ~60 m)
+#metros por delante del player a los que aparecen los enemigos (la cámara ve ~27 m)
 const ADELANTE : float = 80.0
 #metros por detrás del player a los que se eliminan los enemigos que ya ha pasado
 const DETRAS : float = 15.0
@@ -39,7 +39,7 @@ var _revisa_detras : float = 0.0
 func _ready() -> void:
 	instancia_laterales()
 	var cfg = Niveles.MAPAS[numero]
-	plan = MapGenerator.generar(cfg, Balance.dif().densidad)
+	plan = MapGenerator.generar(cfg, Balance.dif().densidad, Balance.dif().hordas)
 	instancia_paneles(cfg.puertas)
 	jefe_final = final.instantiate()
 	jefe_final.name = "boss_final"
@@ -107,7 +107,7 @@ func _spawn_hasta(z_max : float, limite : int) -> void:
 		e.name = "%s_%d" % [s.tipo, siguiente]
 		$Suelo/Enemigos.add_child(e)
 		e.global_position = Vector3(s.x, 0, s.z)
-		e.setup(s.tipo, s.z, numero)
+		e.setup(s.tipo, s.z, numero, s.horda)
 		prepara(e, s.tipo)
 		vivos.append(e)
 

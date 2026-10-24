@@ -27,12 +27,14 @@ Distancias en metros sobre z. Los pares `[inicio, fin]` se interpolan a lo largo
 | `tipos` | `{tipo: [peso_inicio, peso_fin, desde]}`; `desde` = punto del recorrido en que empieza a salir |
 | `jefes` | `{tipo, z: [...]}` mini jefes en el carril central |
 | `puertas` | z de las puertas de mejora |
+| `hordas` | `{tipo, separacion, desde, carriles, filas}`: hordas del mapa (solo en dificultades con `hordas` > 0, que divide `separacion`); `carriles` = ancho (2-3) y `filas` = fondo, ambos `[inicio, fin]` |
 
 Diseño actual:
 
 - **Mapa 1**: goblins al principio, orcos a partir del 10 %, trolls desde el 45 %. Separación 20 → 10 m. Ogros en 250/500/750 m. 8 puertas repartidas.
 - **Mapa 2**: zombis (3 modelos al azar) que avanzan hacia el player. Separación 14 → 7 m. *Brutes* (zombi ×1,6 de tamaño) en 300/600/850 m. 9 puertas.
 - **Mapa 3**: provisional con los enemigos del mapa 1 (más trolls y 4 ogros) hasta que tenga los suyos.
+- **Hordas** (Hard y Hell): goblins en los mapas 1 y 3, zombis en el 2; de 2×3 carriles y 3-5 filas, más grandes y frecuentes hacia el final. En Hell, ~9 por mapa.
 
 ## Reglas del generador
 
@@ -40,15 +42,16 @@ Diseño actual:
 - **Separación mínima entre filas: 6 m** (a velocidad base, cambiar de carril lleva ~2,7 m de avance).
 - **Zona libre de 7 m** alrededor de cada puerta y de cada mini jefe.
 - El tipo de cada enemigo se elige al azar por peso según el punto del recorrido.
+- **Hordas**: se colocan antes que las filas, cada una pegada a la pared izquierda o derecha al azar; sus miembros van en rejilla (`HORDA_ESPACIO` = 1,3 × 1,6 m). Las filas normales no entran en el tramo de una horda ni a menos de 7 m. Los miembros llevan `"horda": true` en el plan y `Enemy.setup()` les aplica `Balance.HORDA`.
 - Vida, daño y oro los pone `Enemy.setup(tipo, z, mapa)` desde [Balance](balance.md).
 
 ## Spawner (`Mapa`)
 
-- `ADELANTE = 80 m`: los enemigos se crean cuando el player está a esa distancia (la cámara ve ~60 m).
+- `ADELANTE = 80 m`: los enemigos se crean cuando el player está a esa distancia (la cámara ve ~27 m).
 - `DETRAS = 15 m`: los enemigos superados se eliminan (sin dar oro), revisando cada 0,5 s.
 - `SPAWNS_POR_FRAME = 2`: reparte el coste de instanciar.
 - Al montar el mapa se crean ya los de los primeros 80 m (durante el fundido a negro).
-- Resultado: 8-15 enemigos vivos a la vez en lugar de 70-180.
+- Resultado: 13-25 enemigos vivos a la vez sin hordas y hasta ~60 en Hell, en lugar de 70-280.
 
 ## Añadir un mapa nuevo
 

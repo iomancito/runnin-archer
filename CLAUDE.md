@@ -44,3 +44,6 @@ $A logcat -s godot:*
 - `export_files` solo admite escenas: los PNG listados ahí se ignoran.
 - Escenas copiadas de otro proyecto: quitar los `uid` de sus `ext_resource` o el exportador no incluirá sus dependencias.
 - Con el **ahorro de batería** del móvil activo la CPU va a menos de la mitad: las medidas de tiempo no son comparables.
+- En el renderer Mobile, `blend_mul` oscurece de más (el búfer guarda el color a la mitad): usar mezcla alfa.
+- Los ajustes de proyecto con variante `.mobile` (p. ej. `directional_shadow/size.mobile`) mandan en Android sobre el valor base.
+- El móvil de pruebas se queda en ~40 FPS tras ~10 s de partida (gestor de frecuencia): comparar los primeros 10-20 s.
