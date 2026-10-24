@@ -85,5 +85,11 @@ func instancia_enemigos() -> void:
 	dragon_negro.set_vida(500)
 	dragon_negro.update_hp()
 
+#nombre que muestra la barra de vida del boss
+var boss_name : String = "Black Dragon"
+
+func get_boss() -> Enemy:
+	return dragon_negro
+
 func set_boss(main : Node) -> void:
 	dragon_negro.connect("muere_boss", main.muere_boss)

@@ -22,6 +22,7 @@ var dragon_rojo : Node3D
 func _ready() -> void:
 	instancia_laterales()
 	instancia_enemigos()
+	instancia_paneles()
 		
 func generate_spawn_points():
 	var curve = path.curve
@@ -56,7 +57,8 @@ func instancia_paneles() -> void:
 	for i in range(1,9):
 		var instancia = panel.instantiate()
 		$Suelo/Paneles.add_child(instancia)
-		instancia.global_position.z = i * 50
+		#desplazados 25 para no coincidir con los ogros (z = 200, 300...)
+		instancia.global_position.z = i * 50 + 25
 		
 		
 func instancia_enemigos() -> void:
@@ -72,25 +74,23 @@ func instancia_enemigos() -> void:
 		
 	for i in range(0, 9):
 		for n in range(1,2):
-			if i*100 + n*35 != 100:
-				var instancia = enemies[1].instantiate()
-				instancia.name = "orco" + str(i)
-				$Suelo/Enemigos.add_child(instancia)
-				instancia.global_position.z = i*100 + n*35
-				instancia.global_position.x = randf_range(-4,4)
-				instancia.set_vida(3 + i)
-				instancia.update_hp()
+			var instancia = enemies[1].instantiate()
+			instancia.name = "orco" + str(i)
+			$Suelo/Enemigos.add_child(instancia)
+			instancia.global_position.z = i*100 + n*35
+			instancia.global_position.x = randf_range(-4,4)
+			instancia.set_vida(3 + i)
+			instancia.update_hp()
 			
 	for i in range(26, 49):
 		for n in range(1,2):
-			if n*20 != 100:
-				var instancia = enemies[1].instantiate()
-				instancia.name = "orco" + str(i)
-				$Suelo/Enemigos.add_child(instancia)
-				instancia.global_position.z = i*20 
-				instancia.global_position.x = randf_range(-4,4)
-				instancia.set_vida(50 + i*2)
-				instancia.update_hp()
+			var instancia = enemies[1].instantiate()
+			instancia.name = "orco" + str(i)
+			$Suelo/Enemigos.add_child(instancia)
+			instancia.global_position.z = i*20 
+			instancia.global_position.x = randf_range(-4,4)
+			instancia.set_vida(50 + i*2)
+			instancia.update_hp()
 		
 	for i in range(13, 24):
 		if i*40 != 100:
@@ -116,6 +116,12 @@ func instancia_enemigos() -> void:
 	dragon_rojo.global_position.z = 1000
 	dragon_rojo.set_vida(500)
 	dragon_rojo.update_hp()
+
+#nombre que muestra la barra de vida del boss
+var boss_name : String = "Red Dragon"
+
+func get_boss() -> Enemy:
+	return dragon_rojo
 
 func set_boss(main : Node) -> void:
 	dragon_rojo.connect("muere_boss", main.muere_boss)

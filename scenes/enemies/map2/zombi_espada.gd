@@ -12,6 +12,3 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	velocity.z = v
 	move_and_slide()
-
-func update_hp() -> void:
-	$Label3D.text = str(vida)

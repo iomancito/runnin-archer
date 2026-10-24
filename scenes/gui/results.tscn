@@ -1,0 +1,148 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/gui/results.gd" id="1_s"]
+
+[node name="Results" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_s")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Panel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(580, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+theme_override_font_sizes/font_size = 72
+text = "DEFEATED"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+theme_override_font_sizes/font_size = 30
+text = ""
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Stats" type="PanelContainer" parent="Panel/VBox"]
+layout_mode = 2
+theme_type_variation = &"CardPanel"
+
+[node name="Rows" type="VBoxContainer" parent="Panel/VBox/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="DistanceRow" type="HBoxContainer" parent="Panel/VBox/Stats/Rows"]
+layout_mode = 2
+
+[node name="Caption" type="Label" parent="Panel/VBox/Stats/Rows/DistanceRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SmallLabel"
+theme_override_font_sizes/font_size = 32
+text = "Distance"
+
+[node name="Distance" type="Label" parent="Panel/VBox/Stats/Rows/DistanceRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "0"
+horizontal_alignment = 2
+
+[node name="KillsRow" type="HBoxContainer" parent="Panel/VBox/Stats/Rows"]
+layout_mode = 2
+
+[node name="Caption" type="Label" parent="Panel/VBox/Stats/Rows/KillsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SmallLabel"
+theme_override_font_sizes/font_size = 32
+text = "Enemies killed"
+
+[node name="Kills" type="Label" parent="Panel/VBox/Stats/Rows/KillsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "0"
+horizontal_alignment = 2
+
+[node name="GoldRow" type="HBoxContainer" parent="Panel/VBox/Stats/Rows"]
+layout_mode = 2
+
+[node name="Caption" type="Label" parent="Panel/VBox/Stats/Rows/GoldRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"SmallLabel"
+theme_override_font_sizes/font_size = 32
+text = "Gold earned"
+
+[node name="Gold" type="Label" parent="Panel/VBox/Stats/Rows/GoldRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"GoldLabel"
+theme_override_font_sizes/font_size = 36
+text = "0"
+horizontal_alignment = 2
+
+[node name="Gap" type="Control" parent="Panel/VBox"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+
+[node name="NextButton" type="Button" parent="Panel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"PrimaryButton"
+text = "NEXT MAP"
+
+[node name="RetryButton" type="Button" parent="Panel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"PrimaryButton"
+text = "RETRY"
+
+[node name="ShopButton" type="Button" parent="Panel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+focus_mode = 0
+text = "SHOP"
+
+[node name="MenuButton" type="Button" parent="Panel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+focus_mode = 0
+text = "MAIN MENU"

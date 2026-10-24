@@ -2,6 +2,7 @@ class_name Player extends CharacterBody3D
 
 signal position_updated
 signal player_dead
+signal vida_changed(vida : int, vida_max : int)
 
 @onready var arrow_spawn_point = $Arrow_spawn_mark
 
@@ -50,6 +51,8 @@ var velocidad_flechas : Array[int]
 }
 #variable que controla si está o no habilitado el salto
 var action_enabled : bool = true
+#evita emitir player_dead varias veces
+var is_dead : bool = false
 
 #para el control táctil
 var posicion_inicial_dedo : Vector2
@@ -83,6 +86,8 @@ func cargar_datos_progreso() -> void:
 #######################################################################################################
 
 func _physics_process(delta: float) -> void:
+	if is_dead:
+		return
 	#emit_signal("position_updated", global_position)
 	#gravedad
 	velocity.y -= gravity * delta
@@ -192,13 +197,18 @@ func increase_arrow_distance(s : float = 0.2) -> void:
 	stats["f_max_distancia"] += s
 
 func increase_arrow_number(i : int = 1) -> void:
-	stats["f_cantidad"] +=1
+	stats["f_cantidad"] += i
 	
 #reduce la vida del player
 func recibe_daño(d : int) -> void:
+	if is_dead:
+		return
 	vida -= d
+	vida_changed.emit(vida, stats["p_vida"])
 	if vida <= 0:
+		is_dead = true
 		velocity = Vector3.ZERO
+		$Timer.stop()
 		await get_tree().create_timer(0.3).timeout
 		fin_partida()
 		

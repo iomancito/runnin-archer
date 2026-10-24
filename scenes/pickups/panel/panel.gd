@@ -1,7 +1,8 @@
 class_name PanelSkills extends Node3D
 
 enum skills {arrow_speed, arrow_distance, attack_speed, move_speed, side_speed, arrow_damage,arrow_add}
-var skills_name : Array[String] = ["Arrow\nspeed", "Arrow\ndistance", "Attack\nspeed", "Walk\nspeed", "Sidewalk\nspeed", "Damage+2", "Arrow+1"]
+#mismo orden que el enum skills, con el valor que da cada mejora
+var skills_name : Array[String] = ["Arrow speed\n+30", "Range\n+4 m", "Fire rate\n+0.2/s", "Run speed\n+20", "Dodge speed\n+5", "Damage\n+2", "Arrows\n+1"]
 var left_rnd : int
 var right_rnd : int
 @onready var left_txt = $left_mesh/left_label

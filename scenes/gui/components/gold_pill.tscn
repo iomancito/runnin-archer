@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/gui/components/gold_pill.gd" id="1_pill"]
+[ext_resource type="Script" path="res://scenes/gui/components/coin_icon.gd" id="2_coin"]
+
+[node name="GoldPill" type="PanelContainer"]
+theme_type_variation = &"PillPanel"
+mouse_filter = 2
+script = ExtResource("1_pill")
+
+[node name="HBox" type="HBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Coin" type="Control" parent="HBox"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("2_coin")
+
+[node name="Amount" type="Label" parent="HBox"]
+layout_mode = 2
+theme_type_variation = &"GoldLabel"
+text = "0"

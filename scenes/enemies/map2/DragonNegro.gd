@@ -1,9 +1,8 @@
-class_name DragonRojo extends Enemy
+class_name DragonNegro extends Enemy
 
 signal muere_boss(s :Node3D)
 
-func update_hp() -> void:
-	$Label3D.text = str(vida)
+@export var boss_gold : int = 100
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is Player:
@@ -11,4 +10,5 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 
 func die() -> void:
 	print("muere dragon negro")
+	recompensa(boss_gold)
 	muere_boss.emit(self)

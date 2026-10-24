@@ -1,0 +1,102 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/gui/main_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" path="res://scenes/gui/components/gold_pill.tscn" id="2_pill"]
+
+[sub_resource type="Gradient" id="Gradient_bg"]
+colors = PackedColorArray(0.18, 0.33, 0.21, 1, 0.05, 0.1, 0.07, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bg"]
+gradient = SubResource("Gradient_bg")
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_bg")
+expand_mode = 1
+
+[node name="Center" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="Title" type="Label" parent="Center"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+theme_override_font_sizes/font_size = 100
+text = "RUNNING
+ARCHER"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Center"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Dodge. Shoot. Upgrade."
+horizontal_alignment = 1
+
+[node name="Gap1" type="Control" parent="Center"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="GoldPill" parent="Center" instance=ExtResource("2_pill")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ProgressLabel" type="Label" parent="Center"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Furthest map: 1 / 3"
+horizontal_alignment = 1
+
+[node name="Gap2" type="Control" parent="Center"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="PlayButton" type="Button" parent="Center"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(460, 130)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 60
+text = "PLAY"
+
+[node name="ShopButton" type="Button" parent="Center"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(460, 104)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+text = "SHOP"
+
+[node name="ExitButton" type="Button" parent="Center"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(460, 104)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+text = "EXIT"

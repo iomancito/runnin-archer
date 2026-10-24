@@ -10,7 +10,9 @@ class_name Troll	 extends Enemy
 @onready var player  # Ruta al jugador
 
 func throw_projectile():
-	player = get_node("/root/Main/player")
+	player = Progreso.player
+	if not is_instance_valid(player):
+		return
 	var proyectile_pos = $Armature/Skeleton3D/BoneAttachment3D/Pebble_Square_32.global_position
 	var target_pos = player.global_position
 	var target_vel = player.get_velocity()
@@ -52,10 +54,3 @@ func calculate_launch_velocity(start_pos: Vector3, target_pos: Vector3, target_v
 			best_velocity = horizontal_dir * v0_horizontal + Vector3.UP * v0_y
 	
 	return best_velocity	
-
-func get_player_velocity() -> Vector3:
-	# Implementar según el movimiento de tu jugador
-	return Vector3(0, 	0, player.speed)  # Ejemplo para movimiento constante en Z
-
-func update_hp() -> void:
-	$Label3D.text = str(vida)

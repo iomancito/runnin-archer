@@ -63,14 +63,13 @@ func instancia_paneles() -> void:
 		
 func instancia_enemigos() -> void:
 	for i in range(1, 24):
-		if i != 100:
-			var instancia = enemies[0].instantiate()
-			instancia.name = "goblin" + str(i)
-			$Suelo/Enemigos.add_child(instancia)
-			instancia.global_position.z = i * 20
-			instancia.global_position.x = randf_range(-4,4)
-			instancia.set_vida(1 + int(i/3))
-			instancia.update_hp()
+		var instancia = enemies[0].instantiate()
+		instancia.name = "goblin" + str(i)
+		$Suelo/Enemigos.add_child(instancia)
+		instancia.global_position.z = i * 20
+		instancia.global_position.x = randf_range(-4,4)
+		instancia.set_vida(1 + int(i/3))
+		instancia.update_hp()
 		
 	for i in range(0, 9):
 		for n in range(1,2):
@@ -84,14 +83,13 @@ func instancia_enemigos() -> void:
 			
 	for i in range(26, 49):
 		for n in range(1,2):
-			if n != 100:
-				var instancia = enemies[1].instantiate()
-				instancia.name = "orco" + str(i)
-				$Suelo/Enemigos.add_child(instancia)
-				instancia.global_position.z = i*20 
-				instancia.global_position.x = randf_range(-4,4)
-				instancia.set_vida(50 + i*2)
-				instancia.update_hp()
+			var instancia = enemies[1].instantiate()
+			instancia.name = "orco" + str(i)
+			$Suelo/Enemigos.add_child(instancia)
+			instancia.global_position.z = i*20 
+			instancia.global_position.x = randf_range(-4,4)
+			instancia.set_vida(50 + i*2)
+			instancia.update_hp()
 		
 	for i in range(25, 49):
 		var instancia = enemies[2].instantiate()
@@ -116,6 +114,12 @@ func instancia_enemigos() -> void:
 	dragon_skeleto.global_position.z = 1000
 	dragon_skeleto.set_vida(500)
 	dragon_skeleto.update_hp()
+
+#nombre que muestra la barra de vida del boss
+var boss_name : String = "Ancient Dragon"
+
+func get_boss() -> Enemy:
+	return dragon_skeleto
 
 func set_boss(main : Node) -> void:
 	dragon_skeleto.connect("muere_boss", main.muere_boss)
