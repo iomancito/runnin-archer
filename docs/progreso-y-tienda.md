@@ -9,12 +9,15 @@
 | `progreso_permanente` | Stats base + mejoras; lo recalcula la tienda a partir de `niveles` |
 | `BASE_STATS` | Stats del player sin mejoras |
 | `dificultad` | `easy` / `medium` / `hard` / `hell`; al cambiar actualiza `Balance.dificultad` |
+| `desbloqueadas` | Dificultades disponibles. Se empieza solo con `easy` |
+| `esta_desbloqueada(d)`, `siguiente_dificultad(d)` | Consultas sobre el orden `Balance.ORDEN_DIFICULTADES` |
+| `completa_dificultad()` | Al superar el mapa 3: desbloquea la siguiente dificultad y la devuelve (`""` si ya lo estaba) |
 | `max_maps` / `max_map` | Mapa más alto alcanzado por dificultad; `max_map` es el de la dificultad actual |
 | `current_map` | Mapa de la partida en curso (vuelve a 1 al morir o abandonar) |
 | `player` | Referencia al player actual |
 | `run_kills`, `run_gold` | Estadísticas de la partida (pantalla de resultados) |
 | `oro_con_bonus(n)` | Aplica el bonus de oro acumulando la fracción en `oro_resto` |
-| `reset_all()` | Borra todo (oro, mejoras, mapas) y emite `progress_reset` |
+| `reset_all()` | Borra todo (oro, mejoras, mapas, dificultades desbloqueadas) y emite `progress_reset` |
 | `aviso` | Mensaje de un solo uso para el menú principal |
 
 ## Guardado
@@ -24,10 +27,10 @@
 - Se guarda al comprar, al morir, al matar un boss, al cambiar de dificultad, al resetear, al cerrar la app y al pasarla a segundo plano.
 - Se guardan los **niveles** de las mejoras, no los stats finales: si cambian los incrementos en `Balance`, las partidas viejas usan los valores nuevos.
 
-Contenido (versión 3):
+Contenido (versión 4):
 
 ```json
-{"version": 3, "gold": 637, "niveles": {"damage": 3}, "max_maps": {"medium": 2}, "dificultad": "medium", "skin": 1}
+{"version": 4, "gold": 637, "niveles": {"damage": 3}, "max_maps": {"medium": 2}, "dificultad": "medium", "desbloqueadas": ["easy", "medium"], "skin": 1}
 ```
 
 ### Versiones y migraciones (`load_game`)
@@ -36,7 +39,8 @@ Contenido (versión 3):
 |---|---|---|
 | 1 | Tienda antigua (precios 1-5) | `_migra_v1()`: reembolsa lo gastado, borra niveles y muestra un aviso |
 | 2 | `max_map` único | Se asigna a `max_maps["medium"]` |
-| 3 | Dificultades | — |
+| 3 | Dificultades (todas abiertas) | — |
+| 4 | Desbloqueo de dificultades | Se desbloquean las dificultades ya jugadas (`max_maps`) o la elegida, para no quitar acceso |
 
 Si haces un cambio incompatible: sube `SAVE_VERSION` y añade la conversión en `load_game()`.
 
@@ -48,9 +52,15 @@ Si haces un cambio incompatible: sube `SAVE_VERSION` y añade la conversión en 
 - **Reset de mejoras** (botón rojo): primer toque muestra el reembolso, el segundo lo confirma; devuelve todo lo gastado.
 - Al recibir `progress_reset` pone todos los niveles a 0 sin reembolso.
 
+## Desbloqueo de dificultades
+
+- Al empezar solo está **Easy**. Superar los 3 mapas (vencer al boss del mapa 3) en una dificultad desbloquea la siguiente: Easy → Medium → Hard → Hell.
+- Lo hace `Main.muere_boss()` con `Progreso.completa_dificultad()`; la pantalla de victoria muestra "*X* difficulty unlocked!".
+- En el menú las dificultades bloqueadas salen deshabilitadas y se indica cómo desbloquear la siguiente.
+
 ## Reset total (menú principal)
 
-Botón **RESET PROGRESS**: primer toque "TAP AGAIN TO ERASE ALL" durante 3 s, el segundo llama a `Progreso.reset_all()` → 0 de oro, sin mejoras, mapa 1 en todas las dificultades.
+Botón **RESET PROGRESS**: primer toque "TAP AGAIN TO ERASE ALL" durante 3 s, el segundo llama a `Progreso.reset_all()` → 0 de oro, sin mejoras, mapa 1 en todas las dificultades y solo Easy desbloqueada.
 
 ## Mejoras durante la partida
 

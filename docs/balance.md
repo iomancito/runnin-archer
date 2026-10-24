@@ -60,6 +60,7 @@ Se multiplican por mapa y por dificultad igual que los enemigos. Al tocar al bos
 - **Densidad** divide la separación entre filas de enemigos del generador (más densidad = más enemigos).
 - Más dificultad da más oro, para que merezca la pena rejugar.
 - La dificultad elegida se guarda en `Progreso.dificultad` y se copia a `Balance.dificultad`; `Balance.dif()` devuelve sus multiplicadores.
+- Se empieza solo con Easy; superar los 3 mapas en una dificultad desbloquea la siguiente (ver [progreso-y-tienda.md](progreso-y-tienda.md)).
 
 Resultado aproximado (generador, 20 partidas de media):
 

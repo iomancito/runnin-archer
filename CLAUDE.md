@@ -1,6 +1,6 @@
 # Running Archer
 
-Runner vertical en Godot 4.7 para **móviles Android** (retrato, renderer Mobile). El arquero corre solo, el jugador lo mueve a los lados y dispara automáticamente; el oro de los enemigos compra mejoras permanentes. 3 mapas con boss final y 4 dificultades.
+Runner vertical en Godot 4.7 para **móviles Android** (retrato, renderer Mobile). El arquero corre solo, el jugador lo mueve a los lados y dispara automáticamente; el oro de los enemigos compra mejoras permanentes. 3 mapas con boss final y 4 dificultades (superar los 3 mapas desbloquea la siguiente).
 
 ## Reglas del proyecto
 

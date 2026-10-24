@@ -37,12 +37,17 @@ func _refresh() -> void:
 	reset_button.text = RESET_TEXT
 	if visible:
 		progress_label.text = "Furthest map (%s): %d / 3" % [Balance.dif().nombre, Progreso.max_map]
+		var siguiente = Progreso.siguiente_dificultad(Progreso.dificultad)
+		if siguiente != "" and not Progreso.esta_desbloqueada(siguiente):
+			progress_label.text += "\nBeat map 3 on %s to unlock %s" % [Balance.dif().nombre, Balance.DIFICULTADES[siguiente].nombre]
 		_marca_dificultad()
 		if Progreso.aviso != "":
 			progress_label.text += "\n" + Progreso.aviso
 			Progreso.aviso = ""
 
 func _on_dificultad_pressed(d : String) -> void:
+	if not Progreso.esta_desbloqueada(d):
+		return
 	Progreso.dificultad = d
 	Progreso.save_game()
 	_refresh()
@@ -52,6 +57,7 @@ func _marca_dificultad() -> void:
 	for i in Balance.ORDEN_DIFICULTADES.size():
 		var d = Balance.ORDEN_DIFICULTADES[i]
 		var b : Button = %DiffRow.get_child(i)
+		b.disabled = not Progreso.esta_desbloqueada(d)
 		if d != Progreso.dificultad:
 			b.theme_type_variation = &""
 		else:

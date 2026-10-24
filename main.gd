@@ -123,8 +123,9 @@ func muere_boss(s : Node3D) -> void :
 	get_tree().paused = true
 	if Progreso.current_map == 3:
 		Progreso.current_map = 1
+		var nueva = Progreso.completa_dificultad()
 		Progreso.save_game()
-		results.show_victory(stats)
+		results.show_victory(stats, nueva)
 		return
 	Progreso.current_map += 1
 	Progreso.max_map = max(Progreso.max_map, Progreso.current_map)

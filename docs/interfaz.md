@@ -29,7 +29,7 @@ El tema está generado por un script; para retocarlo es más cómodo editar el `
 | Escena / script | Contenido | Señales |
 |---|---|---|
 | `Splash` (en `main.tscn`) | Imagen de inicio + barra "Loading %" | — |
-| `main_menu.tscn` | Título, oro, mapa más lejano, selector de dificultad, PLAY / SHOP / EXIT, RESET PROGRESS | `play_pressed`, `shop_pressed`, `exit_pressed` |
+| `main_menu.tscn` | Título, oro, mapa más lejano, selector de dificultad (las bloqueadas deshabilitadas, con pista para desbloquear la siguiente), PLAY / SHOP / EXIT, RESET PROGRESS | `play_pressed`, `shop_pressed`, `exit_pressed` |
 | `shop.tscn` + `shop_card.tscn` | Tarjetas de mejora, reset de mejoras | `back_pressed` |
 | `game_hud.tscn` | Vida, oro, barra de distancia al boss, barra del boss, botón de pausa, destello rojo al recibir daño | `pause_pressed` |
 | `pause_menu.tscn` | RESUME / QUIT RUN | `resume_pressed`, `menu_pressed` |

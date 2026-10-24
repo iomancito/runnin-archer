@@ -30,7 +30,7 @@ const DIFICULTADES = {
 const ORDEN_DIFICULTADES = ["easy", "medium", "hard", "hell"]
 
 #dificultad actual: la sincroniza Progreso al cargar o elegirla en el menú
-static var dificultad : String = "medium"
+static var dificultad : String = "easy"
 
 static func dif() -> Dictionary:
 	return DIFICULTADES.get(dificultad, DIFICULTADES["medium"])
