@@ -26,18 +26,17 @@ sky_material = SubResource("ProceduralSkyMaterial_11ey0")
 background_mode = 2
 sky = SubResource("Sky_dwk4x")
 tonemap_mode = 2
-glow_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ayuj2"]
 albedo_texture = ExtResource("14_u1ve2")
 emission = Color(0.179594, 0.0725512, 0.0149807, 1)
 emission_energy_multiplier = 3.87
-uv1_scale = Vector3(0.1, 0.1, 0.1)
-uv1_triplanar = true
+uv1_scale = Vector3(1.5, 1010, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_qkqrm"]
+[sub_resource type="PlaneMesh" id="BoxMesh_qkqrm"]
 material = SubResource("StandardMaterial3D_ayuj2")
-size = Vector3(15, 0.2, 10100)
+size = Vector2(15, 10100)
+subdivide_depth = 100
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6tong"]
 size = Vector3(20, 0.2, 10000)
@@ -64,9 +63,11 @@ environment = SubResource("Environment_qql7r")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Suelo"]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
 shadow_enabled = true
+directional_shadow_mode = 0
+directional_shadow_max_distance = 40.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Suelo"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4990)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 4990)
 mesh = SubResource("BoxMesh_qkqrm")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Suelo"]

@@ -27,7 +27,6 @@ sky_material = SubResource("ProceduralSkyMaterial_11ey0")
 background_mode = 2
 sky = SubResource("Sky_dwk4x")
 tonemap_mode = 2
-glow_enabled = true
 fog_enabled = true
 fog_mode = 1
 fog_light_color = Color(1, 0.388235, 0.278431, 1)
@@ -37,12 +36,12 @@ fog_density = 1.0
 albedo_texture = ExtResource("8_5bnym")
 emission = Color(0.179594, 0.0725512, 0.0149807, 1)
 emission_energy_multiplier = 3.87
-uv1_scale = Vector3(0.1, 0.1, 0.1)
-uv1_triplanar = true
+uv1_scale = Vector3(2, 1000, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_qkqrm"]
+[sub_resource type="PlaneMesh" id="BoxMesh_qkqrm"]
 material = SubResource("StandardMaterial3D_ayuj2")
-size = Vector3(20, 0.2, 10000)
+size = Vector2(20, 10000)
+subdivide_depth = 100
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6tong"]
 size = Vector3(20, 0.2, 10000)
@@ -70,9 +69,11 @@ light_color = Color(1, 0.627451, 0.478431, 1)
 light_energy = 1.2
 shadow_enabled = true
 shadow_opacity = 0.4
+directional_shadow_mode = 0
+directional_shadow_max_distance = 40.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Suelo"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4990)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 4990)
 mesh = SubResource("BoxMesh_qkqrm")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Suelo"]
