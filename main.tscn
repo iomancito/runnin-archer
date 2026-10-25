@@ -22,9 +22,10 @@ player_scene = ExtResource("2_c25tm")
 process_mode = 1
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-1, 0, 0, 0, 0.358368, 0.93358, 0, 0.93358, -0.358368, 0, 14, 0)
+transform = Transform3D(-1, 0, 0, 0, 0.848048, 0.529919, 0, 0.529919, -0.848048, 0, 5.5, 0)
 keep_aspect = 0
-fov = 42.0
+fov = 48.0
+far = 40.0
 
 [node name="EnemiesContainer" type="Node3D" parent="."]
 process_mode = 1

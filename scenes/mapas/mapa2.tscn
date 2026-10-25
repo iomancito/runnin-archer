@@ -17,7 +17,8 @@
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_11ey0"]
 sky_top_color = Color(1, 0.270588, 0, 1)
 sky_horizon_color = Color(1, 0.270588, 0, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_bottom_color = Color(1, 0.388235, 0.278431, 1)
+ground_horizon_color = Color(1, 0.388235, 0.278431, 1)
 sun_angle_max = 20.0
 
 [sub_resource type="Sky" id="Sky_dwk4x"]
@@ -31,6 +32,9 @@ fog_enabled = true
 fog_mode = 1
 fog_light_color = Color(1, 0.388235, 0.278431, 1)
 fog_density = 1.0
+fog_depth_begin = 22.0
+fog_depth_end = 40.0
+fog_sky_affect = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ayuj2"]
 albedo_texture = ExtResource("8_5bnym")
@@ -70,7 +74,7 @@ light_energy = 1.2
 shadow_enabled = true
 shadow_opacity = 0.4
 directional_shadow_mode = 0
-directional_shadow_max_distance = 28.0
+directional_shadow_max_distance = 18.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Suelo"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 4990)

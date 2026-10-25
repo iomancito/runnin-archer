@@ -17,7 +17,7 @@ class_name Mapa extends Node3D
 #spawn del player
 @onready var spawn_point = $Suelo/Spawn
 
-#metros por delante del player a los que aparecen los enemigos (la cámara ve ~27 m)
+#metros por delante del player a los que aparecen los enemigos (la cámara dibuja hasta 40 m)
 const ADELANTE : float = 80.0
 #metros por detrás del player a los que se eliminan los enemigos que ya ha pasado
 const DETRAS : float = 15.0

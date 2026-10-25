@@ -47,7 +47,7 @@ Diseño actual:
 
 ## Spawner (`Mapa`)
 
-- `ADELANTE = 80 m`: los enemigos se crean cuando el player está a esa distancia (la cámara ve ~27 m).
+- `ADELANTE = 80 m`: los enemigos se crean cuando el player está a esa distancia (la cámara dibuja hasta 40 m).
 - `DETRAS = 15 m`: los enemigos superados se eliminan (sin dar oro), revisando cada 0,5 s.
 - `SPAWNS_POR_FRAME = 2`: reparte el coste de instanciar.
 - Al montar el mapa se crean ya los de los primeros 80 m (durante el fundido a negro).

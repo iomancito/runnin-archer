@@ -9,6 +9,9 @@ const SIN_SOMBRA : PackedStringArray = ["grass", "clover", "fern", "flower", "pe
 #materiales sólidos que el pack exporta con recorte alfa y doble cara sin necesitarlo:
 #en GPUs Mali el recorte alfa desactiva la eliminación de superficies ocultas
 const SOLIDOS : PackedStringArray = ["bark", "rock"]
+#hojas: con la cámara detrás del player llenan media pantalla con varias capas de recorte alfa;
+#sin recibir sombras ni especular cada píxel cuesta mucho menos (~4 ms en el móvil)
+const HOJAS : PackedStringArray = ["leaves"]
 
 static func batch(root : Node3D, block_size : float = 30.0) -> int:
 	var grupos := {}
@@ -49,7 +52,7 @@ static func batch(root : Node3D, block_size : float = 30.0) -> int:
 			mi.queue_free()
 	return grupos.size()
 
-#copia la malla con los materiales sólidos opacos y de una cara (cacheado por malla)
+#copia la malla con los materiales sólidos opacos y de una cara y las hojas baratas (cacheado por malla)
 static var _optimizadas := {}
 static var _materiales := {}
 static func _optimiza_materiales(mesh : Mesh) -> Mesh:
@@ -70,12 +73,18 @@ static func _material_solido(mat : Material) -> Material:
 	if not mat is BaseMaterial3D:
 		return mat
 	var nombre = mat.resource_name.to_lower()
-	if not Array(SOLIDOS).any(func(k): return nombre.contains(k)):
+	var solido = Array(SOLIDOS).any(func(k): return nombre.contains(k))
+	var hoja = Array(HOJAS).any(func(k): return nombre.contains(k))
+	if not solido and not hoja:
 		return mat
 	if not _materiales.has(mat):
 		var copia : BaseMaterial3D = mat.duplicate()
-		copia.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
-		copia.cull_mode = BaseMaterial3D.CULL_BACK
+		if solido:
+			copia.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
+			copia.cull_mode = BaseMaterial3D.CULL_BACK
+		else:
+			copia.disable_receive_shadows = true
+			copia.specular_mode = BaseMaterial3D.SPECULAR_DISABLED
 		_materiales[mat] = copia
 	return _materiales[mat]
 

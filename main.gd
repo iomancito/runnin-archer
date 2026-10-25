@@ -18,9 +18,14 @@ signal mapa_cargado
 
 #segundos mínimos que se ve la pantalla de inicio aunque la carga acabe antes
 const SPLASH_MIN : float = 3.0
-#metros que la cámara va por detrás del player (negativo: por delante, mirando hacia abajo);
-#en x queda fija en el centro del camino: su FOV horizontal (main.tscn) abarca las dos paredes
-const CAMARA_DETRAS : float = -1.5
+#metros que la cámara va por detrás del player. Altura, inclinación, FOV y distancia de dibujo
+#en main.tscn (5,5 m, 32°, 48°, far 40 m: la niebla de los mapas acaba ahí)
+const CAMARA_DETRAS : float = 4.0
+#fracción del desplazamiento lateral del player que sigue la cámara: así se ve más camino
+#del lado contrario y la cámara se mueve menos
+const CAMARA_SIGUE_X : float = 0.6
+#rapidez con la que la cámara alcanza su x (por segundo)
+const CAMARA_SUAVIZADO : float = 10.0
 
 var player
 var partida_iniciada : bool = false
@@ -181,6 +186,8 @@ func spawn_player() -> void:
 func _physics_process(delta: float) -> void:
 	if is_playing() and is_instance_valid(player):
 		$Camera3D.global_position.z = player.global_position.z - CAMARA_DETRAS
+		var x = player.global_position.x * CAMARA_SIGUE_X
+		$Camera3D.global_position.x = lerp($Camera3D.global_position.x, x, 1.0 - exp(-CAMARA_SUAVIZADO * delta))
 
 func on_player_position_updated(player_pos) -> void:
 	pass#print(player_pos)
