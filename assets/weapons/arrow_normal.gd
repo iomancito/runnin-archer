@@ -33,6 +33,10 @@ func _process(delta: float) -> void:
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if not body is Enemy or body in golpeados:
 		return
+	#boss aún inmune (no ha empezado el combate): sin daño ni efectos
+	if body is Boss and not body.combatiendo:
+		queue_free()
+		return
 	golpeados.append(body)
 	var d = daño
 	if body is Boss:

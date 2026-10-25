@@ -97,6 +97,10 @@ static func _lanza(escena : PackedScene, padre : Node, pos : Vector3, escala : f
 	if pool.size() < TAM_POOL:
 		fx = _prepara(escena.instantiate())
 		fx.set("one_shot", true)
+		#la animación "main" de la explosión viene en bucle: sin esto se repite sin fin
+		var anim : AnimationPlayer = fx.get_node_or_null("AnimationPlayer")
+		if anim and anim.has_animation("main"):
+			anim.get_animation("main").loop_mode = Animation.LOOP_NONE
 		padre.add_child(fx)
 		if escena == VFX_EXPLOSION:
 			fx.tertiary_color = COLOR_HUMO_EXPLOSION

@@ -53,6 +53,8 @@ var velocidad_flechas : Array[int]
 var action_enabled : bool = true
 #evita emitir player_dead varias veces
 var is_dead : bool = false
+#deja de disparar entre el último enemigo y el comienzo del combate con el boss
+var dispara : bool = true
 
 #para el control táctil
 var posicion_inicial_dedo : Vector2
@@ -222,6 +224,8 @@ func recibe_daño(d : int) -> void:
 		
 #Realiza el araque, instancir flecha y demás
 func attack() -> void:
+	if not dispara:
+		return
 	for i in range (0, stats["f_cantidad"]):
 		var flecha_instancia = normal_arrow.instantiate()
 		get_parent().find_child("ArrowContainer").add_child(flecha_instancia)
@@ -233,4 +237,14 @@ func fin_partida() ->void:
 	player_dead.emit()
 	
 func _on_timer_timeout() -> void:
+	if dispara:
+		shoot()
+
+func para_disparo() -> void:
+	dispara = false
+
+#vuelve a disparar al momento y con la cadencia normal
+func reanuda_disparo() -> void:
+	dispara = true
 	shoot()
+	$Timer.start()

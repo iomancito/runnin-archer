@@ -44,6 +44,7 @@ Las escenas de enemigo necesitan: `Label3D` (número de vida), un `Area3D` conec
 
 - `setup_boss(mapa)`: vida, daño, intervalo y oro desde `Balance`.
 - Al entrar el player en su `Area3D`: `p_speed = 0` y empieza el combate; el primer ataque llega a medio intervalo.
+- Es **inmune** hasta que empieza el combate (`recibe_daño` y `quemar` no hacen nada; las flechas desaparecen sin efectos). El player deja de disparar al pasar el último enemigo del plan (`Mapa._physics_process` → `Player.para_disparo`) y vuelve a disparar al detenerse (`Player.reanuda_disparo`).
 - Ataca en el orden de `Niveles.MAPAS[n].boss_ataques` (`bola`, `barrera`, `lluvia`; ver [balance.md](balance.md)) y deja `intervalo` segundos entre ataques.
 - Cada ataque: reproduce su animación y, en el segundo en que el dragón lanza la cabeza, crea los `Proyectil` desde la boca (`boca()`: hueso `hueso_boca` + `boca_adelante` m hacia el player).
 - Cada subclase rellena en `_init`: `anim_ataques` (`{tipo: [animación, segundo del disparo]}`), `hueso_boca`, `boca_adelante` y `estilo` (color del fuego). `anim_reposo` (`idle`, se pone en bucle) y `anim_muerte` (`death`) son comunes.

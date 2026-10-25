@@ -38,6 +38,8 @@ var siguiente : int = 0
 var vivos : Array[Node3D] = []
 var jefe_final : Boss
 var _revisa_detras : float = 0.0
+#el player ha pasado el último enemigo del plan y ya no dispara hasta el combate con el boss
+var _fin_disparo : bool = false
 
 func _ready() -> void:
 	instancia_laterales()
@@ -91,6 +93,9 @@ func _physics_process(delta: float) -> void:
 		return
 	var pz = Progreso.player.global_position.z
 	_spawn_hasta(pz + ADELANTE, SPAWNS_POR_FRAME)
+	if not _fin_disparo and not jefe_final.combatiendo and pz > (plan.back().z if plan.size() > 0 else 0.0):
+		_fin_disparo = true
+		Progreso.player.para_disparo()
 	#los enemigos ya superados se eliminan (sin dar oro)
 	_revisa_detras -= delta
 	if _revisa_detras <= 0.0:

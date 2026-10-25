@@ -63,8 +63,18 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is Player and not combatiendo and vida > 0:
 		body.stats["p_speed"] = 0
 		combatiendo = true
+		body.reanuda_disparo()
 		#el primer ataque llega tras medio intervalo: lo justo para ver al dragón
 		_espera = intervalo * 0.5
+
+#inmune hasta que el player se detiene y empieza el combate
+func recibe_daño(d : int) -> void:
+	if combatiendo:
+		super(d)
+
+func quemar(dps : float, segundos : float) -> void:
+	if combatiendo:
+		super(dps, segundos)
 
 func _physics_process(delta: float) -> void:
 	if not combatiendo or _atacando or vida <= 0 or not is_instance_valid(Progreso.player):
