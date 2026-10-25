@@ -1,0 +1,246 @@
+{
+ "asset": {
+  "generator": "Khronos glTF Blender I/O v5.2.40",
+  "version": "2.0"
+ },
+ "scene": 0,
+ "scenes": [
+  {
+   "name": "Scene",
+   "nodes": [
+    0
+   ]
+  }
+ ],
+ "nodes": [
+  {
+   "mesh": 0,
+   "name": "Bush_Common"
+  }
+ ],
+ "materials": [
+  {
+   "alphaCutoff": 0.20000000298023224,
+   "alphaMode": "MASK",
+   "doubleSided": true,
+   "name": "Leaves_TwistedTree",
+   "pbrMetallicRoughness": {
+    "baseColorTexture": {
+     "index": 0
+    },
+    "metallicFactor": 0
+   }
+  },
+  {
+   "doubleSided": true,
+   "name": "Copa_Leaves_TwistedTree",
+   "pbrMetallicRoughness": {
+    "baseColorFactor": [
+     0.2898221015930176,
+     0.006426094565540552,
+     0.006426094565540552,
+     1
+    ],
+    "metallicFactor": 0
+   }
+  }
+ ],
+ "meshes": [
+  {
+   "name": "tree.008",
+   "primitives": [
+    {
+     "attributes": {
+      "POSITION": 0,
+      "NORMAL": 1,
+      "TEXCOORD_0": 2,
+      "COLOR_0": 3
+     },
+     "indices": 4,
+     "material": 0
+    },
+    {
+     "attributes": {
+      "POSITION": 5,
+      "NORMAL": 6,
+      "TEXCOORD_0": 7,
+      "COLOR_0": 8
+     },
+     "indices": 9,
+     "material": 1
+    }
+   ]
+  }
+ ],
+ "textures": [
+  {
+   "sampler": 0,
+   "source": 0
+  }
+ ],
+ "images": [
+  {
+   "mimeType": "image/png",
+   "name": "Leaves_TwistedTree_C",
+   "uri": "../externos/Nature/Leaves_TwistedTree_C.png"
+  }
+ ],
+ "accessors": [
+  {
+   "bufferView": 0,
+   "componentType": 5126,
+   "count": 697,
+   "max": [
+    0.9913685917854309,
+    1.3117437362670898,
+    0.9907516837120056
+   ],
+   "min": [
+    -0.9234761595726013,
+    -0.234694704413414,
+    -0.9743891954421997
+   ],
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 1,
+   "componentType": 5126,
+   "count": 697,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 2,
+   "componentType": 5126,
+   "count": 697,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 3,
+   "componentType": 5123,
+   "count": 697,
+   "normalized": true,
+   "type": "VEC4"
+  },
+  {
+   "bufferView": 4,
+   "componentType": 5123,
+   "count": 1224,
+   "type": "SCALAR"
+  },
+  {
+   "bufferView": 5,
+   "componentType": 5126,
+   "count": 242,
+   "max": [
+    0.9869558811187744,
+    1.3470909595489502,
+    0.8791734576225281
+   ],
+   "min": [
+    -0.885272204875946,
+    -0.13066262006759644,
+    -0.8702561259269714
+   ],
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 6,
+   "componentType": 5126,
+   "count": 242,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 7,
+   "componentType": 5126,
+   "count": 242,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 8,
+   "componentType": 5123,
+   "count": 242,
+   "normalized": true,
+   "type": "VEC4"
+  },
+  {
+   "bufferView": 9,
+   "componentType": 5123,
+   "count": 618,
+   "type": "SCALAR"
+  }
+ ],
+ "bufferViews": [
+  {
+   "buffer": 0,
+   "byteLength": 8364,
+   "byteOffset": 0,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 8364,
+   "byteOffset": 8364,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 5576,
+   "byteOffset": 16728,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 5576,
+   "byteOffset": 22304,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 2448,
+   "byteOffset": 27880,
+   "target": 34963
+  },
+  {
+   "buffer": 0,
+   "byteLength": 2904,
+   "byteOffset": 30328,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 2904,
+   "byteOffset": 33232,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 1936,
+   "byteOffset": 36136,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 1936,
+   "byteOffset": 38072,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 1236,
+   "byteOffset": 40008,
+   "target": 34963
+  }
+ ],
+ "samplers": [
+  {
+   "magFilter": 9729,
+   "minFilter": 9987
+  }
+ ],
+ "buffers": [
+  {
+   "byteLength": 41244,
+   "uri": "Bush_Common.bin"
+  }
+ ]
+}

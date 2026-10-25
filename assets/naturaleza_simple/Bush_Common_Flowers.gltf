@@ -1,0 +1,348 @@
+{
+ "asset": {
+  "generator": "Khronos glTF Blender I/O v5.2.40",
+  "version": "2.0"
+ },
+ "scene": 0,
+ "scenes": [
+  {
+   "name": "Scene",
+   "nodes": [
+    0
+   ]
+  }
+ ],
+ "nodes": [
+  {
+   "mesh": 0,
+   "name": "Bush_Common_Flowers"
+  }
+ ],
+ "materials": [
+  {
+   "alphaCutoff": 0.20000000298023224,
+   "alphaMode": "MASK",
+   "doubleSided": true,
+   "name": "Leaves_NormalTree",
+   "pbrMetallicRoughness": {
+    "baseColorTexture": {
+     "index": 0
+    },
+    "metallicFactor": 0
+   }
+  },
+  {
+   "alphaCutoff": 0.20000000298023224,
+   "alphaMode": "MASK",
+   "doubleSided": true,
+   "name": "Flowers",
+   "pbrMetallicRoughness": {
+    "baseColorTexture": {
+     "index": 1
+    },
+    "metallicFactor": 0
+   }
+  },
+  {
+   "doubleSided": true,
+   "name": "Copa_Leaves_NormalTree",
+   "pbrMetallicRoughness": {
+    "baseColorFactor": [
+     0.07319051772356033,
+     0.14855201542377472,
+     0,
+     1
+    ],
+    "metallicFactor": 0
+   }
+  }
+ ],
+ "meshes": [
+  {
+   "name": "tree.009",
+   "primitives": [
+    {
+     "attributes": {
+      "POSITION": 0,
+      "NORMAL": 1,
+      "TEXCOORD_0": 2,
+      "COLOR_0": 3
+     },
+     "indices": 4,
+     "material": 0
+    },
+    {
+     "attributes": {
+      "POSITION": 5,
+      "NORMAL": 6,
+      "TEXCOORD_0": 7,
+      "COLOR_0": 8
+     },
+     "indices": 9,
+     "material": 1
+    },
+    {
+     "attributes": {
+      "POSITION": 10,
+      "NORMAL": 11,
+      "TEXCOORD_0": 12,
+      "COLOR_0": 13
+     },
+     "indices": 14,
+     "material": 2
+    }
+   ]
+  }
+ ],
+ "textures": [
+  {
+   "sampler": 0,
+   "source": 0
+  },
+  {
+   "sampler": 0,
+   "source": 1
+  }
+ ],
+ "images": [
+  {
+   "mimeType": "image/png",
+   "name": "Leaves_NormalTree_C",
+   "uri": "../externos/Nature/Leaves_NormalTree_C.png"
+  },
+  {
+   "mimeType": "image/png",
+   "name": "Flowers",
+   "uri": "../externos/Nature/Flowers.png"
+  }
+ ],
+ "accessors": [
+  {
+   "bufferView": 0,
+   "componentType": 5126,
+   "count": 921,
+   "max": [
+    0.9913685917854309,
+    1.3470909595489502,
+    0.9907516837120056
+   ],
+   "min": [
+    -0.9234761595726013,
+    -0.234694704413414,
+    -0.9743891954421997
+   ],
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 1,
+   "componentType": 5126,
+   "count": 921,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 2,
+   "componentType": 5126,
+   "count": 921,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 3,
+   "componentType": 5123,
+   "count": 921,
+   "normalized": true,
+   "type": "VEC4"
+  },
+  {
+   "bufferView": 4,
+   "componentType": 5123,
+   "count": 1809,
+   "type": "SCALAR"
+  },
+  {
+   "bufferView": 5,
+   "componentType": 5126,
+   "count": 464,
+   "max": [
+    0.6836528182029724,
+    1.328537940979004,
+    0.6778495907783508
+   ],
+   "min": [
+    -0.7453983426094055,
+    0.6463521122932434,
+    -0.7969385981559753
+   ],
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 6,
+   "componentType": 5126,
+   "count": 464,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 7,
+   "componentType": 5126,
+   "count": 464,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 8,
+   "componentType": 5123,
+   "count": 464,
+   "normalized": true,
+   "type": "VEC4"
+  },
+  {
+   "bufferView": 9,
+   "componentType": 5123,
+   "count": 768,
+   "type": "SCALAR"
+  },
+  {
+   "bufferView": 10,
+   "componentType": 5126,
+   "count": 349,
+   "max": [
+    0.9718135595321655,
+    1.0295828580856323,
+    0.98771071434021
+   ],
+   "min": [
+    -0.6257622838020325,
+    0.2586841881275177,
+    -0.9251851439476013
+   ],
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 11,
+   "componentType": 5126,
+   "count": 349,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 12,
+   "componentType": 5126,
+   "count": 349,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 13,
+   "componentType": 5123,
+   "count": 349,
+   "normalized": true,
+   "type": "VEC4"
+  },
+  {
+   "bufferView": 14,
+   "componentType": 5123,
+   "count": 636,
+   "type": "SCALAR"
+  }
+ ],
+ "bufferViews": [
+  {
+   "buffer": 0,
+   "byteLength": 11052,
+   "byteOffset": 0,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 11052,
+   "byteOffset": 11052,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 7368,
+   "byteOffset": 22104,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 7368,
+   "byteOffset": 29472,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 3618,
+   "byteOffset": 36840,
+   "target": 34963
+  },
+  {
+   "buffer": 0,
+   "byteLength": 5568,
+   "byteOffset": 40460,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 5568,
+   "byteOffset": 46028,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 3712,
+   "byteOffset": 51596,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 3712,
+   "byteOffset": 55308,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 1536,
+   "byteOffset": 59020,
+   "target": 34963
+  },
+  {
+   "buffer": 0,
+   "byteLength": 4188,
+   "byteOffset": 60556,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 4188,
+   "byteOffset": 64744,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 2792,
+   "byteOffset": 68932,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 2792,
+   "byteOffset": 71724,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteLength": 1272,
+   "byteOffset": 74516,
+   "target": 34963
+  }
+ ],
+ "samplers": [
+  {
+   "magFilter": 9729,
+   "minFilter": 9987
+  }
+ ],
+ "buffers": [
+  {
+   "byteLength": 75788,
+   "uri": "Bush_Common_Flowers.bin"
+  }
+ ]
+}

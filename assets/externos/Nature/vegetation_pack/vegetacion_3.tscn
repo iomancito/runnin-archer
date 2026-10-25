@@ -1,8 +1,8 @@
 [gd_scene load_steps=12 format=3 uid="uid://30ju72ifm3bt"]
 
-[ext_resource type="PackedScene" uid="uid://ddr2mmbn1gu4i" path="res://assets/externos/Nature/Pine_1.gltf" id="1_nfdkk"]
-[ext_resource type="PackedScene" uid="uid://dnvivwbkiny6o" path="res://assets/externos/Nature/Pine_2.gltf" id="2_15rd2"]
-[ext_resource type="PackedScene" uid="uid://4imb45rum8k8" path="res://assets/externos/Nature/Pine_3.gltf" id="3_g4pgq"]
+[ext_resource type="PackedScene" path="res://assets/naturaleza_simple/Pine_1.gltf" id="1_nfdkk"]
+[ext_resource type="PackedScene" path="res://assets/naturaleza_simple/Pine_2.gltf" id="2_15rd2"]
+[ext_resource type="PackedScene" path="res://assets/naturaleza_simple/Pine_3.gltf" id="3_g4pgq"]
 [ext_resource type="PackedScene" uid="uid://dtffmvel14uak" path="res://assets/externos/Nature/Pebble_Round_1.gltf" id="4_drduc"]
 [ext_resource type="PackedScene" uid="uid://bapeifx7slp7s" path="res://assets/externos/Nature/Plant_1.gltf" id="5_jjl8i"]
 [ext_resource type="PackedScene" uid="uid://cleu4tjtibkxa" path="res://assets/externos/Nature/RockPath_Round_Thin.gltf" id="6_u87mu"]

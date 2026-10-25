@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://bqubcet6pphjl"]
 
-[ext_resource type="PackedScene" uid="uid://wk1da43058r0" path="res://assets/externos/Nature/Bush_Common.gltf" id="1_akk8b"]
-[ext_resource type="PackedScene" uid="uid://crcvldyqekexq" path="res://assets/externos/Nature/CommonTree_1.gltf" id="2_6pusm"]
+[ext_resource type="PackedScene" path="res://assets/naturaleza_simple/Bush_Common.gltf" id="1_akk8b"]
+[ext_resource type="PackedScene" path="res://assets/naturaleza_simple/CommonTree_1.gltf" id="2_6pusm"]
 [ext_resource type="PackedScene" uid="uid://b8jt0tnn64vrx" path="res://assets/externos/Nature/Clover_1.gltf" id="3_yyw0b"]
 [ext_resource type="PackedScene" uid="uid://c3hr338gis8hx" path="res://assets/externos/Nature/Clover_2.gltf" id="4_u6xkw"]
-[ext_resource type="PackedScene" uid="uid://b78kvestrgo4b" path="res://assets/externos/Nature/Bush_Common_Flowers.gltf" id="5_d71cd"]
+[ext_resource type="PackedScene" path="res://assets/naturaleza_simple/Bush_Common_Flowers.gltf" id="5_d71cd"]
 
 [node name="Vegetacion_1" type="Node3D"]
 

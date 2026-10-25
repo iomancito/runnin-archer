@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://clai66cievmp"]
 
-[ext_resource type="PackedScene" uid="uid://dit5h72xvx84d" path="res://assets/externos/Nature/CommonTree_2.gltf" id="1_a3rwy"]
-[ext_resource type="PackedScene" uid="uid://c41ew3kwy2tpr" path="res://assets/externos/Nature/CommonTree_3.gltf" id="2_5a4pe"]
-[ext_resource type="PackedScene" uid="uid://bcw1rbh2dc8fu" path="res://assets/externos/Nature/CommonTree_4.gltf" id="3_i8mkb"]
+[ext_resource type="PackedScene" path="res://assets/naturaleza_simple/CommonTree_2.gltf" id="1_a3rwy"]
+[ext_resource type="PackedScene" path="res://assets/naturaleza_simple/CommonTree_3.gltf" id="2_5a4pe"]
+[ext_resource type="PackedScene" path="res://assets/naturaleza_simple/CommonTree_4.gltf" id="3_i8mkb"]
 [ext_resource type="PackedScene" uid="uid://bpttr8lkluufd" path="res://assets/externos/Nature/Fern_1.gltf" id="4_eahy5"]
 [ext_resource type="PackedScene" uid="uid://b1ky4uy8m1mdc" path="res://assets/externos/Nature/Grass_Common_Short.gltf" id="5_f15wx"]
 [ext_resource type="PackedScene" uid="uid://dgojc85nyj8rl" path="res://assets/externos/Nature/Grass_Common_Tall.gltf" id="6_6y2a0"]
