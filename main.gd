@@ -21,12 +21,15 @@ signal mapa_cargado
 const SPLASH_MIN : float = 3.0
 #metros que la cámara va por detrás del player. Altura, inclinación, FOV y distancia de dibujo
 #en main.tscn (4,5 m, 32°, 48°, far 40 m: la niebla de los mapas acaba ahí)
-const CAMARA_DETRAS : float = 2.3
+const CAMARA_DETRAS : float = 1.6
 #fracción del desplazamiento lateral del player que sigue la cámara: así se ve más camino
 #del lado contrario y la cámara se mueve menos
 const CAMARA_SIGUE_X : float = 0.6
 #rapidez con la que la cámara alcanza su x (por segundo)
 const CAMARA_SUAVIZADO : float = 10.0
+#metros que el player puede separarse en x del centro de la cámara: a la altura de su cabeza
+#se ven ~1,3 m a cada lado, así que con este margen se ve entero también junto a las paredes
+const CAMARA_MARGEN_X : float = 0.5
 
 var player
 var partida_iniciada : bool = false
@@ -189,8 +192,9 @@ func spawn_player() -> void:
 func _physics_process(delta: float) -> void:
 	if is_playing() and is_instance_valid(player):
 		$Camera3D.global_position.z = player.global_position.z - CAMARA_DETRAS
-		var x = player.global_position.x * CAMARA_SIGUE_X
-		$Camera3D.global_position.x = lerp($Camera3D.global_position.x, x, 1.0 - exp(-CAMARA_SUAVIZADO * delta))
+		var px = player.global_position.x
+		var x = lerp($Camera3D.global_position.x, px * CAMARA_SIGUE_X, 1.0 - exp(-CAMARA_SUAVIZADO * delta))
+		$Camera3D.global_position.x = clamp(x, px - CAMARA_MARGEN_X, px + CAMARA_MARGEN_X)
 
 func on_player_position_updated(player_pos) -> void:
 	pass#print(player_pos)
