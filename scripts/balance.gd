@@ -29,8 +29,8 @@ const PROYECTIL_DAÑO = {"troll": 4, "whelp": 3, "skeleton_mage": 4, "spitter": 
 const LANZADOR = {
 	"easy": {"distancia": 18.0, "recarga": 3.0, "disparos": 2, "aviso": 1.3},
 	"medium": {"distancia": 20.0, "recarga": 2.4, "disparos": 3, "aviso": 1.2},
-	"hard": {"distancia": 22.0, "recarga": 2.0, "disparos": 4, "aviso": 1.1},
-	"hell": {"distancia": 24.0, "recarga": 1.6, "disparos": 5, "aviso": 1.0},
+	"hard": {"distancia": 21.0, "recarga": 2.2, "disparos": 3, "aviso": 1.1},
+	"hell": {"distancia": 21.0, "recarga": 2.1, "disparos": 3, "aviso": 1.0},
 }
 #metros del impacto
 const LANZADOR_RADIO = 0.9
@@ -44,11 +44,11 @@ const DAÑO_POR_METRO = VIDA_POR_METRO * 0.5
 ## etapa = índice de la dificultad * ETAPAS_POR_DIFICULTAD + (mapa - 1). Con 2, el mapa 1 de una
 ## dificultad es la misma etapa que el mapa 3 de la anterior: cada dificultad empieza donde acabó
 ## la otra. Vida, daño y oro de enemigos y bosses se multiplican por base * crecimiento^etapa:
-##   vida: Easy 0.6 / 0.96 / 1.54 ... Hell 10.1 / 16.1 / 25.8
+##   vida: Easy 0.6 / 1.02 / 1.73 ... Hell 14.5 / 24.6 / 41.9
 ## El oro crece menos que la vida: cada etapa pide más mejoras de las que paga
 const ETAPAS_POR_DIFICULTAD = 2
 const ETAPA_BASE = {"vida": 0.6, "daño": 0.5, "oro": 0.6}
-const ETAPA_CRECIMIENTO = {"vida": 1.6, "daño": 1.2, "oro": 1.15}
+const ETAPA_CRECIMIENTO = {"vida": 1.7, "daño": 1.2, "oro": 1.15}
 
 #--- Hordas: grupos compactos de enemigos débiles (diseño en Niveles, frecuencia por dificultad) ---
 #multiplicadores de cada miembro de una horda sobre los valores normales de su tipo
@@ -154,12 +154,20 @@ const ARCOS = {
 		"cadena_daño": [0.5, 0.1],
 		"cadena_radio": [7.0, 0.0],
 	},
+	#el arco final (tras superar Hell), el mejor con diferencia: reúne las habilidades de los
+	#otros. Al nivel 5, con la tienda al máximo, permite todos los logros de Hell (simulado con
+	#tools/simular_balance.py --fin): sus explosiones llegan al carril de al lado, así que se
+	#pueden matar filas enteras a la máxima velocidad de carrera
 	"dragon": {
 		"nombre": "Dragonbone Bow", "modelo": 4, "dificultad": "hell", "coste": [2500, 1.6],
-		"daño": [1.50, 0.05],
-		"quemadura_dps": [0.4, 0.15], #fracción del daño de la flecha por segundo
+		"daño": [2.0, 0.25],
+		"cadencia": [1.2, 0.05],
+		"perfora": [2, 1],
+		"explosion_radio": [2.0, 0.25], #2 m: llega al carril de al lado
+		"explosion_daño": [0.6, 0.1],
+		"quemadura_dps": [0.5, 0.15], #fracción del daño de la flecha por segundo, al objetivo y a los de la explosión
 		"quemadura_seg": [3.0, 0.0],
-		"daño_boss": [0.3, 0.15], #daño extra contra bosses
+		"daño_boss": [0.5, 0.25], #daño extra contra bosses
 	},
 }
 const ORDEN_ARCOS = ["thorn", "sunfire", "storm", "dragon"]
@@ -211,7 +219,9 @@ static func arco_descripcion(id : String, nivel : int) -> String:
 		"storm":
 			texto = "Lightning chains to %d enemies (%d%% damage)\nFire rate x%.2f" % [v.call("cadena_saltos"), v.call("cadena_daño") * 100, v.call("cadencia")]
 		"dragon":
-			texto = "Burns %d%% damage/s for %ds\n+%d%% damage to bosses" % [v.call("quemadura_dps") * 100, v.call("quemadura_seg"), v.call("daño_boss") * 100]
+			texto = "Pierces %d enemies\nFire blast: %d%% damage in %.1f m\nBurns %d%% damage/s for %ds\n+%d%% damage to bosses, fire rate x%.2f" % [
+				v.call("perfora"), v.call("explosion_daño") * 100, v.call("explosion_radio"),
+				v.call("quemadura_dps") * 100, v.call("quemadura_seg"), v.call("daño_boss") * 100, v.call("cadencia")]
 	return texto + "\nDamage x%.2f" % v.call("daño")
 
 #etapa del mapa en la dificultad actual (0 = mapa 1 de Easy)

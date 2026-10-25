@@ -40,6 +40,7 @@ static func precalentar(id : String, padre : Node3D, pos : Vector3) -> void:
 			rayo(padre, pos + Vector3(-2, 0, 0), pos)
 		"dragon":
 			impacto_fuego(padre, pos)
+			explosion(padre, pos + Vector3(-2, 0, 0), 2.0)
 			var fuego = empieza_quemadura(padre)
 			if fuego:
 				fuego.global_position = pos + Vector3(2, 0, 0)

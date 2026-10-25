@@ -7,7 +7,7 @@ Además del arco original hay 4 arcos con una habilidad propia. Cada uno se comp
 - **Un solo arco a la vez.** Comprar el arco equipado lo sube de nivel (máximo `ARCO_NIVEL_MAX = 5`).
 - Comprar **otro** arco lo equipa en nivel 1 y **se pierden las mejoras del anterior**. La tienda pide un segundo toque ("TAP AGAIN: LOSE …").
 - El arquero usa el modelo del último arco comprado; con el original se ve `arco1` (y el arco integrado del modelo).
-- Un arco superior es mejor a igual nivel, pero un arco inferior mejorado puede superarlo (por ejemplo Thorn nivel 5 atraviesa filas enteras, Sunfire nivel 1 apenas alcanza al carril vecino).
+- Un arco superior es mejor a igual nivel, pero un arco inferior mejorado puede superarlo (por ejemplo Thorn nivel 5 atraviesa filas enteras, Sunfire nivel 1 apenas alcanza al carril vecino). La excepción es Dragonbone: ya al nivel 1 iguala o supera a Storm al nivel 5, y solo él permite los logros del mapa 3 de Hell.
 
 ## Los arcos
 
@@ -16,7 +16,7 @@ Además del arco original hay 4 arcos con una habilidad propia. Cada uno se comp
 | **Thorn Bow** | `arco3` (púas) | Easy | **Perforación**: atraviesa 1 → 5 enemigos | ×1,10 → ×1,30 | 150 → 983 |
 | **Sunfire Bow** | `arco2` (llamas) | Medium | **Explosión**: radio 1,5 → 2,5 m, 40 % → 100 % del daño a los de alrededor | ×1,20 → ×1,40 | 400 → 2621 |
 | **Storm Bow** | `arco5` (gemas azules) | Hard | **Rayo en cadena** a 2 → 6 enemigos en 7 m con el 50 % → 90 % del daño; cadencia ×1,15 | ×1,30 → ×1,50 | 1000 → 6554 |
-| **Dragonbone Bow** | `arco4` (hueso) | Hell | **Fuego**: quema 3 s con el 40 % → 100 % del daño por segundo; +30 % → +90 % contra bosses | ×1,50 → ×1,70 | 2500 → 16384 |
+| **Dragonbone Bow** | `arco4` (hueso) | Hell | **Todo a la vez**: atraviesa 2 → 6 enemigos; explosión de fuego de 2 → 3 m (llega al carril de al lado) con el 60 % → 100 % del daño; quema 3 s al objetivo y a los de la explosión con el 50 % → 110 % del daño por segundo; +50 % → +150 % contra bosses; cadencia ×1,20 → ×1,40 | ×2,00 → ×3,00 | 2500 → 16384 |
 
 Los números están en `Balance.ARCOS` ([`scripts/balance.gd`](../scripts/balance.gd)). Cada parámetro es `[valor a nivel 1, suma por nivel]`, y `Balance.arco_valor(id, clave, nivel)` lo calcula. Precio: `coste[0] × coste[1]^(nivel-1)`.
 
@@ -27,7 +27,17 @@ Cada arco se compra al superar una dificultad y está pensado para la siguiente,
 - **Thorn** (tras Easy) → Medium trae **columnas** (fila india en un carril): la flecha atraviesa a los de detrás.
 - **Sunfire** (tras Medium) → Hard trae más **hordas**: la explosión daña a los vecinos de la rejilla (1,3 × 1,6 m).
 - **Storm** (tras Hard) → Hell es lo más denso (hordas ×1,6, columnas ×1,2): el rayo salta entre grupos.
-- **Dragonbone** (tras Hell) → para rejugar Hell: quemadura contra enemigos duros y bonus contra bosses.
+- **Dragonbone** (tras Hell) → el arco final y el mejor con diferencia: reúne perforación, explosión y fuego. Su explosión llega al carril de al lado, así que mata filas enteras aunque se corra a la máxima velocidad. Al nivel 5 y con la tienda al máximo permite **todos los logros de Hell** (Exterminator, Swift Hunter y Perfect Hunt de los 3 mapas, Hell's Ghost, Lone Wolf); el más difícil, Exterminator / Perfect Hunt del mapa 3, sale en ~1 de cada 3 intentos. Con Storm al nivel 5 es imposible (0 %).
+
+Simulación (`python3 tools/simular_balance.py --fin`), Hell con la tienda al máximo, % de intentos por mapa:
+
+| | Exterminator / Perfect Hunt (mapa 1 / 2 / 3) | Sin daño (mapa 1 / 2 / 3) | Lone Wolf mapa 3 |
+|---|---|---|---|
+| Storm nivel 5, jugador bueno | 100 / 98 / 0 | 5 / 1 / 0 | 2 |
+| Dragonbone nivel 1, bueno | 100 / 47 / 0 | 30 / 14 / 1 | 34 |
+| Dragonbone nivel 3, bueno | 100 / 100 / 0 | 59 / 29 / 7 | 73 |
+| Dragonbone nivel 5, bueno | 100 / 100 / 36 | 62 / 51 / 30 | 95 |
+| Dragonbone nivel 5, medio | 100 / 100 / 36 | 46 / 28 / 6 | 50 |
 
 ## Cómo funciona
 
@@ -38,7 +48,7 @@ Cada arco se compra al superar una dificultad y está pensado para la siguiente,
 | Compra | `Progreso.comprar_arco(id)` | Sube de nivel o cambia de arco, cobra y guarda |
 | Stats de partida | `Progreso.stats_partida()` | Copia de las mejoras con `arco`, `arco_nivel` y la cadencia del arco |
 | Modelo | `Player._ready()` → `set_bow(modelo)` | Muestra el modelo del arco y oculta el arco integrado |
-| Habilidades | [`arrow_normal.gd`](../assets/weapons/arrow_normal.gd) | Daño del arco, perforación, explosión, cadena, quemadura y bonus contra bosses al impactar |
+| Habilidades | [`arrow_normal.gd`](../assets/weapons/arrow_normal.gd) | Daño del arco, perforación (Thorn y Dragonbone, clave `perfora`), explosión, cadena, quemadura (Dragonbone: al objetivo y a los de su explosión) y bonus contra bosses al impactar |
 | Quemadura | `Enemy.quemar(dps, segundos)` | Temporizador de 0,5 s que se detiene en pausa |
 | Efectos visuales | [`scenes/player/arco_efectos.gd`](../scenes/player/arco_efectos.gd) | Pool de efectos, búsqueda de enemigos cercanos (grupo `enemigos`) |
 | Tienda | [`shop.gd`](../scenes/gui/shop.gd), [`bow_card.tscn`](../scenes/gui/bow_card.tscn) | Pestañas UPGRADES / BOWS y tarjetas de arco |

@@ -46,24 +46,24 @@ Valores base (multiplicador de etapa 1, al inicio del recorrido); en el juego se
 |---|---|---|---|---|
 | `easy` | 18 m | 3,0 s | 2 | 1,3 s |
 | `medium` | 20 m | 2,4 s | 3 | 1,2 s |
-| `hard` | 22 m | 2,0 s | 4 | 1,1 s |
-| `hell` | 24 m | 1,6 s | 5 | 1,0 s |
+| `hard` | 21 m | 2,2 s | 3 | 1,1 s |
+| `hell` | 21 m | 2,1 s | 3 | 1,0 s |
 
-  Si no se les mata antes, a velocidad base hacen 2 disparos en Easy, 3 en Medium y 4 en Hell (el último cae ya muy cerca). Con el alcance base (10 m) los primeros salen antes de poder dispararles.
+  Si no se les mata antes, a velocidad base hacen 2 disparos en Easy y 3 en el resto (el último cae ya muy cerca); en Hard y Hell los disparos llegan más seguidos y con menos aviso. Con 4-5 disparos cada 1,6-2,0 s Hell se volvía imposible para el jugador medio de la simulación. Con el alcance base (10 m) los primeros salen antes de poder dispararles.
 - El daño al chocar depende del tipo y de la distancia, no de la vida que le quede (antes era la vida restante del enemigo). Chocar mata al enemigo pero **no da oro**.
 
 ## Etapas: dificultad y mapa en una sola escala
 
 Vida, daño y oro de enemigos, proyectiles y bosses se multiplican por `ETAPA_BASE × ETAPA_CRECIMIENTO^etapa`, con `etapa = índice de dificultad × ETAPAS_POR_DIFICULTAD + (mapa − 1)` (`Balance.etapa()`, `Balance._mult()`).
 
-Con `ETAPAS_POR_DIFICULTAD = 2` **el mapa 1 de cada dificultad es la misma etapa que el mapa 3 de la anterior**: cada dificultad empieza donde acabó la otra y no hay bajones (antes Medium 1 era 4 veces más fácil que Easy 3). Crecimiento por etapa: vida ×1,6, daño ×1,2, oro ×1,15. El oro crece menos que la vida: cada etapa pide más mejoras de las que paga.
+Con `ETAPAS_POR_DIFICULTAD = 2` **el mapa 1 de cada dificultad es la misma etapa que el mapa 3 de la anterior**: cada dificultad empieza donde acabó la otra y no hay bajones (antes Medium 1 era 4 veces más fácil que Easy 3). Crecimiento por etapa: vida ×1,7, daño ×1,2, oro ×1,15. El oro crece menos que la vida: cada etapa pide más mejoras de las que paga.
 
 | | Etapa | Vida | Daño | Oro | Boss: vida / daño por impacto / oro |
 |---|---|---|---|---|---|
-| Easy 1 / 2 / 3 | 0 / 1 / 2 | ×0,6 / 0,96 / 1,54 | ×0,5 / 0,6 / 0,72 | ×0,6 / 0,69 / 0,79 | 210 / 336 / 537 — 2 / 2 / 3 — 60 / 69 / 79 |
-| Medium 1 / 2 / 3 | 2 / 3 / 4 | ×1,54 / 2,46 / 3,93 | ×0,72 / 0,86 / 1,04 | ×0,79 / 0,91 / 1,05 | 537 / 860 / 1376 — 3 / 3 / 4 — 79 / 91 / 105 |
-| Hard 1 / 2 / 3 | 4 / 5 / 6 | ×3,93 / 6,29 / 10,1 | ×1,04 / 1,24 / 1,49 | ×1,05 / 1,21 / 1,39 | 1376 / 2202 / 3523 — 4 / 4 / 5 — 105 / 121 / 139 |
-| Hell 1 / 2 / 3 | 6 / 7 / 8 | ×10,1 / 16,1 / 25,8 | ×1,49 / 1,79 / 2,15 | ×1,39 / 1,6 / 1,84 | 3523 / 5637 / 9019 — 5 / 6 / 7 — 139 / 160 / 184 |
+| Easy 1 / 2 / 3 | 0 / 1 / 2 | ×0,6 / 1,02 / 1,73 | ×0,5 / 0,6 / 0,72 | ×0,6 / 0,69 / 0,79 | 210 / 357 / 606 — 2 / 2 / 3 — 60 / 69 / 79 |
+| Medium 1 / 2 / 3 | 2 / 3 / 4 | ×1,73 / 2,95 / 5,01 | ×0,72 / 0,86 / 1,04 | ×0,79 / 0,91 / 1,05 | 606 / 1031 / 1753 — 3 / 3 / 4 — 79 / 91 / 105 |
+| Hard 1 / 2 / 3 | 4 / 5 / 6 | ×5,01 / 8,52 / 14,5 | ×1,04 / 1,24 / 1,49 | ×1,05 / 1,21 / 1,39 | 1753 / 2981 / 5068 — 4 / 4 / 5 — 105 / 121 / 139 |
+| Hell 1 / 2 / 3 | 6 / 7 / 8 | ×14,5 / 24,6 / 41,9 | ×1,49 / 1,79 / 2,15 | ×1,39 / 1,6 / 1,84 | 5068 / 8617 / 14649 — 5 / 6 / 7 — 139 / 160 / 184 |
 
 ## Bosses
 
@@ -167,14 +167,18 @@ En `Progreso.BASE_STATS`: velocidad 200, lateral 150, cadencia 1,0/s, vida 10, 1
 
 ## Ritmo esperado (simulación)
 
-Simulación en Python (fuera del repo) de campañas completas desde 0 de oro: reproduce `MapGenerator` (filas, hordas y columnas) y estos números; el bot mata lo que le da tiempo, esquiva el resto, coge puertas (vida si va por debajo del 50 %, si no DPS), compra cada arco nuevo al desbloquearlo y entre partidas compra siempre el nivel más barato (de 6 mejoras y del arco). Jugador *bueno*: choca con el 5 % de lo que esquiva y le aciertan el 10 % de los disparos; *medio*: 12 %, 25 % y el doble de impactos del boss. No simula Gold Bonus, Run Speed ni Arrow Speed.
+Simulación en Python ([`tools/simular_balance.py`](../tools/simular_balance.py), `python3 tools/simular_balance.py [-n 40] [--set g_vida=1.5]`) de campañas completas desde 0 de oro: reproduce `MapGenerator` (filas, hordas y columnas) y estos números (copiados a mano: si cambian en `balance.gd` o `niveles.gd`, actualizarlos también allí); el bot mata lo que le da tiempo, esquiva el resto, coge puertas (vida si va por debajo del 50 %, si no DPS), compra cada arco nuevo al desbloquearlo y entre partidas compra siempre el nivel más barato (de 6 mejoras y del arco). Jugador *bueno*: choca con el 5 % de lo que esquiva y le aciertan el 10 % de los disparos; *medio*: 12 %, 25 % y el doble de impactos del boss. No simula Gold Bonus, Run Speed ni Arrow Speed.
 
 Partidas hasta superar cada dificultad (mediana, entre paréntesis p10-p90):
 
 | Jugador | Easy | Medium | Hard | Hell |
 |---|---|---|---|---|
-| bueno | 2 (1-2) | 1 (1-2) | 2 (1-3) | 4 (3-7) |
-| medio | 3 (3-4) | 2 (1-3) | 4 (2-8) | 14 (10-27) |
+| bueno | 2 (1-2) | 1 (1-2) | 2 (1-4) | 6 (4-9) |
+| medio | 3 (2-4) | 2 (1-2) | 4 (2-6) | 16 (9-33) |
+
+Con vida ×1,7 por etapa. Con ×1,6 y el modelo corregido del simulador salía demasiado corto (6 partidas en Hell para el jugador medio); antes de corregirlo, el bot quedaba ocupado con el vuelo de cada flecha y hasta que pasaba cada columna u horda, y el juego parecía más difícil de lo que es.
+
+Opciones del simulador: `--set estrategia=arco` (sube antes el arco que la tienda: sale peor, 8 partidas en Hard y 30 en Hell con el modelo antiguo) y `--set logro=mapa|sin_daño|exterminador` con `arco_logro` y `logro_dif` (desbloquear un arco con un logro de otra dificultad). `--fin`: logros de Hell con la tienda al máximo (ver [arcos.md](arcos.md)).
 
 La muerte llega casi siempre en el mapa 3 de cada dificultad (su etapa es la más alta) y en el camino, no en el boss. Medium sale algo más corto que Easy porque su mapa 1 es la etapa ya superada y Thorn Bow barre sus columnas.
 

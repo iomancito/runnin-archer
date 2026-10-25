@@ -60,5 +60,12 @@ func _habilidades(objetivo : Enemy, d : int) -> void:
 				desde = e.global_position
 				e.recibe_daño(max(1, roundi(d * v.call("cadena_daño"))))
 		"dragon":
+			#explosión de fuego: daña y prende a los de alrededor (llega al carril de al lado)
+			var radio = v.call("explosion_radio")
+			var quemadura = d * v.call("quemadura_dps")
 			ArcoEfectos.impacto_fuego(get_parent(), objetivo.global_position)
-			objetivo.quemar(d * v.call("quemadura_dps"), v.call("quemadura_seg"))
+			ArcoEfectos.explosion(get_parent(), objetivo.global_position, radio)
+			objetivo.quemar(quemadura, v.call("quemadura_seg"))
+			for e in ArcoEfectos.enemigos_cerca(objetivo, radio, 99):
+				e.quemar(quemadura, v.call("quemadura_seg"))
+				e.recibe_daño(max(1, roundi(d * v.call("explosion_daño"))))
