@@ -28,13 +28,14 @@ Distancias en metros sobre z. Los pares `[inicio, fin]` se interpolan a lo largo
 | `jefes` | `{tipo, z: [...]}` mini jefes en el carril central |
 | `puertas` | z de las puertas de mejora |
 | `hordas` | `{tipo, separacion, desde, carriles, filas}`: hordas del mapa (solo en dificultades con `hordas` > 0, que divide `separacion`); `carriles` = ancho (2-3) y `filas` = fondo, ambos `[inicio, fin]` |
+| `boss_ataques` | Secuencia de ataques del boss final, se repite (`bola`, `barrera`, `lluvia`; ver [balance.md](balance.md)) |
 
 Diseño actual:
 
-- **Mapa 1**: goblins al principio, orcos a partir del 10 %, trolls desde el 45 %. Separación 20 → 10 m. Ogros en 250/500/750 m. 8 puertas repartidas.
-- **Mapa 2**: zombis (3 modelos al azar) que avanzan hacia el player. Separación 14 → 7 m. *Brutes* (zombi ×1,6 de tamaño) en 300/600/850 m. 9 puertas.
-- **Mapa 3**: provisional con los enemigos del mapa 1 (más trolls y 4 ogros) hasta que tenga los suyos.
-- **Hordas** (Hard y Hell): goblins en los mapas 1 y 3, zombis en el 2; de 2×3 carriles y 3-5 filas, más grandes y frecuentes hacia el final. En Hell, ~9 por mapa.
+- **Mapa 1** (bosque): goblins al principio, orcos a partir del 10 %, trolls desde el 45 % y crías de dragón (disparan) desde el 60 %. Separación 20 → 10 m. Ogros en 250/500/750 m. 8 puertas. Dragón rojo: bola, bola, barrera.
+- **Mapa 2** (pinar, cielo rojo): zombis (3 modelos al azar) que avanzan hacia el player. Separación 14 → 7 m. Zombi gordo (*brute*) en 300/600/850 m. 9 puertas. Dragón negro: barrera, bola, bola, barrera, lluvia.
+- **Mapa 3** (cementerio de noche): esqueletos que corren hacia el player, esqueletos magos (disparan) desde el 10 % y segadores lentos y duros desde el 30 %. Separación 16 → 8 m. Caballero de la muerte en 200/400/600/800 m. 9 puertas. Dragón esqueleto: lluvia, bola, barrera, bola.
+- **Hordas** (Hard y Hell): goblins en el mapa 1, zombis en el 2 y esqueletos en el 3; de 2×3 carriles y 3-5 filas, más grandes y frecuentes hacia el final. En Hell, ~9 por mapa.
 
 ## Reglas del generador
 

@@ -10,6 +10,9 @@ const CREDITOS : Array = [
 	["GAME", ["Running Archer by Ioman"]],
 	["3D MODELS", [
 		"\"Arrows\" by Akshat (sketchfab.com/shooter24994)\nlicensed under CC-BY 4.0",
+		"Based on \"Death Knight - Dungeons and Dragons\"\nby Brian Trepanier (sketchfab.com/CMBC)\nlicensed under CC-BY 4.0",
+		"Based on \"Iron Reaper, Mechanical Gothic Scythe\"\nby Pigcraft (sketchfab.com/s8819296)\nlicensed under CC-BY 4.0",
+		"Black Dragon by 3DHaupt (3dhaupt.com)",
 		"Stylized Nature MegaKit by Quaternius (quaternius.com)\nCC0 1.0",
 	]],
 	["VISUAL EFFECTS", ["BinbunVFX Vol.2 by Binbun3D (bun3d.com)\nCC0 1.0"]],

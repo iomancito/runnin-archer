@@ -1,13 +1,12 @@
 extends Mapa
 
-#provisional: usa los enemigos del mapa 1 hasta que tenga los suyos
 func _init() -> void:
 	numero = 3
-	boss_name = "Ancient Dragon"
+	boss_name = "Bone Dragon"
 
 func escena_de(tipo : String) -> PackedScene:
 	match tipo:
-		"orc": return enemies[1]
-		"troll": return enemies[2]
-		"ogre": return boss[0]
+		"skeleton_mage": return enemies[1]
+		"reaper": return enemies[2]
+		"death_knight": return boss[0]
 	return enemies[0]

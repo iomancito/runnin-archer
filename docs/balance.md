@@ -26,12 +26,20 @@ Valores en el mapa 1, al inicio del recorrido, dificultad media:
 | `goblin` | 2 | 2 | 1 |
 | `orc` | 5 | 3 | 2 |
 | `troll` | 14 | 5 | 4 |
-| `ogre` (mini jefe mapa 1/3) | 30 | 8 | 10 |
+| `ogre` (mini jefe mapa 1) | 30 | 8 | 10 |
+| `whelp` (cría de dragón, dispara) | 7 | 3 | 3 |
 | `zombie` | 4 | 2 | 1 |
-| `brute` (mini jefe mapa 2) | 25 | 6 | 8 |
+| `brute` (zombi gordo, mini jefe mapa 2) | 25 | 6 | 8 |
+| `skeleton` | 3 | 2 | 1 |
+| `skeleton_mage` (dispara) | 6 | 3 | 3 |
+| `reaper` | 12 | 5 | 4 |
+| `death_knight` (mini jefe mapa 3) | 32 | 8 | 10 |
 
 - La vida crece con la distancia: `× (1 + z × VIDA_POR_METRO)` → ×1 al inicio, ×3,5 a los 1000 m.
+- `velocidad` (opcional): m/s a los que avanza hacia el player (`skeleton` 1,6, `brute` 1, `reaper` 0,8). Los zombis normales llevan la suya en su script.
 - `ROCA_TROLL_DAÑO = 4`: daño de la piedra que lanza el troll.
+- `PROYECTIL_DAÑO`: daño del disparo de la cría (3) y del mago (4), con los multiplicadores de mapa y dificultad.
+- `LANZADOR`: los que disparan lo hacen al tener al player a menos de 20 m, cada 2,4 s, 2 veces como mucho; la marca está 1,2 s en el suelo (radio 0,9 m) y cae donde estará el player si sigue recto.
 - El daño al chocar es fijo por tipo (antes era la vida restante del enemigo). Chocar mata al enemigo pero **no da oro**.
 
 ## Multiplicadores por mapa (`MAPAS`)
@@ -43,11 +51,31 @@ Valores en el mapa 1, al inicio del recorrido, dificultad media:
 | | Valor (mapa 1, medio) |
 |---|---|
 | `BOSS_VIDA` | 350 |
-| `BOSS_DAÑO` | 3 por ataque |
-| `BOSS_INTERVALO` | 2,5 s entre ataques |
+| `BOSS_DAÑO` | 3 por impacto |
+| `BOSS_INTERVALO` | 2,5 s de pausa entre ataques |
 | `BOSS_ORO` | 100 |
 
 Se multiplican por mapa y por dificultad igual que los enemigos. Al tocar al boss el player se para y empieza el combate (ver [enemigos.md](enemigos.md)).
+
+### Ataques de los bosses (`BOSS_ATAQUES`)
+
+Cada ataque lanza proyectiles que marcan el suelo donde caerán; si el player sigue dentro al caer, recibe `BOSS_DAÑO`. Se pueden esquivar todos moviéndose a tiempo. La secuencia de cada boss está en `boss_ataques` de [`niveles.gd`](../scripts/niveles.gd):
+
+- **bola**: ráfaga de bolas (radio `BOSS_BOLA_RADIO` = 1,1 m) cada `BOSS_RAFAGA_CADENCIA` = 0,45 s, a donde está el player o a donde estará si sigue moviéndose (`prediccion`).
+- **barrera**: fuego en todos los carriles menos los `libres`; uno de ellos es contiguo al del player.
+- **lluvia**: `oleadas` de fuego que sube y cae del cielo por carriles; el libre se mueve un carril en cada oleada (`BOSS_OLEADAS_PAUSA` = 0,5 s entre ellas).
+
+| | aviso (s) | bolas por ráfaga | predicción | carriles libres | oleadas |
+|---|---|---|---|---|---|
+| `easy` | 1,5 | 1 | 0 | 2 | 1 |
+| `medium` | 1,25 | 2 | 0,3 | 2 | 1 |
+| `hard` | 1,05 | 3 | 0,6 | 1 | 2 |
+| `hell` | 0,9 | 4 | 0,9 | 1 | 3 |
+
+- **aviso**: lo que tarda en caer desde que aparece la marca. En barrera y lluvia se multiplica por `BOSS_AVISO_CARRILES` = 1,2 (hay que cambiar de carril: 2 m).
+- Con Dodge Speed base (150 → 2,5 m/s) salir de una bola lleva ~0,6 s y cambiar de carril ~0,8 s: todo es esquivable en Hell sin mejoras, pero sin margen.
+- `RADIO_PLAYER` = 0,3 m: medio ancho del player para los impactos.
+- Prueba con un bot que esquiva con 0,3 s de reacción y Dodge Speed base, 15 s de combate: Easy 0-1 impactos, Medium 1-2, Hard 2-3, Hell 3-6 (sin moverse: 8-12 en Hell).
 
 ## Dificultad (`DIFICULTADES`)
 
@@ -71,13 +99,13 @@ Resultado aproximado (generador, 20 partidas de media; oro si mata a todos, sin 
 | Enemigos mapa 1 (de ellos en hordas) | 66 | 87 | 180 (89) | 251 (152) |
 | Oro mapa 1 | 94 | 199 | 426 | 737 |
 | Máximo de enemigos vivos a la vez, mapa 1 | 13 | 17 | 40 | 63 |
-| Boss mapa 1: vida / golpe | 210 / 2 cada 3,2 s | 350 / 3 cada 2,5 s | 595 / 5 cada 2,2 s | 1050 / 8 cada 1,9 s |
+| Boss mapa 1: vida / daño por impacto | 210 / 2 | 350 / 3 | 595 / 5 | 1050 / 8 |
 | Enemigos mapa 2 (de ellos en hordas) | 87 | 120 | 226 (97) | 284 (152) |
-| Boss mapa 2: vida / golpe | 630 / 3 cada 3,2 s | 1050 / 5 cada 2,5 s | 1785 / 7 cada 2,2 s | 3150 / 12 cada 1,9 s |
+| Boss mapa 2: vida / daño por impacto | 630 / 3 | 1050 / 5 | 1785 / 7 | 3150 / 12 |
 
 ## Hordas (`HORDA`)
 
-En Hard y Hell aparecen grupos compactos de enemigos débiles (goblins en los mapas 1 y 3, zombis en el 2) pegados a una pared, con al menos 2 carriles libres para esquivarlos. Cada miembro tiene los valores de su tipo multiplicados por `HORDA` (vida, daño y oro ×0,5): con los stats base hay que esquivarlas; con varias flechas o un arco especial (perforar, explosión, rayo) se barren y dan mucho oro. Dónde y cómo son: `hordas` en [`niveles.gd`](../scripts/niveles.gd) (ver [mapas.md](mapas.md)).
+En Hard y Hell aparecen grupos compactos de enemigos débiles (goblins en el mapa 1, zombis en el 2, esqueletos en el 3) pegados a una pared, con al menos 2 carriles libres para esquivarlos. Cada miembro tiene los valores de su tipo multiplicados por `HORDA` (vida, daño y oro ×0,5): con los stats base hay que esquivarlas; con varias flechas o un arco especial (perforar, explosión, rayo) se barren y dan mucho oro. Dónde y cómo son: `hordas` en [`niveles.gd`](../scripts/niveles.gd) (ver [mapas.md](mapas.md)).
 
 ## Tienda (`tienda()`)
 
@@ -113,6 +141,8 @@ En `Progreso.BASE_STATS`: velocidad 200, lateral 150, cadencia 1,0/s, vida 10, 1
 
 ## Ritmo esperado (simulación)
 
+Medido cuando los bosses golpeaban siempre; ahora sus ataques se esquivan, así que los bosses son algo más fáciles para quien se mueve bien. Rehacer la simulación si se ajusta `BOSS_ATAQUES`.
+
 | Mejoras compradas | Boss mapa 1 | Boss mapa 2 | Boss mapa 3 |
 |---|---|---|---|
 | ~360 de oro (4-6 partidas) | gana justo | pierde | pierde |
@@ -123,7 +153,7 @@ En `Progreso.BASE_STATS`: velocidad 200, lateral 150, cadencia 1,0/s, vida 10, 1
 
 - **Más difícil a lo largo del mapa**: subir `VIDA_POR_METRO`.
 - **Mapas más duros**: `MAPAS`.
-- **Bosses**: `BOSS_*`.
+- **Bosses**: `BOSS_*`; lo difícil que es esquivar sus ataques, `BOSS_ATAQUES` (sobre todo `aviso`).
 - **Progresión más lenta/rápida**: el crecimiento `1.4` de `costes()` o los `base`.
 - **Cantidad de enemigos**: separación en [`niveles.gd`](../scripts/niveles.gd) o la densidad por dificultad.
 - **Hordas**: `hordas` de cada dificultad (frecuencia), `HORDA` (lo fuerte que es cada miembro) y `hordas` de cada mapa en `niveles.gd` (tamaño y separación).

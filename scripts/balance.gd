@@ -11,10 +11,21 @@ const ENEMIGOS = {
 	"orc": {"vida": 5, "daño": 3, "oro": 2},
 	"troll": {"vida": 14, "daño": 5, "oro": 4},
 	"ogre": {"vida": 30, "daño": 8, "oro": 10},
+	"whelp": {"vida": 7, "daño": 3, "oro": 3}, #cría de dragón: escupe fuego, final del mapa 1
 	"zombie": {"vida": 4, "daño": 2, "oro": 1},
-	"brute": {"vida": 25, "daño": 6, "oro": 8}, #zombi grande, mini jefe del mapa 2
+	"brute": {"vida": 25, "daño": 6, "oro": 8, "velocidad": 1.0}, #zombi gordo, mini jefe del mapa 2
+	"skeleton": {"vida": 3, "daño": 2, "oro": 1, "velocidad": 1.6},
+	"skeleton_mage": {"vida": 6, "daño": 3, "oro": 3}, #lanza rayos
+	"reaper": {"vida": 12, "daño": 5, "oro": 4, "velocidad": 0.8},
+	"death_knight": {"vida": 32, "daño": 8, "oro": 10}, #mini jefe del mapa 3
 }
 const ROCA_TROLL_DAÑO = 4
+#enemigos que disparan (Lanzador): daño del proyectil, y cuándo y cuánto disparan.
+## distancia: metros por delante del player a los que empiezan; recarga: segundos entre disparos;
+## aviso: segundos que la marca está en el suelo antes del impacto (lo que hay para esquivar);
+## radio: metros del impacto
+const PROYECTIL_DAÑO = {"whelp": 3, "skeleton_mage": 4}
+const LANZADOR = {"distancia": 20.0, "recarga": 2.4, "disparos": 2, "aviso": 1.2, "radio": 0.9}
 #la vida crece con la distancia: x1 al inicio, x3.5 a los 1000 m
 const VIDA_POR_METRO = 1.0 / 400.0
 #multiplicadores por mapa: [vida, daño, oro]
@@ -45,6 +56,28 @@ const BOSS_VIDA = 350
 const BOSS_DAÑO = 3
 const BOSS_INTERVALO = 2.5 #segundos entre ataques mientras el player está parado delante
 const BOSS_ORO = 100
+#--- Ataques de los bosses: proyectiles que marcan el suelo donde caerán y se esquivan ---
+## Tipos (la secuencia de cada boss está en Niveles.MAPAS[n].boss_ataques):
+##   bola:    ráfaga de bolas a donde está (o estará) el player
+##   barrera: fuego en todos los carriles menos "libres"; siempre hay uno libre al lado
+##   lluvia:  "oleadas" de fuego del cielo por carriles; el carril libre cambia en cada oleada
+## Por dificultad:
+##   aviso: segundos entre la marca en el suelo y el impacto (con Dodge Speed base se recorren
+##          2,5 m/s: hacen falta ~0,6 s para salir de una bola y ~0,8 s para cambiar de carril)
+##   rafaga: bolas por ataque "bola"; prediccion: 0 = apunta a donde está, 1 = a donde estará
+##   libres: carriles sin fuego en "barrera" y "lluvia"; oleadas: oleadas de "lluvia"
+const BOSS_ATAQUES = {
+	"easy": {"aviso": 1.5, "rafaga": 1, "prediccion": 0.0, "libres": 2, "oleadas": 1},
+	"medium": {"aviso": 1.25, "rafaga": 2, "prediccion": 0.3, "libres": 2, "oleadas": 1},
+	"hard": {"aviso": 1.05, "rafaga": 3, "prediccion": 0.6, "libres": 1, "oleadas": 2},
+	"hell": {"aviso": 0.9, "rafaga": 4, "prediccion": 0.9, "libres": 1, "oleadas": 3},
+}
+const BOSS_BOLA_RADIO = 1.1 #metros del impacto de una bola
+const BOSS_RAFAGA_CADENCIA = 0.45 #segundos entre las bolas de una ráfaga
+const BOSS_AVISO_CARRILES = 1.2 #"barrera" y "lluvia" dan más tiempo: hay que cambiar de carril
+const BOSS_OLEADAS_PAUSA = 0.5 #segundos entre el impacto de una oleada y el de la siguiente
+#mitad del ancho del player para los impactos (un roce cuenta)
+const RADIO_PLAYER = 0.3
 
 #--- Tienda: nombre (clave de guardado), título, formato, stat, incremento, costes por nivel ---
 static func tienda() -> Array:
@@ -176,6 +209,16 @@ static func oro_enemigo(tipo : String, mapa : int, horda : bool = false) -> int:
 
 static func daño_roca(mapa : int) -> int:
 	return int(ceil(ROCA_TROLL_DAÑO * _mult(mapa, 1) * dif().daño))
+
+static func daño_proyectil(tipo : String, mapa : int) -> int:
+	return int(ceil(PROYECTIL_DAÑO.get(tipo, ROCA_TROLL_DAÑO) * _mult(mapa, 1) * dif().daño))
+
+#metros por segundo hacia el player (0 = quieto)
+static func velocidad_enemigo(tipo : String) -> float:
+	return ENEMIGOS.get(tipo, {}).get("velocidad", 0.0)
+
+static func boss_ataque() -> Dictionary:
+	return BOSS_ATAQUES.get(dificultad, BOSS_ATAQUES["medium"])
 
 static func boss_vida(mapa : int) -> int:
 	return int(BOSS_VIDA * _mult(mapa, 0) * dif().vida)

@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://qsxlamksq0kn" path="res://scenes/enemies/map2/zombi_espada.tscn" id="8_o8da0"]
 [ext_resource type="PackedScene" uid="uid://c83bd5yynepig" path="res://scenes/enemies/map2/zombi_crawl.tscn" id="9_cxeqx"]
 [ext_resource type="PackedScene" uid="uid://c3jn00vyfmdvq" path="res://scenes/enemies/map2/zombi_crawl2.tscn" id="10_x7ksd"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/map2/bloater/bloater.tscn" id="14_bloater"]
 [ext_resource type="PackedScene" uid="uid://srk6plafhlfd" path="res://scenes/enemies/map2/Dragon_Negro.tscn" id="12_6adso"]
 [ext_resource type="PackedScene" uid="uid://mis3o761onwi" path="res://scenes/pickups/panel/panel.tscn" id="13_qp3q1"]
 
@@ -57,6 +58,7 @@ script = ExtResource("1_83lwk")
 left = Array[PackedScene]([ExtResource("2_wh7ia"), ExtResource("3_orf03"), ExtResource("4_yltni")])
 right = Array[PackedScene]([ExtResource("5_30sov"), ExtResource("6_402sa"), ExtResource("7_utswh")])
 enemies = Array[PackedScene]([ExtResource("8_o8da0"), ExtResource("9_cxeqx"), ExtResource("10_x7ksd")])
+boss = Array[PackedScene]([ExtResource("14_bloater")])
 final = ExtResource("12_6adso")
 panel = ExtResource("13_qp3q1")
 

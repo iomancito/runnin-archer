@@ -54,14 +54,15 @@ main.gd / main.tscn      orquestación del juego
 fade.gd                  fundidos y pantalla negra
 scripts/                 Balance, Niveles, Progreso
 scenes/mapas/            mapas, generador, spawner, MeshBatcher
-scenes/enemies/          Enemy (base), Boss (base) y cada enemigo por mapa
+scenes/enemies/          Enemy, Boss, Caminante y Lanzador (bases) y cada enemigo por mapa (mapN/)
+scenes/otros/            proyectiles: piedra del troll, Proyectil (bolas de los bosses) y su marca
 scenes/player/           arquero
 scenes/gui/              tema, HUD, menús, tienda, resultados, componentes
 scenes/pickups/          moneda y puertas de mejora (panel)
 scenes/Sides/            trozos de decorado lateral (30 m)
 assets/                  modelos, texturas, fuentes, imágenes (icono, splash)
 assets/naturaleza_simple/ árboles y arbustos del pack Nature con copas simplificadas (generados)
-tools/                   scripts fuera del juego (simplificar_copas.py para Blender)
+tools/                   scripts de Blender fuera del juego: simplificar_copas.py, importar_modelos.py, dragon_negro.py
 docs/                    esta documentación
 ```
 

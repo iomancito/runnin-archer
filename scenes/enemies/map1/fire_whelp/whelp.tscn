@@ -1,0 +1,52 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/enemies/lanzador.gd" id="1_s"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/moneda/moneda.tscn" id="2_m"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/map1/fire_whelp/fire_whelp.glb" id="3_g"]
+
+[sub_resource type="CylinderShape3D" id="Cuerpo"]
+height = 1.4
+radius = 0.6
+
+[sub_resource type="CylinderShape3D" id="Area"]
+height = 2.0
+radius = 0.5
+
+[node name="Whelp" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_s")
+moneda = ExtResource("2_m")
+anim_reposo = "idle"
+anim_ataque = "spit"
+retardo = 0.7
+hueso = "Jaw"
+adelante = 0.2
+estilo = 0
+escala_proyectil = 0.6
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+shape = SubResource("Cuerpo")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+shape = SubResource("Area")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.6, -0.8)
+modulate = Color(1, 0, 0.145098, 1)
+text = "0"
+font_size = 100
+outline_size = 30
+
+[node name="VisibleOnScreenEnabler3D" type="VisibleOnScreenEnabler3D" parent="."]
+aabb = AABB(-1.0, 0, -1.0, 2, 2, 2)
+
+[node name="Modelo" parent="." instance=ExtResource("3_g")]
+transform = Transform3D(-2.3, 0, 0, 0, 2.3, 0, 0, 0, -2.3, 0, 0, 0)
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

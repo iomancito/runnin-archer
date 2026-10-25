@@ -123,10 +123,14 @@ func precalentar() -> void:
 		e.global_position = Vector3(x, 0, z)
 		e.setup(tipo, 0, numero)
 		prepara(e, tipo)
+		if e is Lanzador:
+			Proyectil.precalentar(self, Vector3(x, 0, z), e.estilo)
 		x += 2.5
 	var b = final.instantiate()
 	$Suelo/Enemigos.add_child(b)
 	b.global_position = Vector3(0, 0, z + 8.0)
+	#proyectiles del boss y su marca en el suelo (y la explosión al caer)
+	Proyectil.precalentar(self, Vector3(-2, 0, z + 2.0), b.estilo)
 	var p = panel.instantiate()
 	$Suelo/Paneles.add_child(p)
 	p.global_position.z = z + 3.0

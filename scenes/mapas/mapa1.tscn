@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://cy723dp4ty665" path="res://scenes/enemies/map1/troll/troll.tscn" id="10_cu7uv"]
 [ext_resource type="PackedScene" uid="uid://mis3o761onwi" path="res://scenes/pickups/panel/panel.tscn" id="10_pthwl"]
 [ext_resource type="PackedScene" uid="uid://b628ejv37o24i" path="res://scenes/enemies/map1/ogre/Ogro.tscn" id="11_mvyri"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/map1/fire_whelp/whelp.tscn" id="16_whelp"]
 [ext_resource type="PackedScene" uid="uid://e2oh4cirifon" path="res://scenes/enemies/map1/red_dragon/Dragon_Rojo.tscn" id="12_4ter5"]
 [ext_resource type="Texture2D" uid="uid://jtwyakh2jf4l" path="res://assets/textures/terrain/grass.jpg" id="14_u1ve2"]
 
@@ -56,7 +57,7 @@ bake_interval = 0.1
 script = ExtResource("1_2rnlj")
 left = Array[PackedScene]([ExtResource("2_0ie6b"), ExtResource("3_eup5s"), ExtResource("4_fnncu")])
 right = Array[PackedScene]([ExtResource("5_pl7by"), ExtResource("5_o3i78"), ExtResource("7_sls8e")])
-enemies = Array[PackedScene]([ExtResource("8_k70d7"), ExtResource("9_wdh78"), ExtResource("10_cu7uv")])
+enemies = Array[PackedScene]([ExtResource("8_k70d7"), ExtResource("9_wdh78"), ExtResource("10_cu7uv"), ExtResource("16_whelp")])
 boss = Array[PackedScene]([ExtResource("11_mvyri")])
 final = ExtResource("12_4ter5")
 panel = ExtResource("10_pthwl")
