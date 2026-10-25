@@ -1,7 +1,8 @@
 class_name Lanzador extends Enemy
 
-## Enemigo quieto que dispara al player cuando lo tiene delante (Balance.LANZADOR): el proyectil
-## marca en el suelo dónde caerá (donde estará el player si sigue recto) y hay que apartarse.
+## Enemigo quieto que dispara al player cuando lo tiene delante (Balance.lanzador(), según la
+## dificultad): el proyectil marca en el suelo dónde caerá (donde estará el player si sigue recto)
+## y hay que apartarse. Sin animación de reposo se queda en el primer fotograma de la de ataque.
 
 @export var anim_reposo : String = "idle"
 @export var anim_ataque : String = ""
@@ -32,16 +33,22 @@ func _ready() -> void:
 		_anim.play(anim_reposo)
 		_anim.seek(randf() * _anim.current_animation_length, true)
 		_anim.animation_finished.connect(func(_n): _anim.play(anim_reposo, 0.3))
+	elif _anim and _anim.has_animation(anim_ataque):
+		_anim.get_animation(anim_ataque).loop_mode = Animation.LOOP_NONE
+		_anim.play(anim_ataque)
+		_anim.seek(0.0, true)
+		_anim.pause()
 
 func _physics_process(delta : float) -> void:
 	_recarga -= delta
 	var p = Progreso.player
-	if _recarga > 0.0 or _disparos >= Balance.LANZADOR.disparos or vida <= 0 or not is_instance_valid(p) or p.is_dead:
+	var cfg = Balance.lanzador()
+	if _recarga > 0.0 or _disparos >= cfg.disparos or vida <= 0 or not is_instance_valid(p) or p.is_dead:
 		return
 	var distancia = global_position.z - p.global_position.z
-	if distancia > 2.0 and distancia < Balance.LANZADOR.distancia:
+	if distancia > 2.0 and distancia < cfg.distancia:
 		_disparos += 1
-		_recarga = Balance.LANZADOR.recarga
+		_recarga = cfg.recarga
 		_dispara()
 
 func _dispara() -> void:
@@ -51,13 +58,13 @@ func _dispara() -> void:
 	var p = Progreso.player
 	if vida <= 0 or not is_inside_tree() or not is_instance_valid(p) or p.is_dead:
 		return
-	var aviso = Balance.LANZADOR.aviso
+	var aviso = Balance.lanzador().aviso
 	#donde estará si sigue recto (no se adelanta a los movimientos laterales)
 	var destino = p.global_position + Vector3(0, 0, p.velocity.z * aviso)
 	#no cae detrás del lanzador
 	destino.z = min(destino.z, global_position.z - 1.0)
 	Proyectil.lanzar(get_parent(), _origen(), destino, aviso, Balance.daño_proyectil(tipo, mapa), estilo,
-		Proyectil.Forma.CIRCULO, Balance.LANZADOR.radio, ARCO, escala_proyectil)
+		Proyectil.Forma.CIRCULO, Balance.LANZADOR_RADIO, ARCO, escala_proyectil)
 
 func _origen() -> Vector3:
 	if _esqueleto and _hueso >= 0:

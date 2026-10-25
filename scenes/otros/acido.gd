@@ -48,6 +48,14 @@ static func salpicadura(padre : Node, pos : Vector3) -> void:
 	p.emitting = true
 	p.get_tree().create_timer(VIDA_SALPICADURA + 0.2, false).timeout.connect(p.queue_free)
 
+#chorro encendido durante la carga para compilar su shader (los demás efectos los
+#precalienta Proyectil); se libera con el padre
+static func precalentar(padre : Node, pos : Vector3) -> void:
+	var p = chorro()
+	padre.add_child(p)
+	p.global_position = pos
+	p.emitting = true
+
 #capa verdosa sobre el modelo para distinguir al escupidor de los zombis normales
 static func tinte() -> StandardMaterial3D:
 	_prepara()

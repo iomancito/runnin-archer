@@ -34,6 +34,8 @@ const CAMARA_MARGEN_X : float = 0.5
 var player
 var partida_iniciada : bool = false
 
+#frames que se dibuja cada mapa al arrancar para compilar shaders y partículas
+const PRECALENTADO_FRAMES : int = 6
 const RUTAS_MAPAS : Array[String] = ["res://scenes/mapas/mapa1.tscn", "res://scenes/mapas/mapa2.tscn", "res://scenes/mapas/mapa3.tscn"]
 #escenas de mapa ya cargadas (guardar la referencia evita que se descarguen)
 var escenas_mapas : Dictionary = {}
@@ -94,8 +96,9 @@ func _carga_inicial() -> void:
 		map_container.add_child(mapa)
 		mapa.precalentar()
 		$Camera3D.global_position = Vector3(0, camara_inicial.y, mapa.get_spawn_point().z - CAMARA_DETRAS)
-		#unos frames dibujando el mapa (tapado por la pantalla negra)
-		for i in 3:
+		#unos frames dibujando el mapa (tapado por la pantalla negra): las partículas compilan
+		#su shader al emitir por primera vez
+		for i in PRECALENTADO_FRAMES:
 			await get_tree().process_frame
 		mapa.queue_free()
 	$Camera3D.global_position = camara_inicial

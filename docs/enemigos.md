@@ -6,12 +6,12 @@
 CharacterBody3D
 └─ Enemy            scenes/enemies/Enemy.gd     vida, daño al chocar, oro, número de vida coloreado
    ├─ Goblin, Orc   (sin lógica propia)
-   ├─ Troll         lanza piedras (Piedra.tscn) con predicción de trayectoria
    ├─ Ogro          mira al player, suelta una puerta de mejora al morir
    ├─ zombies       avanzan hacia el player (v = −1 / −2)
    ├─ Caminante     scenes/enemies/caminante.gd  animación en bucle y avanza a Balance velocidad
    │                (esqueleto, segador, zombi gordo, caballero de la muerte)
    ├─ Lanzador      scenes/enemies/lanzador.gd   quieto, dispara un Proyectil (cría de dragón, esqueleto mago)
+   │  ├─ Troll           scenes/enemies/map1/troll/troll.gd  lanza la piedra de su mano (estilo PIEDRA)
    │  └─ ZombiEscupidor  scenes/enemies/map2/zombi_escupidor.gd  chorro de ácido por la boca
    └─ Boss          scenes/enemies/boss.gd       para al player y le ataca con proyectiles esquivables
       ├─ DragonRojo      (mapa 1)  fuego
@@ -60,14 +60,14 @@ Las escenas de enemigo necesitan: `Label3D` (número de vida), un `Area3D` conec
 `Proyectil.lanzar(padre, desde, hasta, tiempo, daño, estilo, forma, radio, arco, escala)`:
 
 - Pone una **marca en el suelo** en `hasta` (círculo o rectángulo de un carril, shader [`aviso.gdshader`](../scenes/otros/aviso.gdshader) con parámetros por instancia: un solo material) que se rellena hasta el impacto.
-- Mueve el efecto `vfx_fire_projectile_01` de BinbunVFX en parábola (`arco` m sobre la recta) durante `tiempo` s. El color depende del `estilo` (`FUEGO`, `FUEGO_OSCURO`, `ALMAS`, `MAGIA`); sin luz dinámica. El estilo `ACIDO` usa en su lugar una bola con estela de gotas y salpica al caer (ver abajo).
+- Mueve el efecto `vfx_fire_projectile_01` de BinbunVFX en parábola (`arco` m sobre la recta) durante `tiempo` s. El color depende del `estilo` (`FUEGO`, `FUEGO_OSCURO`, `ALMAS`, `MAGIA`); sin luz dinámica. El estilo `ACIDO` usa en su lugar una bola con estela de gotas y salpica al caer (ver abajo), y `PIEDRA` (troll), la piedra `Pebble_Square_3` de la mano.
 - Al llegar: si el player está dentro (`dentro()`, con `Balance.RADIO_PLAYER`) recibe el daño y sale "-N"; explosión naranja con el fuego normal y destello de la marca en todos.
-- `Proyectil.precalentar()` lo muestra durante la carga (lo llama `Mapa.precalentar()` para el boss y los lanzadores del mapa).
+- `Proyectil.precalentar()` lo muestra durante la carga junto con los efectos de su impacto (explosión, salpicadura y chorro de ácido), que se lanzan al momento porque el mapa de precalentado solo se dibuja `PRECALENTADO_FRAMES` = 6 frames, menos de lo que tarda en caer. Lo llama `Mapa.precalentar()` para el boss y los lanzadores del mapa; lo que quede fuera del encuadre (±3,9 m de ancho) no se compila.
 
 ## `Caminante` y `Lanzador`
 
 - `Caminante` ([`caminante.gd`](../scenes/enemies/caminante.gd)): exports `anim`, `anim_escala` y, opcional, `anim_cerca` (una vez cuando el player está a `distancia_cerca` m: el caballero ruge, el zombi gordo grita). Avanza a `Balance.velocidad_enemigo(tipo)`.
-- `Lanzador` ([`lanzador.gd`](../scenes/enemies/lanzador.gd)): exports `anim_reposo`, `anim_ataque`, `retardo` (segundo del disparo), `hueso`/`adelante` (de dónde sale) y `estilo`. Dispara según `Balance.LANZADOR` a donde estará el player si sigue recto.
+- `Lanzador` ([`lanzador.gd`](../scenes/enemies/lanzador.gd)): exports `anim_reposo`, `anim_ataque`, `retardo` (segundo del disparo), `hueso`/`adelante` (de dónde sale) y `estilo`. Dispara según `Balance.lanzador()` (distancia, recarga, disparos y aviso de la dificultad) a donde estará el player si sigue recto. Si `anim_reposo` está vacío (troll: solo tiene la animación de lanzar), se queda en el primer fotograma de `anim_ataque`.
 
 ## Zombi escupidor y `Acido`
 

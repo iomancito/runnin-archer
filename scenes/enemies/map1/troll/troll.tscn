@@ -1,7 +1,6 @@
-[gd_scene load_steps=19 format=4 uid="uid://cy723dp4ty665"]
+[gd_scene load_steps=18 format=4 uid="uid://cy723dp4ty665"]
 
 [ext_resource type="Script" path="res://scenes/enemies/map1/troll/troll.gd" id="1_0canc"]
-[ext_resource type="PackedScene" uid="uid://bilatbg6lgvnm" path="res://scenes/otros/Piedra.tscn" id="2_gk731"]
 [ext_resource type="PackedScene" uid="uid://vrm7ya21kl2d" path="res://scenes/pickups/moneda/moneda.tscn" id="2_ijon2"]
 [ext_resource type="Texture2D" uid="uid://dewv5bt0gjm8v" path="res://scenes/enemies/map1/troll/troll_Troll_Albedo2.jpg" id="3_bcs6f"]
 [ext_resource type="PackedScene" uid="uid://8ptmcjan50ht" path="res://assets/externos/Nature/Pebble_Square_3.gltf" id="4_1ysbr"]
@@ -562,20 +561,6 @@ tracks/40/path = NodePath("Armature/Skeleton3D:mixamorig_RightToeBase")
 tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, 0.360186, 0.0854103, -0.0331249, 0.928372, 0.4, 1, 0.361326, 0.0853833, -0.0330712, 0.927933, 0.466667, 1, 0.362485, 0.0853557, -0.0330168, 0.927485, 0.566667, 1, 0.364787, 0.0853004, -0.0329082, 0.926591, 0.633333, 1, 0.366284, 0.0852641, -0.0328372, 0.926006, 0.666667, 1, 0.369316, 0.0851899, -0.0326934, 0.924813, 0.7, 1, 0.374218, 0.0850678, -0.0324597, 0.92286, 0.733333, 1, 0.380652, 0.0849037, -0.0321509, 0.920251, 0.766667, 1, 0.397852, 0.084442, -0.0313135, 0.913019, 0.8, 1, 0.426228, 0.0836065, -0.0298923, 0.900248, 0.833333, 1, 0.46931, 0.0821539, -0.0276367, 0.878769, 0.866667, 1, 0.518628, 0.0801991, -0.0248989, 0.850866, 0.9, 1, 0.55514, 0.0785337, -0.0227559, 0.827728, 0.933333, 1, 0.579219, 0.077325, -0.0212837, 0.811217, 0.966667, 1, 0.569429, 0.0778274, -0.0218879, 0.818056, 1, 1, 0.551372, 0.0787147, -0.0229819, 0.83022, 1.03333, 1, 0.519685, 0.0801536, -0.0248383, 0.850227, 1.06667, 1, 0.480696, 0.0817312, -0.0270199, 0.872652, 1.1, 1, 0.445089, 0.0829985, -0.0289197, 0.891163, 1.13333, 1, 0.42078, 0.0837741, -0.030169, 0.902782, 1.16667, 1, 0.413564, 0.0839908, -0.0305327, 0.906079, 1.2, 1, 0.416885, 0.0838919, -0.0303658, 0.90457, 1.23333, 1, 0.420264, 0.0837898, -0.0301952, 0.90302, 1.26667, 1, 0.419511, 0.0838126, -0.0302333, 0.903367, 1.3, 1, 0.414176, 0.0839727, -0.030502, 0.905802, 1.33333, 1, 0.405362, 0.0842299, -0.0309422, 0.909741, 1.36667, 1, 0.394686, 0.0845294, -0.0314689, 0.914378, 1.4, 1, 0.382827, 0.0848471, -0.0320461, 0.919357, 1.43333, 1, 0.371344, 0.0851398, -0.0325969, 0.924009, 1.46667, 1, 0.364976, 0.0852958, -0.0328991, 0.926517, 1.7, 1, 0.363928, 0.085321, -0.0329485, 0.926926, 1.83333, 1, 0.362722, 0.08535, -0.0330056, 0.927393, 1.96667, 1, 0.361587, 0.085377, -0.0330589, 0.927832, 2.13333, 1, 0.360582, 0.0854009, -0.0331063, 0.92822, 2.23333, 1, 0.360186, 0.0854103, -0.0331249, 0.928372)
-tracks/41/type = "method"
-tracks/41/imported = false
-tracks/41/enabled = true
-tracks/41/path = NodePath(".")
-tracks/41/interp = 1
-tracks/41/loop_wrap = true
-tracks/41/keys = {
-"times": PackedFloat32Array(0.9),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"throw_projectile"
-}]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_tep43"]
 _data = {
@@ -586,7 +571,6 @@ _data = {
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_0canc")
-projectile_scene = ExtResource("2_gk731")
 moneda = ExtResource("2_ijon2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -988,4 +972,3 @@ transform = Transform3D(1, 0, 0, 0, -0.24364, -0.977224, 0, 1.12195, -0.212212, 
 libraries = {
 &"": SubResource("AnimationLibrary_tep43")
 }
-autoplay = "Armature|mixamo_com|Layer0"

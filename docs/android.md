@@ -31,7 +31,7 @@ $A logcat -s godot:*                                                            
 
 - Solo `arm64-v8a`.
 - **Exporta solo las escenas necesarias** (`export_filter="scenes"`) más todos los `*.gd` (`include_filter`). El APK pasó de 440 MB a ~86 MB.
-- Lista `export_files`: `main.tscn`, los 3 mapas, `panel.tscn`, `Piedra.tscn`, `shop_card.tscn`, `bow_card.tscn`, los 4 efectos de BinbunVFX, `icon.svg`.
+- Lista `export_files`: `main.tscn`, los 3 mapas, `panel.tscn`, `zombi_escupidor.tscn`, la piedra `Pebble_Square_3.gltf` (proyectil del troll), `shop_card.tscn`, `bow_card.tscn`, los 4 efectos de BinbunVFX, `icon.svg`.
 - `include_filter`: `*.gd,assets/images/bows/*.png`.
 
 > **Importante:** Godot no sigue los `load()`/`preload()` de los scripts al calcular dependencias. Lo que **solo se cargue desde código** hay que añadirlo a mano, o en el móvil faltará (pasó con `shop_card.tscn`: pantalla negra):

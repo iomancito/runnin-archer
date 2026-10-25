@@ -24,6 +24,9 @@ const DETRAS : float = 15.0
 #enemigos creados como mucho por frame (repartir el coste de instanciar)
 const SPAWNS_POR_FRAME : int = 2
 
+#flecha del player, para precalentarla
+const FLECHA : PackedScene = preload("res://assets/weapons/arrow_modificada.tscn")
+
 #número de mapa (Niveles.MAPAS y multiplicadores de Balance); lo fija cada mapa
 var numero : int = 1
 #nombre que muestra la barra de vida del boss
@@ -112,12 +115,16 @@ func _spawn_hasta(z_max : float, limite : int) -> void:
 		vivos.append(e)
 
 #crea uno de cada tipo delante de la cámara para compilar sus shaders durante la carga
+#(lo que queda fuera del encuadre no se dibuja ni se compila: a esa distancia la cámara ve
+#unos ±3,9 m de ancho, así que van en filas de 4 entre x = -3 y 3)
 func precalentar() -> void:
-	var z = get_spawn_point().z + 6.0
-	var x = -4.0
+	var z0 = get_spawn_point().z + 6.0
 	var tipos = Niveles.MAPAS[numero].tipos.keys()
 	tipos.append(Niveles.MAPAS[numero].jefes.tipo)
-	for tipo in tipos:
+	for i in tipos.size():
+		var tipo = tipos[i]
+		var x = -3.0 + (i % 4) * 2.0
+		var z = z0 + floori(i / 4.0) * 4.0
 		var e : Enemy = escena_de(tipo).instantiate()
 		$Suelo/Enemigos.add_child(e)
 		e.global_position = Vector3(x, 0, z)
@@ -125,7 +132,7 @@ func precalentar() -> void:
 		prepara(e, tipo)
 		if e is Lanzador:
 			Proyectil.precalentar(self, Vector3(x, 0, z), e.estilo)
-		x += 2.5
+	var z = z0
 	var b = final.instantiate()
 	$Suelo/Enemigos.add_child(b)
 	b.global_position = Vector3(0, 0, z + 8.0)
@@ -139,6 +146,13 @@ func precalentar() -> void:
 	muestra.free()
 	add_child(moneda)
 	moneda.global_position = Vector3(4, 0, z)
+	#flecha del player (sale en el primer segundo de la partida)
+	var flecha = FLECHA.instantiate()
+	add_child(flecha)
+	flecha.global_position = Vector3(-2, 1.2, z)
+	#quieta y sin el _process que la borra al pasar su alcance
+	flecha.set_physics_process(false)
+	flecha.set_process(false)
 	#efectos del arco equipado (los de otro arco se precalientan al comprarlo en la tienda)
 	ArcoEfectos.precalentar(Progreso.arco, self, Vector3(0, 0, z + 2.0))
 	#números flotantes (+oro, -daño) y de vida: sus glifos se rasterizan la primera vez

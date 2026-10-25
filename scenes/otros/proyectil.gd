@@ -1,16 +1,19 @@
 class_name Proyectil extends Node3D
 
-## Bola de fuego (o de magia, o de ácido) que vuela hasta un punto del suelo marcado de antemano.
+## Bola de fuego (o de magia, de ácido o una piedra) que vuela hasta un punto del suelo marcado de antemano.
 ## La marca aparece al lanzarla y se va rellenando hasta el impacto: el player ve dónde caerá
 ## y cuánto le queda para apartarse. Al llegar daña al player si está dentro.
 ## La usan los bosses (Boss) y los enemigos que disparan (Lanzador).
 
-enum Estilo {FUEGO, FUEGO_OSCURO, ALMAS, MAGIA, ACIDO}
+enum Estilo {FUEGO, FUEGO_OSCURO, ALMAS, MAGIA, ACIDO, PIEDRA}
 enum Forma {CIRCULO, CARRIL}
 
 const GRUPO : StringName = &"proyectiles"
 #cargados por código: también están en export_files del preset Android
 const VFX : PackedScene = preload("res://assets/BinbunVFX_Vol2/ElementalMagicFX/effects/projectile/vfx_fire_projectile_01.tscn")
+#piedra del troll (la misma que lleva en la mano)
+const PIEDRA : PackedScene = preload("res://assets/externos/Nature/Pebble_Square_3.gltf")
+const ESCALA_PIEDRA : float = 1.6
 const SHADER_AVISO : Shader = preload("res://scenes/otros/aviso.gdshader")
 #colores de cada estilo: [primario, secundario, terciario, marca del suelo]
 const ESTILOS = {
@@ -20,6 +23,7 @@ const ESTILOS = {
 	Estilo.MAGIA: [Color(0.6, 1.0, 0.45), Color(0.2, 0.8, 0.25), Color(0.04, 0.2, 0.05), Color(0.45, 1.0, 0.3)],
 	#el ácido no usa el efecto de fuego (ver Acido): solo cuenta el color de la marca
 	Estilo.ACIDO: [Color(0.78, 0.95, 0.25), Color(0.5, 0.75, 0.12), Color(0.2, 0.35, 0.05), Color(0.75, 1.0, 0.1)],
+	Estilo.PIEDRA: [Color.WHITE, Color.WHITE, Color.WHITE, Color(1.0, 0.75, 0.35)],
 }
 #al caer, la marca crece y se desvanece en este tiempo (s)
 const DESTELLO : float = 0.3
@@ -70,6 +74,12 @@ func _ready() -> void:
 	var e = ESTILOS[estilo]
 	if estilo == Estilo.ACIDO:
 		_vfx = Acido.gota()
+		add_child(_vfx)
+	elif estilo == Estilo.PIEDRA:
+		_vfx = Node3D.new()
+		var piedra = PIEDRA.instantiate()
+		piedra.scale = Vector3.ONE * ESCALA_PIEDRA
+		_vfx.add_child(piedra)
 		add_child(_vfx)
 	else:
 		_vfx = VFX.instantiate()
@@ -125,11 +135,7 @@ func _impacto() -> void:
 	if daño > 0 and is_instance_valid(p) and not p.is_dead and dentro(p.global_position):
 		p.recibe_daño(daño)
 		texto_daño(get_parent(), p.global_position, daño)
-	#la explosión del juego es naranja: solo con el fuego normal; las demás, destello de la marca
-	if estilo == Estilo.FUEGO:
-		ArcoEfectos.explosion(get_parent(), hasta, radio * 0.8)
-	elif estilo == Estilo.ACIDO:
-		Acido.salpicadura(get_parent(), hasta)
+	efecto_impacto(get_parent(), hasta, estilo, radio)
 	_marca.reparent(get_parent())
 	_marca.set_instance_shader_parameter("progreso", 1.0)
 	var color : Color = ESTILOS[estilo][3]
@@ -147,6 +153,14 @@ func dentro(pos : Vector3) -> bool:
 	if forma == Forma.CARRIL:
 		return dx < radio + Balance.RADIO_PLAYER and dz < LARGO_CARRIL * 0.5 + Balance.RADIO_PLAYER
 	return Vector2(dx, dz).length() < radio + Balance.RADIO_PLAYER
+
+#la explosión del juego es naranja: solo con el fuego normal; el ácido salpica; los demás, solo
+#el destello de la marca
+static func efecto_impacto(padre : Node, pos : Vector3, est : int, r : float) -> void:
+	if est == Estilo.FUEGO:
+		ArcoEfectos.explosion(padre, pos, r * 0.8)
+	elif est == Estilo.ACIDO:
+		Acido.salpicadura(padre, pos)
 
 #lo llama el boss al morir: lo que queda en el aire desaparece sin dañar
 func cancelar() -> void:
@@ -169,7 +183,11 @@ static func texto_daño(padre : Node, pos : Vector3, d : int) -> void:
 	tw.tween_property(label, "modulate:a", 0.0, 0.7).set_delay(0.25)
 	tw.chain().tween_callback(label.queue_free)
 
-#muestra un proyectil inofensivo durante la carga para compilar sus shaders
+#muestra un proyectil inofensivo durante la carga para compilar sus shaders, y los efectos
+#de su impacto ya, porque el precalentado dura menos de lo que tarda en caer
 static func precalentar(padre : Node, pos : Vector3, est : int) -> void:
 	lanzar(padre, pos + Vector3.UP * 2.0, pos, 0.4, 0, est, Forma.CIRCULO, 1.0, 1.0)
 	lanzar(padre, pos + Vector3(2, 2, 0), pos + Vector3(2, 0, 0), 0.4, 0, est, Forma.CARRIL, 1.0, 1.0)
+	efecto_impacto(padre, pos + Vector3(0, 0, -1.5), est, Balance.LANZADOR_RADIO)
+	if est == Estilo.ACIDO:
+		Acido.precalentar(padre, pos + Vector3(0, 1.2, -1.5))

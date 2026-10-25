@@ -20,13 +20,20 @@ const ENEMIGOS = {
 	"reaper": {"vida": 12, "daño": 5, "oro": 4, "velocidad": 0.8},
 	"death_knight": {"vida": 32, "daño": 8, "oro": 10}, #mini jefe del mapa 3
 }
-const ROCA_TROLL_DAÑO = 4
-#enemigos que disparan (Lanzador): daño del proyectil, y cuándo y cuánto disparan.
-## distancia: metros por delante del player a los que empiezan; recarga: segundos entre disparos;
-## aviso: segundos que la marca está en el suelo antes del impacto (lo que hay para esquivar);
-## radio: metros del impacto
-const PROYECTIL_DAÑO = {"whelp": 3, "skeleton_mage": 4, "spitter": 3}
-const LANZADOR = {"distancia": 20.0, "recarga": 2.4, "disparos": 2, "aviso": 1.2, "radio": 0.9}
+#enemigos que disparan (Lanzador: troll, cría, escupidor, mago): daño del proyectil y, por
+#dificultad, cuándo y cuánto disparan. Las mismas reglas para todos:
+## distancia: metros por delante del player a los que empiezan (la niebla deja ver ~30 m);
+## recarga: segundos entre disparos; disparos: máximo por enemigo;
+## aviso: segundos que la marca está en el suelo antes del impacto (lo que hay para esquivar)
+const PROYECTIL_DAÑO = {"troll": 4, "whelp": 3, "skeleton_mage": 4, "spitter": 3}
+const LANZADOR = {
+	"easy": {"distancia": 18.0, "recarga": 3.0, "disparos": 2, "aviso": 1.3},
+	"medium": {"distancia": 20.0, "recarga": 2.4, "disparos": 3, "aviso": 1.2},
+	"hard": {"distancia": 22.0, "recarga": 2.0, "disparos": 4, "aviso": 1.1},
+	"hell": {"distancia": 24.0, "recarga": 1.6, "disparos": 5, "aviso": 1.0},
+}
+#metros del impacto
+const LANZADOR_RADIO = 0.9
 #la vida crece con la distancia: x1 al inicio, x3.5 a los 1000 m
 const VIDA_POR_METRO = 1.0 / 400.0
 #el daño al chocar crece la mitad de rápido: x1 al inicio, x2.25 a los 1000 m
@@ -228,15 +235,15 @@ static func oro_enemigo(tipo : String, mapa : int, horda : bool = false) -> int:
 	var h = HORDA.oro if horda else 1.0
 	return max(1, int(round(ENEMIGOS[tipo].oro * _mult(mapa, "oro") * h)))
 
-static func daño_roca(mapa : int) -> int:
-	return int(ceil(ROCA_TROLL_DAÑO * _mult(mapa, "daño")))
-
 static func daño_proyectil(tipo : String, mapa : int) -> int:
-	return int(ceil(PROYECTIL_DAÑO.get(tipo, ROCA_TROLL_DAÑO) * _mult(mapa, "daño")))
+	return int(ceil(PROYECTIL_DAÑO.get(tipo, 3) * _mult(mapa, "daño")))
 
 #metros por segundo hacia el player (0 = quieto)
 static func velocidad_enemigo(tipo : String) -> float:
 	return ENEMIGOS.get(tipo, {}).get("velocidad", 0.0)
+
+static func lanzador() -> Dictionary:
+	return LANZADOR.get(dificultad, LANZADOR["medium"])
 
 static func boss_ataque() -> Dictionary:
 	return BOSS_ATAQUES.get(dificultad, BOSS_ATAQUES["medium"])

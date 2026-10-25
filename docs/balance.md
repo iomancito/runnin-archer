@@ -39,9 +39,17 @@ Valores base (multiplicador de etapa 1, al inicio del recorrido); en el juego se
 - La vida crece con la distancia: `× (1 + z × VIDA_POR_METRO)` → ×1 al inicio, ×3,5 a los 1000 m.
 - El daño al chocar crece la mitad de rápido: `× (1 + z × DAÑO_POR_METRO)` → ×1 al inicio, ×2,25 a los 1000 m. Así embestir enemigos al final del mapa sigue siendo peligroso aunque no se les pueda matar.
 - `velocidad` (opcional): m/s a los que avanza hacia el player (`skeleton` 1,6, `brute` 1, `reaper` 0,8). Los zombis normales llevan la suya en su script.
-- `ROCA_TROLL_DAÑO = 4`: daño de la piedra que lanza el troll.
-- `PROYECTIL_DAÑO`: daño del disparo de la cría (3), del escupidor (3) y del mago (4), con el multiplicador de daño de la etapa.
-- `LANZADOR`: los que disparan lo hacen al tener al player a menos de 20 m, cada 2,4 s, 2 veces como mucho; la marca está 1,2 s en el suelo (radio 0,9 m) y cae donde estará el player si sigue recto.
+- `PROYECTIL_DAÑO`: daño del disparo del troll (4), la cría (3), el escupidor (3) y el mago (4), con el multiplicador de daño de la etapa.
+- `LANZADOR`: los cuatro que disparan siguen las mismas reglas, que dependen de la dificultad. La marca (radio `LANZADOR_RADIO` = 0,9 m) cae donde estará el player si sigue recto:
+
+| | Empiezan a | Recarga | Disparos como mucho | Aviso |
+|---|---|---|---|---|
+| `easy` | 18 m | 3,0 s | 2 | 1,3 s |
+| `medium` | 20 m | 2,4 s | 3 | 1,2 s |
+| `hard` | 22 m | 2,0 s | 4 | 1,1 s |
+| `hell` | 24 m | 1,6 s | 5 | 1,0 s |
+
+  Si no se les mata antes, a velocidad base hacen 2 disparos en Easy, 3 en Medium y 4 en Hell (el último cae ya muy cerca). Con el alcance base (10 m) los primeros salen antes de poder dispararles.
 - El daño al chocar depende del tipo y de la distancia, no de la vida que le quede (antes era la vida restante del enemigo). Chocar mata al enemigo pero **no da oro**.
 
 ## Etapas: dificultad y mapa en una sola escala
