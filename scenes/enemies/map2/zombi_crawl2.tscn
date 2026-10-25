@@ -1579,7 +1579,7 @@ _data = {
 
 [node name="Zombi_espada" type="CharacterBody3D"]
 collision_layer = 2
-collision_mask = 10
+collision_mask = 8
 wall_min_slide_angle = 0.0
 script = ExtResource("3_o3t3k")
 moneda = ExtResource("2_c8t2n")
