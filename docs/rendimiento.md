@@ -58,7 +58,7 @@ Mapa 1 en Hell, 3 partidas alternas: **43,2 → 46,1 FPS, 20,1 → 18,3 ms, ~190
 
 ### Cámara final
 
-5,5 m de altura, 4 m por detrás, 32°, FOV 48°, `far` 40 m (`main.tscn`). Sigue el 60 % del desplazamiento lateral del player, suavizado (`CAMARA_SIGUE_X`, `CAMARA_SUAVIZADO` en `main.gd`): se ve más ancho cerca del player y los carriles se distinguen mejor que con la de 3,5 m. Rinde igual que la de 3,5 m (Hell, con copas simplificadas):
+4,5 m de altura, 2,3 m por detrás, 32°, FOV 48°, `far` 40 m (`main.tscn`). Las medidas de abajo son con 5,5 m y 4 m; después se acercó para que el player se vea más grande y quede más abajo en la pantalla (~20 % en vez de ~30 %), sin cambiar lo que se ve por delante. Sigue el 60 % del desplazamiento lateral del player, suavizado (`CAMARA_SIGUE_X`, `CAMARA_SUAVIZADO` en `main.gd`): se ve más ancho cerca del player y los carriles se distinguen mejor que con la de 3,5 m. Rinde igual que la de 3,5 m (Hell, con copas simplificadas):
 
 | Mapa | 3,5 m, 20° | Final |
 |---|---|---|

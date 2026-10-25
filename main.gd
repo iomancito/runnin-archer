@@ -20,8 +20,8 @@ signal mapa_cargado
 #segundos mínimos que se ve la pantalla de inicio aunque la carga acabe antes
 const SPLASH_MIN : float = 3.0
 #metros que la cámara va por detrás del player. Altura, inclinación, FOV y distancia de dibujo
-#en main.tscn (5,5 m, 32°, 48°, far 40 m: la niebla de los mapas acaba ahí)
-const CAMARA_DETRAS : float = 4.0
+#en main.tscn (4,5 m, 32°, 48°, far 40 m: la niebla de los mapas acaba ahí)
+const CAMARA_DETRAS : float = 2.3
 #fracción del desplazamiento lateral del player que sigue la cámara: así se ve más camino
 #del lado contrario y la cámara se mueve menos
 const CAMARA_SIGUE_X : float = 0.6
