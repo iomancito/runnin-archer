@@ -15,6 +15,13 @@ El juego solo se publica para **móviles Android** (no se mantienen builds de Wi
 ## Compilar e instalar
 
 ```bash
+./build.sh        # compila build/RunningArcher.apk (log en build/export.log; build/ no va a git)
+./build.sh -i     # compila e instala en el móvil
+```
+
+A mano:
+
+```bash
 G=/mnt/ARC100/Godot/Godot_v4.7.1-stable_linux.x86_64
 A=~/Android/Sdk/platform-tools/adb
 $G --headless --path . --export-debug "Android" /tmp/RunningArcher.apk

@@ -62,7 +62,8 @@ scenes/pickups/          moneda y puertas de mejora (panel)
 scenes/Sides/            trozos de decorado lateral (30 m)
 assets/                  modelos, texturas, fuentes, imágenes (icono, splash)
 assets/naturaleza_simple/ árboles y arbustos del pack Nature con copas simplificadas (generados)
-tools/                   scripts de Blender fuera del juego: simplificar_copas.py, importar_modelos.py, dragon_negro.py
+tools/                   fuera del juego: scripts de Blender (simplificar_copas.py, importar_modelos.py,
+                         dragon_negro.py) y el simulador de balance (simular_balance.py)
 docs/                    esta documentación
 ```
 
