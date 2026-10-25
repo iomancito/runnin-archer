@@ -69,4 +69,4 @@ Botón **RESET PROGRESS**: primer toque "TAP AGAIN TO ERASE ALL" durante 3 s, el
 
 ## Mejoras durante la partida
 
-Las puertas (`scenes/pickups/panel/panel.gd`) ofrecen dos mejoras al azar de `Balance.PUERTAS` y llaman a `Player.mejora(stat, valor)`. Solo duran esa partida (el player recibe una copia de `progreso_permanente` al aparecer).
+Las puertas (`scenes/pickups/panel/panel.gd`) ofrecen dos mejoras al azar de `Balance.PUERTAS` y llaman a `Player.mejora(stat, valor)`. El pilar central es una cuña en la capa de los muros (capa 4) que desvía al arquero hacia un lado, así que solo se cruza una de las dos; si llega justo al centro sin tocar la pantalla, `Player` se aparta solo hacia un lado. Además `PanelSkills.cogido` impide aplicar las dos aunque ambas áreas avisen en el mismo frame. Solo duran esa partida (el player recibe una copia de `progreso_permanente` al aparecer).

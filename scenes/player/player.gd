@@ -59,6 +59,8 @@ var posicion_inicial_dedo : Vector2
 var posicion_final_dedo : Vector2
 var index = -1
 var direccion :Vector2
+#lado al que se aparta solo si choca de frente (-1, 0, 1)
+var _empuje : float = 0.0
 #gravedad
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -115,8 +117,12 @@ func _physics_process(delta: float) -> void:
 	elif direccion.x < 0:
 		velocity.x = stats["p_side_speed"] * delta
 	else:
-		velocity.x = 0
-	move_and_slide()	
+		velocity.x = _empuje * stats["p_side_speed"] * delta
+	move_and_slide()
+	#chocar de frente (pilar de las puertas) sin tocar la pantalla: se aparta hacia su lado
+	_empuje = 0.0
+	if is_on_wall() and abs(get_wall_normal().x) < 0.3:
+		_empuje = signf(global_position.x) if global_position.x != 0 else [-1.0, 1.0].pick_random()
 
 #Control de interacción con la pantalla
 func _input(event: InputEvent) -> void:

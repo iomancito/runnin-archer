@@ -1,8 +1,11 @@
 class_name PanelSkills extends Node3D
 
 #dos mejoras distintas al azar de Balance.PUERTAS (texto, stat, incremento)
+#el pilar central es una cuña en la capa de los muros: obliga a ir a un lado u otro
 var left_rnd : int
 var right_rnd : int
+#solo se puede coger una de las dos (las dos áreas pueden avisar en el mismo frame)
+var cogido : bool = false
 @onready var left_txt = $left_mesh/left_label
 @onready var right_txt = $right_mesh/right_label
 
@@ -24,6 +27,9 @@ func _on_right_area_body_entered(body: Node3D) -> void:
 		upgrade_skill_player(body, right_rnd)
 
 func upgrade_skill_player(body : Node3D, valor : int) -> void:
+	if cogido:
+		return
+	cogido = true
 	body.mejora(Balance.PUERTAS[valor][1], Balance.PUERTAS[valor][2])
 	Logros.puerta(body)
 	queue_free()
