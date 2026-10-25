@@ -11,6 +11,7 @@ signal mapa_cargado
 @onready var menu_principal : MainMenu = %MainMenu
 @onready var menu_mejoras : Shop = %Shop
 @onready var menu_logros : AchievementsScreen = %Achievements
+@onready var menu_creditos : CreditsScreen = %Credits
 @onready var pause_menu : PauseMenu = %PauseMenu
 @onready var results : Results = %Results
 @onready var fade = %fade
@@ -45,6 +46,8 @@ func _ready() -> void:
 	menu_principal.shop_pressed.connect(show_mejoras)
 	menu_principal.achievements_pressed.connect(show_logros)
 	menu_logros.back_pressed.connect(show_principal)
+	menu_principal.credits_pressed.connect(show_creditos)
+	menu_creditos.back_pressed.connect(show_principal)
 	menu_principal.exit_pressed.connect(salir)
 	menu_mejoras.back_pressed.connect(show_principal)
 	menu_mejoras.arco_equipado.connect(_precalentar_arco)
@@ -250,7 +253,7 @@ func _notification(what: int) -> void:
 
 #botón atrás de android / escape
 func _on_back() -> void:
-	if menu_mejoras.visible or menu_logros.visible:
+	if menu_mejoras.visible or menu_logros.visible or menu_creditos.visible:
 		show_principal()
 	elif is_playing():
 		pause_game()
@@ -269,6 +272,7 @@ func show_principal() -> void:
 	await get_tree().create_timer(0.6).timeout
 	menu_mejoras.hide()
 	menu_logros.hide()
+	menu_creditos.hide()
 	menu_principal.show()
 
 func show_mejoras() -> void:
@@ -277,6 +281,10 @@ func show_mejoras() -> void:
 
 func show_logros() -> void:
 	menu_logros.show()
+	menu_principal.hide()
+
+func show_creditos() -> void:
+	menu_creditos.show()
 	menu_principal.hide()
 
 func show_game() -> void:

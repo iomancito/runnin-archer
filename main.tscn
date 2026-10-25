@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cuwfat5jqb56d"]
+[gd_scene load_steps=14 format=3 uid="uid://cuwfat5jqb56d"]
 
 [ext_resource type="Script" uid="uid://b61pt8iirmtqh" path="res://main.gd" id="1_3cdxv"]
 [ext_resource type="PackedScene" uid="uid://usjyg6j4mk04" path="res://scenes/player/player.tscn" id="2_c25tm"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" path="res://scenes/gui/results.tscn" id="11_results"]
 [ext_resource type="Texture2D" path="res://assets/images/splash.png" id="12_splash"]
 [ext_resource type="PackedScene" path="res://scenes/gui/achievements.tscn" id="13_logros"]
+[ext_resource type="PackedScene" path="res://scenes/gui/credits.tscn" id="14_creditos"]
 [ext_resource type="Script" path="res://scenes/gui/achievement_toast.gd" id="14_toast"]
 
 [node name="Main" type="Node3D"]
@@ -69,6 +70,11 @@ visible = false
 layout_mode = 1
 
 [node name="Achievements" parent="HUD" instance=ExtResource("13_logros")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="Credits" parent="HUD" instance=ExtResource("14_creditos")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1

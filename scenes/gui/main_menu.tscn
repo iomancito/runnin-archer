@@ -113,11 +113,26 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 30
 text = "ACHIEVEMENTS"
 
-[node name="ExitButton" type="Button" parent="Center"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(460, 104)
+[node name="MenuRow2" type="HBoxContainer" parent="Center"]
+custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/separation = 12
+
+[node name="CreditsButton" type="Button" parent="Center/MenuRow2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 104)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+text = "CREDITS"
+
+[node name="ExitButton" type="Button" parent="Center/MenuRow2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 104)
+layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
 text = "EXIT"
 
