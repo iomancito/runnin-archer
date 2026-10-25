@@ -19,7 +19,7 @@ El color del número de vida de cada enemigo usa esta misma fórmula (`Enemy.thr
 
 ## Enemigos (`ENEMIGOS`)
 
-Valores en el mapa 1, al inicio del recorrido, dificultad media:
+Valores base (multiplicador de etapa 1, al inicio del recorrido); en el juego se multiplican por la etapa (ver abajo):
 
 | Tipo | Vida | Daño al chocar | Oro |
 |---|---|---|---|
@@ -29,6 +29,7 @@ Valores en el mapa 1, al inicio del recorrido, dificultad media:
 | `ogre` (mini jefe mapa 1) | 30 | 8 | 10 |
 | `whelp` (cría de dragón, dispara) | 7 | 3 | 3 |
 | `zombie` | 4 | 2 | 1 |
+| `spitter` (zombi escupidor, dispara ácido) | 6 | 3 | 3 |
 | `brute` (zombi gordo, mini jefe mapa 2) | 25 | 6 | 8 |
 | `skeleton` | 3 | 2 | 1 |
 | `skeleton_mage` (dispara) | 6 | 3 | 3 |
@@ -39,13 +40,22 @@ Valores en el mapa 1, al inicio del recorrido, dificultad media:
 - El daño al chocar crece la mitad de rápido: `× (1 + z × DAÑO_POR_METRO)` → ×1 al inicio, ×2,25 a los 1000 m. Así embestir enemigos al final del mapa sigue siendo peligroso aunque no se les pueda matar.
 - `velocidad` (opcional): m/s a los que avanza hacia el player (`skeleton` 1,6, `brute` 1, `reaper` 0,8). Los zombis normales llevan la suya en su script.
 - `ROCA_TROLL_DAÑO = 4`: daño de la piedra que lanza el troll.
-- `PROYECTIL_DAÑO`: daño del disparo de la cría (3) y del mago (4), con los multiplicadores de mapa y dificultad.
+- `PROYECTIL_DAÑO`: daño del disparo de la cría (3), del escupidor (3) y del mago (4), con el multiplicador de daño de la etapa.
 - `LANZADOR`: los que disparan lo hacen al tener al player a menos de 20 m, cada 2,4 s, 2 veces como mucho; la marca está 1,2 s en el suelo (radio 0,9 m) y cae donde estará el player si sigue recto.
 - El daño al chocar depende del tipo y de la distancia, no de la vida que le quede (antes era la vida restante del enemigo). Chocar mata al enemigo pero **no da oro**.
 
-## Multiplicadores por mapa (`MAPAS`)
+## Etapas: dificultad y mapa en una sola escala
 
-`[vida, daño, oro]`: mapa 1 `[1, 1, 1]`, mapa 2 `[3, 1,5, 1,5]`, mapa 3 `[7, 2, 2]`.
+Vida, daño y oro de enemigos, proyectiles y bosses se multiplican por `ETAPA_BASE × ETAPA_CRECIMIENTO^etapa`, con `etapa = índice de dificultad × ETAPAS_POR_DIFICULTAD + (mapa − 1)` (`Balance.etapa()`, `Balance._mult()`).
+
+Con `ETAPAS_POR_DIFICULTAD = 2` **el mapa 1 de cada dificultad es la misma etapa que el mapa 3 de la anterior**: cada dificultad empieza donde acabó la otra y no hay bajones (antes Medium 1 era 4 veces más fácil que Easy 3). Crecimiento por etapa: vida ×1,6, daño ×1,2, oro ×1,15. El oro crece menos que la vida: cada etapa pide más mejoras de las que paga.
+
+| | Etapa | Vida | Daño | Oro | Boss: vida / daño por impacto / oro |
+|---|---|---|---|---|---|
+| Easy 1 / 2 / 3 | 0 / 1 / 2 | ×0,6 / 0,96 / 1,54 | ×0,5 / 0,6 / 0,72 | ×0,6 / 0,69 / 0,79 | 210 / 336 / 537 — 2 / 2 / 3 — 60 / 69 / 79 |
+| Medium 1 / 2 / 3 | 2 / 3 / 4 | ×1,54 / 2,46 / 3,93 | ×0,72 / 0,86 / 1,04 | ×0,79 / 0,91 / 1,05 | 537 / 860 / 1376 — 3 / 3 / 4 — 79 / 91 / 105 |
+| Hard 1 / 2 / 3 | 4 / 5 / 6 | ×3,93 / 6,29 / 10,1 | ×1,04 / 1,24 / 1,49 | ×1,05 / 1,21 / 1,39 | 1376 / 2202 / 3523 — 4 / 4 / 5 — 105 / 121 / 139 |
+| Hell 1 / 2 / 3 | 6 / 7 / 8 | ×10,1 / 16,1 / 25,8 | ×1,49 / 1,79 / 2,15 | ×1,39 / 1,6 / 1,84 | 3523 / 5637 / 9019 — 5 / 6 / 7 — 139 / 160 / 184 |
 
 ## Bosses
 
@@ -56,7 +66,7 @@ Valores en el mapa 1, al inicio del recorrido, dificultad media:
 | `BOSS_INTERVALO` | 2,5 s de pausa entre ataques |
 | `BOSS_ORO` | 100 |
 
-Se multiplican por mapa y por dificultad igual que los enemigos. Al tocar al boss el player se para y empieza el combate (ver [enemigos.md](enemigos.md)).
+Se multiplican por etapa igual que los enemigos. Al tocar al boss el player se para y empieza el combate (ver [enemigos.md](enemigos.md)).
 
 ### Ataques de los bosses (`BOSS_ATAQUES`)
 
@@ -80,33 +90,40 @@ Cada ataque lanza proyectiles que marcan el suelo donde caerán; si el player si
 
 ## Dificultad (`DIFICULTADES`)
 
-| | Vida | Daño | Densidad | Oro | Intervalo boss | Hordas |
-|---|---|---|---|---|---|---|
-| `easy` | ×0,6 | ×0,5 | ×0,75 | ×0,6 | ×1,3 | no |
-| `medium` | ×1 | ×1 | ×1 | ×1 | ×1 | no |
-| `hard` | ×1,7 | ×1,5 | ×1,25 | ×1,6 | ×0,9 | ×1 |
-| `hell` | ×3 | ×2,5 | ×1,5 | ×2,5 | ×0,75 | ×1,6 |
+Vida, daño y oro van por etapas (arriba); la dificultad decide cuántos enemigos salen, el ritmo del boss y las formaciones:
 
-- **Densidad** divide la separación entre filas de enemigos del generador (más densidad = más enemigos).
-- **Hordas** divide la separación entre hordas del mapa (0 = sin hordas). Ver abajo.
-- Más dificultad da más oro, para que merezca la pena rejugar.
+| | Densidad | Intervalo boss | Hordas | Columnas |
+|---|---|---|---|---|
+| `easy` | ×0,75 | ×1,3 | no | no |
+| `medium` | ×1 | ×1 | ×0,6 | ×1 |
+| `hard` | ×1,25 | ×0,9 | ×1 | ×1 |
+| `hell` | ×1,5 | ×0,75 | ×1,6 | ×1,2 |
+
+- **Densidad** divide la separación entre filas de enemigos del generador (más densidad = más enemigos, y más oro).
+- **Hordas** y **columnas** dividen la separación entre esas formaciones del mapa (0 = no salen). Ver abajo.
 - La dificultad elegida se guarda en `Progreso.dificultad` y se copia a `Balance.dificultad`; `Balance.dif()` devuelve sus multiplicadores.
 - Se empieza solo con Easy; superar los 3 mapas en una dificultad desbloquea la siguiente (ver [progreso-y-tienda.md](progreso-y-tienda.md)).
 
-Resultado aproximado (generador, 20 partidas de media; oro si mata a todos, sin contar bosses):
+Enemigos por mapa (generador, 20 partidas de media; entre paréntesis, los que van en hordas):
 
 | | Easy | Medium | Hard | Hell |
 |---|---|---|---|---|
-| Enemigos mapa 1 (de ellos en hordas) | 66 | 87 | 180 (89) | 251 (152) |
-| Oro mapa 1 | 94 | 199 | 426 | 737 |
-| Máximo de enemigos vivos a la vez, mapa 1 | 13 | 17 | 40 | 63 |
-| Boss mapa 1: vida / daño por impacto | 210 / 2 | 350 / 3 | 595 / 5 | 1050 / 8 |
-| Enemigos mapa 2 (de ellos en hordas) | 87 | 120 | 226 (97) | 284 (152) |
-| Boss mapa 2: vida / daño por impacto | 630 / 3 | 1050 / 5 | 1785 / 7 | 3150 / 12 |
+| Mapa 1 | 66 | 145 (55) | 192 (90) | 261 (156) |
+| Mapa 2 | 88 | 176 (62) | 234 (107) | 284 (151) |
+| Mapa 3 | 78 | 164 (60) | 207 (89) | 275 (156) |
 
-## Hordas (`HORDA`)
+## Formaciones: hordas y columnas
 
-En Hard y Hell aparecen grupos compactos de enemigos débiles (goblins en el mapa 1, zombis en el 2, esqueletos en el 3) pegados a una pared, con al menos 2 carriles libres para esquivarlos. Cada miembro tiene los valores de su tipo multiplicados por `HORDA` (vida, daño y oro ×0,5): con los stats base hay que esquivarlas; con varias flechas o un arco especial (perforar, explosión, rayo) se barren y dan mucho oro. Dónde y cómo son: `hordas` en [`niveles.gd`](../scripts/niveles.gd) (ver [mapas.md](mapas.md)).
+Dan sentido a los arcos especiales, que se compran al superar cada dificultad y se usan en la siguiente:
+
+- **Columnas** (desde Medium): 3-5 enemigos normales del mismo tipo en fila india en un carril, a 1,8 m. Con el arco original hay que gastar mucho tiempo en ellas o esquivarlas; **Thorn Bow** (tras Easy) las atraviesa enteras y **Sunfire** alcanza al de detrás cuando su radio llega a 1,8 m.
+- **Hordas** (desde Medium): grupos compactos de enemigos débiles (abajo). **Sunfire** (tras Medium) y **Storm** (tras Hard) las barren con daño en área y en cadena.
+
+Simulación: sin arcos el jugador medio no supera Hell; con arcos pero sin formaciones necesita ~23 partidas en Hell, y con formaciones ~14.
+
+### Hordas (`HORDA`)
+
+Desde Medium aparecen grupos compactos de enemigos débiles (goblins en el mapa 1, zombis en el 2, esqueletos en el 3) pegados a una pared, con al menos 2 carriles libres para esquivarlos. Cada miembro tiene los valores de su tipo multiplicados por `HORDA` (vida, daño y oro ×0,5): con los stats base hay que esquivarlas; con varias flechas o un arco especial (perforar, explosión, rayo) se barren y dan mucho oro. Dónde y cómo son: `hordas` en [`niveles.gd`](../scripts/niveles.gd) (ver [mapas.md](mapas.md)).
 
 ## Tienda (`tienda()`)
 
@@ -142,22 +159,22 @@ En `Progreso.BASE_STATS`: velocidad 200, lateral 150, cadencia 1,0/s, vida 10, 1
 
 ## Ritmo esperado (simulación)
 
-Simulación en Python (fuera del repo) de campañas completas desde 0 de oro: reproduce `MapGenerator` y estos números; el bot mata lo que le da tiempo, esquiva el resto, coge puertas (vida si va por debajo del 50 %, si no DPS) y entre partidas compra siempre el nivel más barato. Jugador *bueno*: choca con el 5 % de lo que esquiva y le aciertan el 10 % de los disparos; *medio*: 12 %, 25 % y el doble de impactos del boss. No simula arcos especiales (Hell no se puede evaluar) ni Gold Bonus, Run Speed o Arrow Speed.
+Simulación en Python (fuera del repo) de campañas completas desde 0 de oro: reproduce `MapGenerator` (filas, hordas y columnas) y estos números; el bot mata lo que le da tiempo, esquiva el resto, coge puertas (vida si va por debajo del 50 %, si no DPS), compra cada arco nuevo al desbloquearlo y entre partidas compra siempre el nivel más barato (de 6 mejoras y del arco). Jugador *bueno*: choca con el 5 % de lo que esquiva y le aciertan el 10 % de los disparos; *medio*: 12 %, 25 % y el doble de impactos del boss. No simula Gold Bonus, Run Speed ni Arrow Speed.
 
-Partidas hasta superar cada dificultad (mediana, entre paréntesis p10-p90), con `DAÑO_POR_METRO` y `CRECIMIENTO_COSTES = 1.6`:
+Partidas hasta superar cada dificultad (mediana, entre paréntesis p10-p90):
 
-| Jugador | Easy | Medium | Hard |
-|---|---|---|---|
-| bueno | 2 (2-3) | 2 (1-3) | 4 (2-6) |
-| medio | 4 (3-5) | 4 (3-6) | 16 (5-39) |
+| Jugador | Easy | Medium | Hard | Hell |
+|---|---|---|---|---|
+| bueno | 2 (1-2) | 1 (1-2) | 2 (1-3) | 4 (3-7) |
+| medio | 3 (3-4) | 2 (1-3) | 4 (2-8) | 14 (10-27) |
 
-Antes del cambio (daño de choque fijo, crecimiento 1,4) eran 2 / 1-2 / 2 y 3 / 2-3 / 6, y la tienda quedaba al máximo durante Hard. La muerte llega casi siempre en el camino del mapa 3 (choques y rayos de los magos), no en el boss: con las puertas los combates son cortos y el boss solo quita 1-4 de vida de media.
+La muerte llega casi siempre en el mapa 3 de cada dificultad (su etapa es la más alta) y en el camino, no en el boss. Medium sale algo más corto que Easy porque su mapa 1 es la etapa ya superada y Thorn Bow barre sus columnas.
 
 ## Cómo ajustar
 
+- **Más difícil de una etapa a otra**: `ETAPA_CRECIMIENTO` (vida, daño, oro); el solapamiento entre dificultades, `ETAPAS_POR_DIFICULTAD`.
 - **Más difícil a lo largo del mapa**: subir `VIDA_POR_METRO` (aguante) o `DAÑO_POR_METRO` (lo que duele chocar).
-- **Mapas más duros**: `MAPAS`.
 - **Bosses**: `BOSS_*`; lo difícil que es esquivar sus ataques, `BOSS_ATAQUES` (sobre todo `aviso`).
 - **Progresión más lenta/rápida**: `CRECIMIENTO_COSTES` o los `base` de cada mejora.
 - **Cantidad de enemigos**: separación en [`niveles.gd`](../scripts/niveles.gd) o la densidad por dificultad.
-- **Hordas**: `hordas` de cada dificultad (frecuencia), `HORDA` (lo fuerte que es cada miembro) y `hordas` de cada mapa en `niveles.gd` (tamaño y separación).
+- **Hordas y columnas**: `hordas` / `columnas` de cada dificultad (frecuencia), `HORDA` (lo fuerte que es cada miembro de una horda) y `hordas` / `columnas` de cada mapa en `niveles.gd` (tamaño y separación).

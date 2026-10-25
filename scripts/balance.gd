@@ -5,7 +5,7 @@ class_name Balance
 ##   (alcance / velocidad de carrera) * cadencia * daño * flechas
 ## Con los stats base son ~3 puntos; con la tienda al máximo ~990.
 
-#--- Enemigos: valores en el mapa 1 al inicio del recorrido ---
+#--- Enemigos: valores base (etapa con multiplicador 1, al inicio del recorrido) ---
 const ENEMIGOS = {
 	"goblin": {"vida": 2, "daño": 2, "oro": 1},
 	"orc": {"vida": 5, "daño": 3, "oro": 2},
@@ -13,6 +13,7 @@ const ENEMIGOS = {
 	"ogre": {"vida": 30, "daño": 8, "oro": 10},
 	"whelp": {"vida": 7, "daño": 3, "oro": 3}, #cría de dragón: escupe fuego, final del mapa 1
 	"zombie": {"vida": 4, "daño": 2, "oro": 1},
+	"spitter": {"vida": 6, "daño": 3, "oro": 3}, #zombi que escupe ácido
 	"brute": {"vida": 25, "daño": 6, "oro": 8, "velocidad": 1.0}, #zombi gordo, mini jefe del mapa 2
 	"skeleton": {"vida": 3, "daño": 2, "oro": 1, "velocidad": 1.6},
 	"skeleton_mage": {"vida": 6, "daño": 3, "oro": 3}, #lanza rayos
@@ -24,27 +25,37 @@ const ROCA_TROLL_DAÑO = 4
 ## distancia: metros por delante del player a los que empiezan; recarga: segundos entre disparos;
 ## aviso: segundos que la marca está en el suelo antes del impacto (lo que hay para esquivar);
 ## radio: metros del impacto
-const PROYECTIL_DAÑO = {"whelp": 3, "skeleton_mage": 4}
+const PROYECTIL_DAÑO = {"whelp": 3, "skeleton_mage": 4, "spitter": 3}
 const LANZADOR = {"distancia": 20.0, "recarga": 2.4, "disparos": 2, "aviso": 1.2, "radio": 0.9}
 #la vida crece con la distancia: x1 al inicio, x3.5 a los 1000 m
 const VIDA_POR_METRO = 1.0 / 400.0
 #el daño al chocar crece la mitad de rápido: x1 al inicio, x2.25 a los 1000 m
 #(chocar al final del mapa vuelve a ser peligroso)
 const DAÑO_POR_METRO = VIDA_POR_METRO * 0.5
-#multiplicadores por mapa: [vida, daño, oro]
-const MAPAS = {1: [1.0, 1.0, 1.0], 2: [3.0, 1.5, 1.5], 3: [7.0, 2.0, 2.0]}
+
+#--- Etapas: dificultad y mapa en una sola escala continua ---
+## etapa = índice de la dificultad * ETAPAS_POR_DIFICULTAD + (mapa - 1). Con 2, el mapa 1 de una
+## dificultad es la misma etapa que el mapa 3 de la anterior: cada dificultad empieza donde acabó
+## la otra. Vida, daño y oro de enemigos y bosses se multiplican por base * crecimiento^etapa:
+##   vida: Easy 0.6 / 0.96 / 1.54 ... Hell 10.1 / 16.1 / 25.8
+## El oro crece menos que la vida: cada etapa pide más mejoras de las que paga
+const ETAPAS_POR_DIFICULTAD = 2
+const ETAPA_BASE = {"vida": 0.6, "daño": 0.5, "oro": 0.6}
+const ETAPA_CRECIMIENTO = {"vida": 1.6, "daño": 1.2, "oro": 1.15}
 
 #--- Hordas: grupos compactos de enemigos débiles (diseño en Niveles, frecuencia por dificultad) ---
 #multiplicadores de cada miembro de una horda sobre los valores normales de su tipo
 const HORDA = {"vida": 0.5, "daño": 0.5, "oro": 0.5}
 
-#--- Dificultad: multiplica vida, daño, densidad de enemigos y oro (también de los bosses) ---
-## hordas: multiplica la frecuencia de las hordas del mapa (0 = sin hordas)
+#--- Dificultad: densidad de enemigos, ritmo del boss y formaciones (vida, daño y oro van por etapas) ---
+## hordas / columnas: multiplican la frecuencia de esas formaciones del mapa (0 = no salen).
+## Las formaciones dan sentido a los arcos: las columnas (fila india en un carril) premian
+## atravesar (Thorn, se compra tras Easy) y las hordas, el daño en área (Sunfire, Storm)
 const DIFICULTADES = {
-	"easy": {"nombre": "Easy", "vida": 0.6, "daño": 0.5, "densidad": 0.75, "oro": 0.6, "boss_intervalo": 1.3, "hordas": 0.0},
-	"medium": {"nombre": "Medium", "vida": 1.0, "daño": 1.0, "densidad": 1.0, "oro": 1.0, "boss_intervalo": 1.0, "hordas": 0.0},
-	"hard": {"nombre": "Hard", "vida": 1.7, "daño": 1.5, "densidad": 1.25, "oro": 1.6, "boss_intervalo": 0.9, "hordas": 1.0},
-	"hell": {"nombre": "Hell", "vida": 3.0, "daño": 2.5, "densidad": 1.5, "oro": 2.5, "boss_intervalo": 0.75, "hordas": 1.6},
+	"easy": {"nombre": "Easy", "densidad": 0.75, "boss_intervalo": 1.3, "hordas": 0.0, "columnas": 0.0},
+	"medium": {"nombre": "Medium", "densidad": 1.0, "boss_intervalo": 1.0, "hordas": 0.6, "columnas": 1.0},
+	"hard": {"nombre": "Hard", "densidad": 1.25, "boss_intervalo": 0.9, "hordas": 1.0, "columnas": 1.0},
+	"hell": {"nombre": "Hell", "densidad": 1.5, "boss_intervalo": 0.75, "hordas": 1.6, "columnas": 1.2},
 }
 const ORDEN_DIFICULTADES = ["easy", "medium", "hard", "hell"]
 
@@ -54,7 +65,7 @@ static var dificultad : String = "easy"
 static func dif() -> Dictionary:
 	return DIFICULTADES.get(dificultad, DIFICULTADES["medium"])
 
-#--- Bosses (mapa 1, se multiplican igual que los enemigos) ---
+#--- Bosses (valores base, se multiplican por etapa igual que los enemigos) ---
 const BOSS_VIDA = 350
 const BOSS_DAÑO = 3
 const BOSS_INTERVALO = 2.5 #segundos entre ataques mientras el player está parado delante
@@ -196,27 +207,32 @@ static func arco_descripcion(id : String, nivel : int) -> String:
 			texto = "Burns %d%% damage/s for %ds\n+%d%% damage to bosses" % [v.call("quemadura_dps") * 100, v.call("quemadura_seg"), v.call("daño_boss") * 100]
 	return texto + "\nDamage x%.2f" % v.call("daño")
 
-static func _mult(mapa : int, i : int) -> float:
-	return MAPAS.get(mapa, MAPAS[1])[i]
+#etapa del mapa en la dificultad actual (0 = mapa 1 de Easy)
+static func etapa(mapa : int) -> int:
+	return max(ORDEN_DIFICULTADES.find(dificultad), 0) * ETAPAS_POR_DIFICULTAD + mapa - 1
+
+#multiplicador de "vida", "daño" u "oro" del mapa en la dificultad actual
+static func _mult(mapa : int, clave : String) -> float:
+	return ETAPA_BASE[clave] * pow(ETAPA_CRECIMIENTO[clave], etapa(mapa))
 
 #horda: el enemigo es miembro de una horda (valores reducidos según HORDA)
 static func vida_enemigo(tipo : String, z : float, mapa : int, horda : bool = false) -> int:
 	var h = HORDA.vida if horda else 1.0
-	return int(ceil(ENEMIGOS[tipo].vida * (1.0 + max(z, 0.0) * VIDA_POR_METRO) * _mult(mapa, 0) * dif().vida * h))
+	return int(ceil(ENEMIGOS[tipo].vida * (1.0 + max(z, 0.0) * VIDA_POR_METRO) * _mult(mapa, "vida") * h))
 
 static func daño_enemigo(tipo : String, z : float, mapa : int, horda : bool = false) -> int:
 	var h = HORDA.daño if horda else 1.0
-	return int(ceil(ENEMIGOS[tipo].daño * (1.0 + max(z, 0.0) * DAÑO_POR_METRO) * _mult(mapa, 1) * dif().daño * h))
+	return int(ceil(ENEMIGOS[tipo].daño * (1.0 + max(z, 0.0) * DAÑO_POR_METRO) * _mult(mapa, "daño") * h))
 
 static func oro_enemigo(tipo : String, mapa : int, horda : bool = false) -> int:
 	var h = HORDA.oro if horda else 1.0
-	return max(1, int(round(ENEMIGOS[tipo].oro * _mult(mapa, 2) * dif().oro * h)))
+	return max(1, int(round(ENEMIGOS[tipo].oro * _mult(mapa, "oro") * h)))
 
 static func daño_roca(mapa : int) -> int:
-	return int(ceil(ROCA_TROLL_DAÑO * _mult(mapa, 1) * dif().daño))
+	return int(ceil(ROCA_TROLL_DAÑO * _mult(mapa, "daño")))
 
 static func daño_proyectil(tipo : String, mapa : int) -> int:
-	return int(ceil(PROYECTIL_DAÑO.get(tipo, ROCA_TROLL_DAÑO) * _mult(mapa, 1) * dif().daño))
+	return int(ceil(PROYECTIL_DAÑO.get(tipo, ROCA_TROLL_DAÑO) * _mult(mapa, "daño")))
 
 #metros por segundo hacia el player (0 = quieto)
 static func velocidad_enemigo(tipo : String) -> float:
@@ -226,13 +242,13 @@ static func boss_ataque() -> Dictionary:
 	return BOSS_ATAQUES.get(dificultad, BOSS_ATAQUES["medium"])
 
 static func boss_vida(mapa : int) -> int:
-	return int(BOSS_VIDA * _mult(mapa, 0) * dif().vida)
+	return int(BOSS_VIDA * _mult(mapa, "vida"))
 
 static func boss_daño(mapa : int) -> int:
-	return int(ceil(BOSS_DAÑO * _mult(mapa, 1) * dif().daño))
+	return int(ceil(BOSS_DAÑO * _mult(mapa, "daño")))
 
 static func boss_intervalo() -> float:
 	return BOSS_INTERVALO * dif().boss_intervalo
 
 static func boss_oro(mapa : int) -> int:
-	return int(round(BOSS_ORO * _mult(mapa, 2) * dif().oro))
+	return int(round(BOSS_ORO * _mult(mapa, "oro")))

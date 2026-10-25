@@ -39,7 +39,7 @@ var _revisa_detras : float = 0.0
 func _ready() -> void:
 	instancia_laterales()
 	var cfg = Niveles.MAPAS[numero]
-	plan = MapGenerator.generar(cfg, Balance.dif().densidad, Balance.dif().hordas)
+	plan = MapGenerator.generar(cfg, Balance.dif().densidad, Balance.dif().hordas, Balance.dif().columnas)
 	instancia_paneles(cfg.puertas)
 	jefe_final = final.instantiate()
 	jefe_final.name = "boss_final"

@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemies/map2/zombi_espada.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scenes/enemies/map2/zombi_escupidor.gd" id="2_script"]
+
+[node name="Zombi_escupidor" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+anim_reposo = "agonize"
+retardo = 0.35
+hueso = "mixamorig_Head"
+adelante = 0.25
+estilo = 4
+escala_proyectil = 0.6

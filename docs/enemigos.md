@@ -12,6 +12,7 @@ CharacterBody3D
    ├─ Caminante     scenes/enemies/caminante.gd  animación en bucle y avanza a Balance velocidad
    │                (esqueleto, segador, zombi gordo, caballero de la muerte)
    ├─ Lanzador      scenes/enemies/lanzador.gd   quieto, dispara un Proyectil (cría de dragón, esqueleto mago)
+   │  └─ ZombiEscupidor  scenes/enemies/map2/zombi_escupidor.gd  chorro de ácido por la boca
    └─ Boss          scenes/enemies/boss.gd       para al player y le ataca con proyectiles esquivables
       ├─ DragonRojo      (mapa 1)  fuego
       ├─ DragonNegro     (mapa 2)  fuego violeta
@@ -21,7 +22,7 @@ CharacterBody3D
 | Mapa | Enemigos | Mini jefe | Boss |
 |---|---|---|---|
 | 1 | goblin, orco, troll, cría de dragón (desde el 60 %) | ogro | dragón rojo |
-| 2 | zombis (3 modelos) | zombi gordo (`brute`) | dragón negro |
+| 2 | zombis (3 modelos), zombi escupidor | zombi gordo (`brute`) | dragón negro |
 | 3 | esqueleto, esqueleto mago, segador | caballero de la muerte | dragón esqueleto |
 
 ## `Enemy` ([`Enemy.gd`](../scenes/enemies/Enemy.gd))
@@ -59,7 +60,7 @@ Las escenas de enemigo necesitan: `Label3D` (número de vida), un `Area3D` conec
 `Proyectil.lanzar(padre, desde, hasta, tiempo, daño, estilo, forma, radio, arco, escala)`:
 
 - Pone una **marca en el suelo** en `hasta` (círculo o rectángulo de un carril, shader [`aviso.gdshader`](../scenes/otros/aviso.gdshader) con parámetros por instancia: un solo material) que se rellena hasta el impacto.
-- Mueve el efecto `vfx_fire_projectile_01` de BinbunVFX en parábola (`arco` m sobre la recta) durante `tiempo` s. El color depende del `estilo` (`FUEGO`, `FUEGO_OSCURO`, `ALMAS`, `MAGIA`); sin luz dinámica.
+- Mueve el efecto `vfx_fire_projectile_01` de BinbunVFX en parábola (`arco` m sobre la recta) durante `tiempo` s. El color depende del `estilo` (`FUEGO`, `FUEGO_OSCURO`, `ALMAS`, `MAGIA`); sin luz dinámica. El estilo `ACIDO` usa en su lugar una bola con estela de gotas y salpica al caer (ver abajo).
 - Al llegar: si el player está dentro (`dentro()`, con `Balance.RADIO_PLAYER`) recibe el daño y sale "-N"; explosión naranja con el fuego normal y destello de la marca en todos.
 - `Proyectil.precalentar()` lo muestra durante la carga (lo llama `Mapa.precalentar()` para el boss y los lanzadores del mapa).
 
@@ -67,6 +68,13 @@ Las escenas de enemigo necesitan: `Label3D` (número de vida), un `Area3D` conec
 
 - `Caminante` ([`caminante.gd`](../scenes/enemies/caminante.gd)): exports `anim`, `anim_escala` y, opcional, `anim_cerca` (una vez cuando el player está a `distancia_cerca` m: el caballero ruge, el zombi gordo grita). Avanza a `Balance.velocidad_enemigo(tipo)`.
 - `Lanzador` ([`lanzador.gd`](../scenes/enemies/lanzador.gd)): exports `anim_reposo`, `anim_ataque`, `retardo` (segundo del disparo), `hueso`/`adelante` (de dónde sale) y `estilo`. Dispara según `Balance.LANZADOR` a donde estará el player si sigue recto.
+
+## Zombi escupidor y `Acido`
+
+- Escena [`zombi_escupidor.tscn`](../scenes/enemies/map2/zombi_escupidor.tscn): **heredada** de `zombi_espada.tscn` (mismo modelo Yakuzombie, sin duplicar la malla en el APK) con el script `ZombiEscupidor` (un `Lanzador` en reposo `agonize`, disparo desde `mixamorig_Head`, estilo `ACIDO`). Lleva un tinte verde (`material_overlay`) para distinguirlo.
+- Al disparar le sale de la boca un chorro de gotas hacia el player durante 0,45 s y el proyectil cae en la marca.
+- [`scenes/otros/acido.gd`](../scenes/otros/acido.gd) (`Acido`): chorro, gota en vuelo, salpicadura y tinte, con partículas creadas por código y recursos compartidos. El chorro es el del zombi vomitador de YoelGame (código propio, sin texturas).
+- `mapa2.gd` lo carga con `preload`: está en `export_files` del preset Android.
 
 ## Modelos
 

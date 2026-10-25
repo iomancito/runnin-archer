@@ -13,9 +13,11 @@ const SEPARACION_MIN : float = 6.0
 #distancia entre los miembros de una horda (x, z) y margen fuera de sus carriles extremos
 const HORDA_ESPACIO : Vector2 = Vector2(1.3, 1.6)
 const HORDA_MARGEN : float = 0.6
+#distancia en z entre los enemigos de una columna
+const COLUMNA_ESPACIO : float = 1.8
 
-#hordas: multiplicador de frecuencia de hordas de la dificultad (0 = sin hordas)
-static func generar(cfg : Dictionary, densidad : float, hordas : float = 0.0) -> Array:
+#hordas / columnas: multiplicador de frecuencia de esas formaciones en la dificultad (0 = no salen)
+static func generar(cfg : Dictionary, densidad : float, hordas : float = 0.0, columnas : float = 0.0) -> Array:
 	var plan : Array = []
 	var reservados : Array = cfg.puertas.duplicate()
 	for z in cfg.jefes.z:
@@ -28,6 +30,8 @@ static func generar(cfg : Dictionary, densidad : float, hordas : float = 0.0) ->
 	var tramos : Array = []
 	if hordas > 0.0 and cfg.has("hordas"):
 		tramos = _hordas(cfg, hordas, reservados, fin, plan)
+	if columnas > 0.0 and cfg.has("columnas"):
+		_columnas(cfg, columnas, reservados, fin, plan, tramos)
 
 	var z : float = cfg.inicio
 	while z < fin:
@@ -81,6 +85,31 @@ static func _hordas(cfg : Dictionary, frecuencia : float, reservados : Array, fi
 			z += fondo
 		z += lerpf(h.separacion[0], h.separacion[1], t) / frecuencia * randf_range(0.85, 1.15)
 	return tramos
+
+#coloca columnas (fila india de enemigos normales en un carril al azar) y añade sus tramos.
+#El tipo es el mismo en toda la columna: perforar (Thorn Bow) atraviesa a los de detrás
+static func _columnas(cfg : Dictionary, frecuencia : float, reservados : Array, fin : float, plan : Array, tramos : Array) -> void:
+	var c : Dictionary = cfg.columnas
+	var largo : float = cfg.largo
+	var z : float = max(cfg.inicio, c.desde * largo)
+	while z < fin:
+		var t = z / largo
+		var n = maxi(roundi(lerpf(c.largo[0], c.largo[1], t)), 2)
+		var fondo = (n - 1) * COLUMNA_ESPACIO
+		if z + fondo < fin and not _cerca(z, reservados) and not _cerca(z + fondo, reservados) \
+				and not _en_tramo(z, tramos) and not _en_tramo(z + fondo, tramos):
+			var tipo = _elige_tipo(cfg.tipos, t)
+			var x = CARRILES.pick_random()
+			for i in n:
+				plan.append({
+					"tipo": tipo,
+					"z": z + i * COLUMNA_ESPACIO + randf_range(-0.2, 0.2),
+					"x": x + randf_range(-0.2, 0.2),
+					"horda": false,
+				})
+			tramos.append([z, z + fondo])
+			z += fondo
+		z += lerpf(c.separacion[0], c.separacion[1], t) / frecuencia * randf_range(0.85, 1.15)
 
 #z dentro de un tramo de horda o a menos de ZONA_LIBRE de él
 static func _en_tramo(z : float, tramos : Array) -> bool:

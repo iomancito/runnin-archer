@@ -28,14 +28,16 @@ Distancias en metros sobre z. Los pares `[inicio, fin]` se interpolan a lo largo
 | `jefes` | `{tipo, z: [...]}` mini jefes en el carril central |
 | `puertas` | z de las puertas de mejora |
 | `hordas` | `{tipo, separacion, desde, carriles, filas}`: hordas del mapa (solo en dificultades con `hordas` > 0, que divide `separacion`); `carriles` = ancho (2-3) y `filas` = fondo, ambos `[inicio, fin]` |
+| `columnas` | `{separacion, desde, largo}`: enemigos normales en fila india en un carril (solo en dificultades con `columnas` > 0, que divide `separacion`); el tipo sale de `tipos` y `largo` = enemigos `[inicio, fin]` |
 | `boss_ataques` | Secuencia de ataques del boss final, se repite (`bola`, `barrera`, `lluvia`; ver [balance.md](balance.md)) |
 
 Diseño actual:
 
 - **Mapa 1** (bosque): goblins al principio, orcos a partir del 10 %, trolls desde el 45 % y crías de dragón (disparan) desde el 60 %. Separación 20 → 10 m. Ogros en 250/500/750 m. 8 puertas. Dragón rojo: bola, bola, barrera.
-- **Mapa 2** (pinar, cielo rojo): zombis (3 modelos al azar) que avanzan hacia el player. Separación 14 → 7 m. Zombi gordo (*brute*) en 300/600/850 m. 9 puertas. Dragón negro: barrera, bola, bola, barrera, lluvia.
+- **Mapa 2** (pinar, cielo rojo): zombis (3 modelos al azar) que avanzan hacia el player y zombis escupidores (quietos, lanzan ácido) desde el 15 %. Separación 14 → 7 m. Zombi gordo (*brute*) en 300/600/850 m. 9 puertas. Dragón negro: barrera, bola, bola, barrera, lluvia.
 - **Mapa 3** (cementerio de noche): esqueletos que corren hacia el player, esqueletos magos (disparan) desde el 10 % y segadores lentos y duros desde el 30 %. Separación 16 → 8 m. Caballero de la muerte en 200/400/600/800 m. 9 puertas. Dragón esqueleto: lluvia, bola, barrera, bola.
-- **Hordas** (Hard y Hell): goblins en el mapa 1, zombis en el 2 y esqueletos en el 3; de 2×3 carriles y 3-5 filas, más grandes y frecuentes hacia el final. En Hell, ~9 por mapa.
+- **Columnas** (Medium, Hard y Hell): 3-5 enemigos del mismo tipo en fila india en un carril, más largas y frecuentes hacia el final (~6-9 por mapa).
+- **Hordas** (desde Medium): goblins en el mapa 1, zombis en el 2 y esqueletos en el 3; de 2×3 carriles y 3-5 filas, más grandes y frecuentes hacia el final. En Hell, ~9 por mapa.
 
 ## Reglas del generador
 
@@ -44,6 +46,7 @@ Diseño actual:
 - **Zona libre de 7 m** alrededor de cada puerta y de cada mini jefe.
 - El tipo de cada enemigo se elige al azar por peso según el punto del recorrido.
 - **Hordas**: se colocan antes que las filas, cada una pegada a la pared izquierda o derecha al azar; sus miembros van en rejilla (`HORDA_ESPACIO` = 1,3 × 1,6 m). Las filas normales no entran en el tramo de una horda ni a menos de 7 m. Los miembros llevan `"horda": true` en el plan y `Enemy.setup()` les aplica `Balance.HORDA`.
+- **Columnas**: se colocan después de las hordas y fuera de sus tramos, en un carril al azar (`COLUMNA_ESPACIO` = 1,8 m entre enemigos); las filas normales tampoco entran en su tramo.
 - Vida, daño y oro los pone `Enemy.setup(tipo, z, mapa)` desde [Balance](balance.md).
 
 ## Spawner (`Mapa`)
@@ -58,7 +61,7 @@ Diseño actual:
 
 1. Crear `scenes/mapas/mapa4.tscn` (copiar uno existente) y asignar sus escenas exportadas.
 2. Crear `mapa4.gd` con `extends Mapa`, `numero = 4`, `boss_name` y `escena_de(tipo)` (y `prepara()` si hace falta).
-3. Añadir el diseño en `Niveles.MAPAS[4]` y los multiplicadores en `Balance.MAPAS[4]`.
+3. Añadir el diseño en `Niveles.MAPAS[4]` y revisar las etapas (`Balance.ETAPAS_POR_DIFICULTAD`, que asume 3 mapas).
 4. Añadir la ruta a `RUTAS_MAPAS` en `main.gd` (precarga) y revisar el final de partida (`muere_boss`, que termina en el mapa 3).
 5. **Añadir la escena a `export_files` del preset Android** en `export_presets.cfg`: se carga por ruta desde código y Godot no la exportaría (pantalla negra en el móvil). Ver [android.md](android.md).
 

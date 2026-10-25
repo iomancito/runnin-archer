@@ -20,6 +20,15 @@ Además del arco original hay 4 arcos con una habilidad propia. Cada uno se comp
 
 Los números están en `Balance.ARCOS` ([`scripts/balance.gd`](../scripts/balance.gd)). Cada parámetro es `[valor a nivel 1, suma por nivel]`, y `Balance.arco_valor(id, clave, nivel)` lo calcula. Precio: `coste[0] × coste[1]^(nivel-1)`.
 
+## Para qué sirve cada arco
+
+Cada arco se compra al superar una dificultad y está pensado para la siguiente, que trae las formaciones donde brilla (ver [balance.md](balance.md)):
+
+- **Thorn** (tras Easy) → Medium trae **columnas** (fila india en un carril): la flecha atraviesa a los de detrás.
+- **Sunfire** (tras Medium) → Hard trae más **hordas**: la explosión daña a los vecinos de la rejilla (1,3 × 1,6 m).
+- **Storm** (tras Hard) → Hell es lo más denso (hordas ×1,6, columnas ×1,2): el rayo salta entre grupos.
+- **Dragonbone** (tras Hell) → para rejugar Hell: quemadura contra enemigos duros y bonus contra bosses.
+
 ## Cómo funciona
 
 | Pieza | Archivo | Función |

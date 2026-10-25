@@ -1,11 +1,11 @@
 class_name Proyectil extends Node3D
 
-## Bola de fuego (o de magia) que vuela hasta un punto del suelo marcado de antemano.
+## Bola de fuego (o de magia, o de ácido) que vuela hasta un punto del suelo marcado de antemano.
 ## La marca aparece al lanzarla y se va rellenando hasta el impacto: el player ve dónde caerá
 ## y cuánto le queda para apartarse. Al llegar daña al player si está dentro.
 ## La usan los bosses (Boss) y los enemigos que disparan (Lanzador).
 
-enum Estilo {FUEGO, FUEGO_OSCURO, ALMAS, MAGIA}
+enum Estilo {FUEGO, FUEGO_OSCURO, ALMAS, MAGIA, ACIDO}
 enum Forma {CIRCULO, CARRIL}
 
 const GRUPO : StringName = &"proyectiles"
@@ -18,6 +18,8 @@ const ESTILOS = {
 	Estilo.FUEGO_OSCURO: [Color(0.85, 0.5, 1.0), Color(0.55, 0.12, 0.95), Color(0.16, 0.02, 0.28), Color(0.75, 0.2, 1.0)],
 	Estilo.ALMAS: [Color(0.7, 1.0, 0.95), Color(0.15, 0.75, 1.0), Color(0.02, 0.1, 0.3), Color(0.25, 0.95, 1.0)],
 	Estilo.MAGIA: [Color(0.6, 1.0, 0.45), Color(0.2, 0.8, 0.25), Color(0.04, 0.2, 0.05), Color(0.45, 1.0, 0.3)],
+	#el ácido no usa el efecto de fuego (ver Acido): solo cuenta el color de la marca
+	Estilo.ACIDO: [Color(0.78, 0.95, 0.25), Color(0.5, 0.75, 0.12), Color(0.2, 0.35, 0.05), Color(0.75, 1.0, 0.1)],
 }
 #al caer, la marca crece y se desvanece en este tiempo (s)
 const DESTELLO : float = 0.3
@@ -66,19 +68,23 @@ func _ready() -> void:
 	top_level = true
 	global_position = Vector3.ZERO
 	var e = ESTILOS[estilo]
-	_vfx = VFX.instantiate()
-	_vfx.set("autoplay", false)
-	#cada luz dinámica cuesta en el móvil
-	for luz in _vfx.find_children("*", "Light3D", true, false):
-		luz.visible = false
-	add_child(_vfx)
-	#los materiales del efecto son compartidos: el color se pone en cada lanzamiento
-	_vfx.set("primary_color", e[0])
-	_vfx.set("secondary_color", e[1])
-	_vfx.set("tertiary_color", e[2])
+	if estilo == Estilo.ACIDO:
+		_vfx = Acido.gota()
+		add_child(_vfx)
+	else:
+		_vfx = VFX.instantiate()
+		_vfx.set("autoplay", false)
+		#cada luz dinámica cuesta en el móvil
+		for luz in _vfx.find_children("*", "Light3D", true, false):
+			luz.visible = false
+		add_child(_vfx)
+		#los materiales del efecto son compartidos: el color se pone en cada lanzamiento
+		_vfx.set("primary_color", e[0])
+		_vfx.set("secondary_color", e[1])
+		_vfx.set("tertiary_color", e[2])
+		_vfx.set("emitting", true)
 	_vfx.scale = Vector3.ONE * ESCALA_VFX * escala
 	_vfx.global_position = desde
-	_vfx.set("emitting", true)
 	_marca = _crea_marca(e[3])
 	add_child(_marca)
 	_marca.global_position = hasta + Vector3.UP * ALTO_MARCA
@@ -122,6 +128,8 @@ func _impacto() -> void:
 	#la explosión del juego es naranja: solo con el fuego normal; las demás, destello de la marca
 	if estilo == Estilo.FUEGO:
 		ArcoEfectos.explosion(get_parent(), hasta, radio * 0.8)
+	elif estilo == Estilo.ACIDO:
+		Acido.salpicadura(get_parent(), hasta)
 	_marca.reparent(get_parent())
 	_marca.set_instance_shader_parameter("progreso", 1.0)
 	var color : Color = ESTILOS[estilo][3]
