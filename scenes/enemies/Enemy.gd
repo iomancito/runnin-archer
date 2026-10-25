@@ -30,7 +30,7 @@ func setup(t : String, z : float, m : int, en_horda : bool = false) -> void:
 	horda = en_horda
 	add_to_group(ArcoEfectos.GRUPO_ENEMIGOS)
 	set_vida(Balance.vida_enemigo(t, z, m, horda))
-	daño_contacto = Balance.daño_enemigo(t, m, horda)
+	daño_contacto = Balance.daño_enemigo(t, z, m, horda)
 	gold = Balance.oro_enemigo(t, m, horda)
 	update_hp()
 

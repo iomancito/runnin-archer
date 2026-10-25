@@ -36,11 +36,12 @@ Valores en el mapa 1, al inicio del recorrido, dificultad media:
 | `death_knight` (mini jefe mapa 3) | 32 | 8 | 10 |
 
 - La vida crece con la distancia: `× (1 + z × VIDA_POR_METRO)` → ×1 al inicio, ×3,5 a los 1000 m.
+- El daño al chocar crece la mitad de rápido: `× (1 + z × DAÑO_POR_METRO)` → ×1 al inicio, ×2,25 a los 1000 m. Así embestir enemigos al final del mapa sigue siendo peligroso aunque no se les pueda matar.
 - `velocidad` (opcional): m/s a los que avanza hacia el player (`skeleton` 1,6, `brute` 1, `reaper` 0,8). Los zombis normales llevan la suya en su script.
 - `ROCA_TROLL_DAÑO = 4`: daño de la piedra que lanza el troll.
 - `PROYECTIL_DAÑO`: daño del disparo de la cría (3) y del mago (4), con los multiplicadores de mapa y dificultad.
 - `LANZADOR`: los que disparan lo hacen al tener al player a menos de 20 m, cada 2,4 s, 2 veces como mucho; la marca está 1,2 s en el suelo (radio 0,9 m) y cae donde estará el player si sigue recto.
-- El daño al chocar es fijo por tipo (antes era la vida restante del enemigo). Chocar mata al enemigo pero **no da oro**.
+- El daño al chocar depende del tipo y de la distancia, no de la vida que le quede (antes era la vida restante del enemigo). Chocar mata al enemigo pero **no da oro**.
 
 ## Multiplicadores por mapa (`MAPAS`)
 
@@ -109,21 +110,21 @@ En Hard y Hell aparecen grupos compactos de enemigos débiles (goblins en el map
 
 ## Tienda (`tienda()`)
 
-Cada entrada: `[nombre (clave de guardado), título, formato, stat, incremento, costes por nivel]`. Los costes se generan con `costes(base, crecimiento, niveles)` = `base × crecimiento^nivel`.
+Cada entrada: `[nombre (clave de guardado), título, formato, stat, incremento, costes por nivel]`. Los costes se generan con `costes(base, CRECIMIENTO_COSTES, niveles)` = `base × 1,6^nivel` (con 1,4 la tienda se agotaba al terminar Hard).
 
 | Mejora | Stat | Por nivel | Niveles | Primer → último precio |
 |---|---|---|---|---|
-| Damage | `f_daño` | +1 | 10 | 12 → 248 |
-| Fire Rate | `p_attack_speed` | +0,1/s | 10 | 12 → 248 |
-| Arrows | `f_cantidad` | +1 | 4 | 50 / 150 / 400 / 900 |
-| Max HP | `p_vida` | +5 | 10 | 8 → 165 |
-| Range | `f_max_distancia` | +2 m | 10 | 8 → 165 |
-| Dodge Speed | `p_side_speed` | +10 | 10 | 6 → 124 |
-| Run Speed | `p_speed` | +10 (200 → 300, 3,33 → 5 m/s) | 10 | 10 → 207 |
-| Arrow Speed | `f_velocidad` | +40 (600 → 1000) | 10 | 6 → 124 |
-| Gold Bonus | `p_oro` | +10 % | 10 | 15 → 310 |
+| Damage | `f_daño` | +1 | 10 | 12 → 825 |
+| Fire Rate | `p_attack_speed` | +0,1/s | 10 | 12 → 825 |
+| Arrows | `f_cantidad` | +1 | 4 | 50 / 170 / 520 / 1340 |
+| Max HP | `p_vida` | +5 | 10 | 8 → 550 |
+| Range | `f_max_distancia` | +2 m | 10 | 8 → 550 |
+| Dodge Speed | `p_side_speed` | +10 | 10 | 6 → 412 |
+| Run Speed | `p_speed` | +10 (200 → 300, 3,33 → 5 m/s) | 10 | 10 → 687 |
+| Arrow Speed | `f_velocidad` | +40 (600 → 1000) | 10 | 6 → 412 |
+| Gold Bonus | `p_oro` | +10 % | 10 | 15 → 1031 |
 
-Total para maximizar todo: ~6820 de oro. Un mapa 1 completo en medio da ~300.
+Total para maximizar todo: ~16 000 de oro. Un mapa 1 completo en medio da ~300.
 
 > Cambiar el `nombre` de una mejora rompe los niveles guardados (se guardan por nombre). Si se cambia la tienda de forma incompatible, añade una migración en `Progreso` (ver [progreso-y-tienda.md](progreso-y-tienda.md)).
 
@@ -141,19 +142,22 @@ En `Progreso.BASE_STATS`: velocidad 200, lateral 150, cadencia 1,0/s, vida 10, 1
 
 ## Ritmo esperado (simulación)
 
-Medido cuando los bosses golpeaban siempre; ahora sus ataques se esquivan, así que los bosses son algo más fáciles para quien se mueve bien. Rehacer la simulación si se ajusta `BOSS_ATAQUES`.
+Simulación en Python (fuera del repo) de campañas completas desde 0 de oro: reproduce `MapGenerator` y estos números; el bot mata lo que le da tiempo, esquiva el resto, coge puertas (vida si va por debajo del 50 %, si no DPS) y entre partidas compra siempre el nivel más barato. Jugador *bueno*: choca con el 5 % de lo que esquiva y le aciertan el 10 % de los disparos; *medio*: 12 %, 25 % y el doble de impactos del boss. No simula arcos especiales (Hell no se puede evaluar) ni Gold Bonus, Run Speed o Arrow Speed.
 
-| Mejoras compradas | Boss mapa 1 | Boss mapa 2 | Boss mapa 3 |
+Partidas hasta superar cada dificultad (mediana, entre paréntesis p10-p90), con `DAÑO_POR_METRO` y `CRECIMIENTO_COSTES = 1.6`:
+
+| Jugador | Easy | Medium | Hard |
 |---|---|---|---|
-| ~360 de oro (4-6 partidas) | gana justo | pierde | pierde |
-| ~1500 | fácil | gana justo | pierde |
-| ~4300 (casi todo al máximo) | — | fácil | gana justo |
+| bueno | 2 (2-3) | 2 (1-3) | 4 (2-6) |
+| medio | 4 (3-5) | 4 (3-6) | 16 (5-39) |
+
+Antes del cambio (daño de choque fijo, crecimiento 1,4) eran 2 / 1-2 / 2 y 3 / 2-3 / 6, y la tienda quedaba al máximo durante Hard. La muerte llega casi siempre en el camino del mapa 3 (choques y rayos de los magos), no en el boss: con las puertas los combates son cortos y el boss solo quita 1-4 de vida de media.
 
 ## Cómo ajustar
 
-- **Más difícil a lo largo del mapa**: subir `VIDA_POR_METRO`.
+- **Más difícil a lo largo del mapa**: subir `VIDA_POR_METRO` (aguante) o `DAÑO_POR_METRO` (lo que duele chocar).
 - **Mapas más duros**: `MAPAS`.
 - **Bosses**: `BOSS_*`; lo difícil que es esquivar sus ataques, `BOSS_ATAQUES` (sobre todo `aviso`).
-- **Progresión más lenta/rápida**: el crecimiento `1.4` de `costes()` o los `base`.
+- **Progresión más lenta/rápida**: `CRECIMIENTO_COSTES` o los `base` de cada mejora.
 - **Cantidad de enemigos**: separación en [`niveles.gd`](../scripts/niveles.gd) o la densidad por dificultad.
 - **Hordas**: `hordas` de cada dificultad (frecuencia), `HORDA` (lo fuerte que es cada miembro) y `hordas` de cada mapa en `niveles.gd` (tamaño y separación).

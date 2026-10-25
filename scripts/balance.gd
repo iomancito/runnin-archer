@@ -28,6 +28,9 @@ const PROYECTIL_DAÑO = {"whelp": 3, "skeleton_mage": 4}
 const LANZADOR = {"distancia": 20.0, "recarga": 2.4, "disparos": 2, "aviso": 1.2, "radio": 0.9}
 #la vida crece con la distancia: x1 al inicio, x3.5 a los 1000 m
 const VIDA_POR_METRO = 1.0 / 400.0
+#el daño al chocar crece la mitad de rápido: x1 al inicio, x2.25 a los 1000 m
+#(chocar al final del mapa vuelve a ser peligroso)
+const DAÑO_POR_METRO = VIDA_POR_METRO * 0.5
 #multiplicadores por mapa: [vida, daño, oro]
 const MAPAS = {1: [1.0, 1.0, 1.0], 2: [3.0, 1.5, 1.5], 3: [7.0, 2.0, 2.0]}
 
@@ -80,18 +83,20 @@ const BOSS_OLEADAS_PAUSA = 0.5 #segundos entre el impacto de una oleada y el de 
 const RADIO_PLAYER = 0.3
 
 #--- Tienda: nombre (clave de guardado), título, formato, stat, incremento, costes por nivel ---
+#cuánto sube el precio de cada nivel: con 1.4 la tienda se agotaba al terminar Hard
+const CRECIMIENTO_COSTES = 1.6
 static func tienda() -> Array:
 	return [
-		["damage", "Damage", "%d", "f_daño", 1, costes(12, 1.4, 10)],
-		["attack_speed", "Fire Rate", "%.1f/s", "p_attack_speed", 0.1, costes(12, 1.4, 10)],
-		["arrow_number", "Arrows", "%d", "f_cantidad", 1, [50, 150, 400, 900]],
-		["vida", "Max HP", "%d", "p_vida", 5, costes(8, 1.4, 10)],
-		["range", "Range", "%d m", "f_max_distancia", 2, costes(8, 1.4, 10)],
-		["dodge", "Dodge Speed", "%d", "p_side_speed", 10, costes(6, 1.4, 10)],
+		["damage", "Damage", "%d", "f_daño", 1, costes(12, CRECIMIENTO_COSTES, 10)],
+		["attack_speed", "Fire Rate", "%.1f/s", "p_attack_speed", 0.1, costes(12, CRECIMIENTO_COSTES, 10)],
+		["arrow_number", "Arrows", "%d", "f_cantidad", 1, [50, 170, 520, 1340]],
+		["vida", "Max HP", "%d", "p_vida", 5, costes(8, CRECIMIENTO_COSTES, 10)],
+		["range", "Range", "%d m", "f_max_distancia", 2, costes(8, CRECIMIENTO_COSTES, 10)],
+		["dodge", "Dodge Speed", "%d", "p_side_speed", 10, costes(6, CRECIMIENTO_COSTES, 10)],
 		#correr más acorta el mapa pero también el tiempo para disparar a cada enemigo
-		["run_speed", "Run Speed", "%d", "p_speed", 10, costes(10, 1.4, 10)],
-		["arrow_speed", "Arrow Speed", "%d", "f_velocidad", 40, costes(6, 1.4, 10)],
-		["gold_bonus", "Gold Bonus", "+%d%%", "p_oro", 10, costes(15, 1.4, 10)],
+		["run_speed", "Run Speed", "%d", "p_speed", 10, costes(10, CRECIMIENTO_COSTES, 10)],
+		["arrow_speed", "Arrow Speed", "%d", "f_velocidad", 40, costes(6, CRECIMIENTO_COSTES, 10)],
+		["gold_bonus", "Gold Bonus", "+%d%%", "p_oro", 10, costes(15, CRECIMIENTO_COSTES, 10)],
 	]
 
 #--- Puertas de mejora durante la partida: texto, stat, incremento ---
@@ -199,9 +204,9 @@ static func vida_enemigo(tipo : String, z : float, mapa : int, horda : bool = fa
 	var h = HORDA.vida if horda else 1.0
 	return int(ceil(ENEMIGOS[tipo].vida * (1.0 + max(z, 0.0) * VIDA_POR_METRO) * _mult(mapa, 0) * dif().vida * h))
 
-static func daño_enemigo(tipo : String, mapa : int, horda : bool = false) -> int:
+static func daño_enemigo(tipo : String, z : float, mapa : int, horda : bool = false) -> int:
 	var h = HORDA.daño if horda else 1.0
-	return int(ceil(ENEMIGOS[tipo].daño * _mult(mapa, 1) * dif().daño * h))
+	return int(ceil(ENEMIGOS[tipo].daño * (1.0 + max(z, 0.0) * DAÑO_POR_METRO) * _mult(mapa, 1) * dif().daño * h))
 
 static func oro_enemigo(tipo : String, mapa : int, horda : bool = false) -> int:
 	var h = HORDA.oro if horda else 1.0
