@@ -195,7 +195,7 @@ def generar(cfg, d, par):
     ev.sort(key=lambda e: e[1])
     return ev
 
-def jugar_mapa(m, d, st, par, skill, puertas=True):
+def jugar_mapa(m, d, st, par, skill):
     """Devuelve dict: ganado, oro, z (de la muerte), causas (daño recibido por causa), todos (ha
     matado a todos) y tiempo (s hasta matar al boss)."""
     mv, md, mo = par.mult(d, m)
@@ -299,8 +299,7 @@ def jugar_mapa(m, d, st, par, skill, puertas=True):
 
     for ev in generar(NIVELES[m], d, par):
         if ev[0] == "puerta":
-            if puertas:
-                puerta()
+            puerta()
             continue
         z = ev[1]
         if ev[0] == "fila" and len(ev[2]) > 1 and explosion_fila() > 0:
@@ -554,9 +553,8 @@ def fin_de_juego(par, n=200, seed=1):
                     c["swift"] += rapido
                     c["perfect"] += r["todos"] and rapido
                     c["sin daño"] += sum(r["causas"].values()) == 0
-                    c["lone wolf"] += jugar_mapa(m, "hell", st, par, sk, puertas=False)["ganado"]
                 out.append(f"mapa {m}: " + " ".join(f"{k} {c[k] * 100 // n}%" for k in
-                                                     ["gana", "exterminator", "swift", "perfect", "sin daño", "lone wolf"])
+                                                     ["gana", "exterminator", "swift", "perfect", "sin daño"])
                            + " | se escapan por intento: " + ", ".join(f"{k} {v / n:.1f}" for k, v in esc.most_common(3)))
             print(f"  {arco} {nivel} {sk_n}")
             for o in out:

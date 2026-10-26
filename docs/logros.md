@@ -1,10 +1,10 @@
 # Logros
 
-Autoload `Logros` ([`scripts/logros.gd`](../scripts/logros.gd)). 72 logros en dos pestañas de la pantalla **ACHIEVEMENTS** del menú principal. Los umbrales están en [`Balance`](../scripts/balance.gd) (`LOGRO_*`).
+Autoload `Logros` ([`scripts/logros.gd`](../scripts/logros.gd)). 71 logros en dos pestañas de la pantalla **ACHIEVEMENTS** del menú principal. Los umbrales están en [`Balance`](../scripts/balance.gd) (`LOGRO_*`).
 
 ## Lista
 
-**General** (36):
+**General** (35):
 
 | Logros | Condición |
 |---|---|
@@ -18,7 +18,6 @@ Autoload `Logros` ([`scripts/logros.gd`](../scripts/logros.gd)). 72 logros en do
 | Special Delivery, Bow Master, Collector | Comprar un arco especial / subirlo al nivel 5 / haber tenido los 4 |
 | Dragon Hunter, Giant Slayer, Horde Breaker | 25 bosses / 25 mini jefes / 1.000 enemigos de horda |
 | Full Quiver | Llegar a `MAX_FLECHAS` flechas por disparo |
-| Lone Wolf | Superar un mapa sin cruzar ninguna puerta |
 | Close Call | Matar al boss con menos del 10 % de vida (`LOGRO_VIDA_AGONICA`) |
 | Untouchable, Hell's Ghost | Superar un mapa sin recibir daño (cualquiera / en Hell) |
 
@@ -53,7 +52,7 @@ Al arrancar se llama a `comprueba()` sin avisos, así una partida antigua recibe
 
 ## Interfaz
 
-- `scenes/gui/achievements.tscn` (`AchievementsScreen`): pestañas GENERAL / CHALLENGES (esta con una cabecera por dificultad) y contador `N / 72`. Los conseguidos se ven normales con medalla dorada; los pendientes, oscurecidos (`COLOR_PENDIENTE`), con su progreso si es un contador.
+- `scenes/gui/achievements.tscn` (`AchievementsScreen`): pestañas GENERAL / CHALLENGES (esta con una cabecera por dificultad) y contador `N / 71`. Los conseguidos se ven normales con medalla dorada; los pendientes, oscurecidos (`COLOR_PENDIENTE`), con su progreso si es un contador.
 - `scenes/gui/achievement_toast.gd`: aviso arriba al desbloquear; en cola si llegan varios (cada uno más corto).
 - `scenes/gui/components/medal_icon.gd`: medalla dibujada (sin texturas).
 

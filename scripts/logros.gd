@@ -25,7 +25,6 @@ var stats : Dictionary = {"bajas": 0, "oro": 0, "bosses": 0, "minijefes": 0, "ho
 var corriendo : bool = false
 var tiempo : float = 0.0
 var golpeado : bool = false
-var puertas : int = 0
 var total_mapa : int = 0 #enemigos del plan + boss final
 #los avisos no salen mientras se cargan logros antiguos
 var _silencio : bool = false
@@ -76,7 +75,6 @@ func _define() -> void:
 	_add("giant_slayer", "Giant Slayer", "Defeat %d mini bosses" % Balance.LOGRO_MINIJEFES, GENERAL, _stat.bind("minijefes", Balance.LOGRO_MINIJEFES))
 	_add("horde_breaker", "Horde Breaker", "Defeat %s horde enemies" % num_txt(Balance.LOGRO_HORDA), GENERAL, _stat.bind("horda", Balance.LOGRO_HORDA))
 	_add("full_quiver", "Full Quiver", "Shoot %d arrows at once" % Balance.MAX_FLECHAS, GENERAL)
-	_add("lone_wolf", "Lone Wolf", "Clear a map without passing through any gate", GENERAL)
 	_add("close_call", "Close Call", "Defeat a boss with less than %d%% HP left" % roundi(Balance.LOGRO_VIDA_AGONICA * 100), GENERAL)
 	_add("untouchable", "Untouchable", "Clear a map without taking damage", GENERAL)
 	_add("untouchable_hell", "Hell's Ghost", "Clear a map on Hell without taking damage", GENERAL)
@@ -184,7 +182,6 @@ func empieza_mapa(total : int) -> void:
 	corriendo = true
 	tiempo = 0.0
 	golpeado = false
-	puertas = 0
 	total_mapa = total
 
 #muerte del player o abandonar: guarda lo acumulado
@@ -211,7 +208,6 @@ func golpe() -> void:
 	golpeado = true
 
 func puerta(player : Player) -> void:
-	puertas += 1
 	if player.stats["f_cantidad"] >= Balance.MAX_FLECHAS:
 		desbloquea("full_quiver")
 
@@ -226,8 +222,6 @@ func mapa_superado(m : int, d : String, bajas : int, player : Player) -> void:
 		desbloquea(_id_reto("swift", d, m))
 	if todos and rapido:
 		desbloquea(_id_reto("perfect", d, m))
-	if puertas == 0:
-		desbloquea("lone_wolf")
 	if not golpeado:
 		desbloquea("untouchable")
 		if d == "hell":
