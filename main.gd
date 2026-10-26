@@ -30,9 +30,27 @@ const CAMARA_SUAVIZADO : float = 10.0
 #metros que el player puede separarse en x del centro de la cámara: a la altura de su cabeza
 #se ven ~1,3 m a cada lado, así que con este margen se ve entero también junto a las paredes
 const CAMARA_MARGEN_X : float = 0.5
+#cámara del combate con el boss: centrada en el camino, más alta, más atrás y más abierta para
+#ver los 5 carriles enteros (y el hueco libre de las andanadas) con el dragón al fondo.
+#Más lejos el dragón (a ~16 m del player) entraría en la niebla, que empieza a 22 m de la cámara
+const CAMARA_BOSS_ALTURA : float = 8.0
+const CAMARA_BOSS_DETRAS : float = 5.0
+const CAMARA_BOSS_INCLINACION : float = 30.0
+const CAMARA_BOSS_FOV : float = 66.0
+#segundos del paso de una cámara a otra (empieza al dejar de disparar antes del boss)
+const CAMARA_BOSS_TRANSICION : float = 2.0
 
 var player
 var partida_iniciada : bool = false
+
+#encuadre normal de main.tscn y avance hacia la cámara del boss (0 = normal, 1 = boss)
+var _camara_base : Basis
+var _camara_altura : float
+var _camara_fov : float
+var _camara_boss : bool = false
+var _mezcla_boss : float = 0.0
+#x del encuadre normal, suavizada
+var _camara_x : float = 0.0
 
 #frames que se dibuja cada mapa al arrancar para compilar shaders y partículas
 const PRECALENTADO_FRAMES : int = 6
@@ -47,6 +65,9 @@ var spawned_enemies: Array[Node3D] = []
 func _ready() -> void:
 	#el botón atrás de android lo gestiona _notification
 	get_tree().set_quit_on_go_back(false)
+	_camara_base = $Camera3D.global_basis
+	_camara_altura = $Camera3D.global_position.y
+	_camara_fov = $Camera3D.fov
 	menu_principal.play_pressed.connect(iniciar_partida)
 	menu_principal.shop_pressed.connect(show_mejoras)
 	menu_principal.achievements_pressed.connect(show_logros)
@@ -142,6 +163,9 @@ func load_map(map_index: int):
 	map_container.add_child(current_map)
 	spawn_player()
 	current_map.call_deferred("set_boss", self)
+	_camara_boss = false
+	_mezcla_boss = 0.0
+	_camara_x = 0.0
 	Progreso.reset_run()
 	#enemigos del plan + boss final (logro de matarlos a todos)
 	Logros.empieza_mapa(current_map.plan.size() + 1)
@@ -194,10 +218,27 @@ func spawn_player() -> void:
 
 func _physics_process(delta: float) -> void:
 	if is_playing() and is_instance_valid(player):
-		$Camera3D.global_position.z = player.global_position.z - CAMARA_DETRAS
 		var px = player.global_position.x
-		var x = lerp($Camera3D.global_position.x, px * CAMARA_SIGUE_X, 1.0 - exp(-CAMARA_SUAVIZADO * delta))
-		$Camera3D.global_position.x = clamp(x, px - CAMARA_MARGEN_X, px + CAMARA_MARGEN_X)
+		var x = lerp(_camara_x, px * CAMARA_SIGUE_X, 1.0 - exp(-CAMARA_SUAVIZADO * delta))
+		_camara_x = clamp(x, px - CAMARA_MARGEN_X, px + CAMARA_MARGEN_X)
+		#la cámara del boss se queda hasta el final del combate (también durante la muerte del dragón)
+		if not _camara_boss and is_instance_valid(current_map):
+			_camara_boss = not player.dispara or current_map.get_boss().combatiendo
+		if _camara_boss and not get_tree().paused:
+			_mezcla_boss = move_toward(_mezcla_boss, 1.0, delta / CAMARA_BOSS_TRANSICION)
+		_coloca_camara(player.global_position.z)
+
+#mezcla el encuadre normal (que sigue al player en x) con el del boss
+func _coloca_camara(pz : float) -> void:
+	var t = smoothstep(0.0, 1.0, _mezcla_boss)
+	var normal = Vector3(_camara_x, _camara_altura, pz - CAMARA_DETRAS)
+	var boss = Vector3(0, CAMARA_BOSS_ALTURA, pz - CAMARA_BOSS_DETRAS)
+	$Camera3D.global_position = normal.lerp(boss, t)
+	#inclinación del encuadre normal: la cámara mira hacia +z y hacia abajo
+	var inclinacion = asin(_camara_base.z.y)
+	var giro = Basis(Vector3.RIGHT, (deg_to_rad(CAMARA_BOSS_INCLINACION) - inclinacion) * t)
+	$Camera3D.global_basis = giro * _camara_base
+	$Camera3D.fov = lerpf(_camara_fov, CAMARA_BOSS_FOV, t)
 
 func on_player_position_updated(player_pos) -> void:
 	pass#print(player_pos)

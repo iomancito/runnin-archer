@@ -66,6 +66,8 @@ Mapa 1 en Hell, 3 partidas alternas: **43,2 → 46,1 FPS, 20,1 → 18,3 ms, ~190
 | 2 | 45,7 FPS, 18,4 ms | 44,2 FPS, 19,4 ms (±2,5 ms) |
 | 3 | 44,2 FPS, 19,3 ms | 45,8 FPS, 18,5 ms |
 
+**Cámara del boss**: al dejar de disparar antes del boss la cámara pasa en 2 s (`CAMARA_BOSS_*` en `main.gd`) a 8 m de altura, 5 m por detrás, 30°, FOV 66° y centrada en x = 0, y se queda así hasta el final del combate. Con la cámara normal solo se ven ~2 m a cada lado del player y no se distingue el carril libre de las andanadas; con esta se ven los 5 carriles con sus marcas (x = ±5 m) y el dragón (~16 m por delante del player) queda a ~21 m de la cámara, justo antes de la niebla (22 m). Rendimiento sin medir aún en el móvil.
+
 ## Qué cuesta en esta GPU
 
 - **Glow**: ~7 ms → desactivado en los tres mapas.
