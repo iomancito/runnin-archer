@@ -9,6 +9,7 @@ Runner vertical en Godot 4.7 para **móviles Android** (retrato, renderer Mobile
 - Comentarios e identificadores en **español**; textos visibles para el jugador en **inglés**.
 - Escenas cargadas solo desde código (`load`/`preload`) → añadirlas a `export_files` del preset Android; **otros recursos** (imágenes, etc.) → a `include_filter`. Si no, faltarán en el APK.
 - Todo recurso de terceros nuevo se apunta en [`docs/licencias.md`](docs/licencias.md) (y en los créditos si su licencia pide atribución).
+- **El juego es gratis y sin ingresos** (ni anuncios, ni compras, ni donaciones): el dragón negro es CC BY-NC. Para monetizar, antes hay que sustituirlo o licenciarlo.
 - Optimizar según lo medido en el móvil: en su GPU (Mali-G57) cuestan los efectos a pantalla completa (glow, sombras), no los triángulos.
 
 ## Documentación
@@ -26,7 +27,7 @@ Runner vertical en Godot 4.7 para **móviles Android** (retrato, renderer Mobile
 | [docs/rendimiento.md](docs/rendimiento.md) | Medidas en el móvil, optimizaciones aplicadas, cómo medir |
 | [docs/licencias.md](docs/licencias.md) | Origen y licencia de cada recurso de terceros, pendientes, pantalla de créditos |
 | [docs/android.md](docs/android.md) | Herramientas, compilar e instalar, preset de exportación, icono, tests sin pantalla, adb |
-| [docs/roadmap-publicacion.md](docs/roadmap-publicacion.md) | Plan para AdMob, compra "Remove Ads" y publicación en Google Play y App Store |
+| [docs/roadmap-publicacion.md](docs/roadmap-publicacion.md) | Plan para publicar gratis en Google Play: bloqueos, cuenta, build AAB, ficha y prueba cerrada |
 
 ## Comandos rápidos
 

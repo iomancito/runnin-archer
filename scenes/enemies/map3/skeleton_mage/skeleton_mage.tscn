@@ -2,7 +2,10 @@
 
 [ext_resource type="Script" path="res://scenes/enemies/lanzador.gd" id="1_s"]
 [ext_resource type="PackedScene" path="res://scenes/pickups/moneda/moneda.tscn" id="2_m"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/map3/skeleton_mage/skeleton_mage.glb" id="3_g"]
+[ext_resource type="PackedScene" path="res://assets/externos/KayKit_Skeletons/Skeleton_Mage.glb" id="3_g"]
+[ext_resource type="AnimationLibrary" path="res://assets/externos/KayKit_Skeletons/Rig_Medium_General.glb" id="4_a"]
+[ext_resource type="AnimationLibrary" path="res://assets/externos/KayKit_Skeletons/Rig_Medium_MovementBasic.glb" id="5_a"]
+[ext_resource type="PackedScene" path="res://assets/externos/KayKit_Skeletons/Skeleton_Staff.gltf" id="6_w"]
 
 [sub_resource type="CylinderShape3D" id="Cuerpo"]
 height = 2.0
@@ -17,10 +20,10 @@ collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_s")
 moneda = ExtResource("2_m")
-anim_reposo = "idle"
-anim_ataque = "bolt"
-retardo = 0.85
-hueso = "mixamorig_RightHand"
+anim_reposo = "Idle_A"
+anim_ataque = "Throw"
+retardo = 0.72
+hueso = "handslot.r"
 adelante = 0.3
 estilo = 3
 escala_proyectil = 0.6
@@ -47,6 +50,17 @@ outline_size = 30
 aabb = AABB(-1.0, 0, -1.0, 2, 2.5, 2)
 
 [node name="Modelo" parent="." instance=ExtResource("3_g")]
-transform = Transform3D(-1.8, 0, 0, 0, 1.8, 0, 0, 0, -1.8, 0, 0, 0)
+transform = Transform3D(-0.85, 0, 0, 0, 0.85, 0, 0, 0, -0.85, 0, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Modelo"]
+libraries = {
+&"": ExtResource("4_a"),
+&"mov": ExtResource("5_a")
+}
+
+[node name="Mano" type="BoneAttachment3D" parent="Modelo/Rig_Medium/Skeleton3D"]
+bone_name = "handslot.r"
+
+[node name="Arma" parent="Modelo/Rig_Medium/Skeleton3D/Mano" instance=ExtResource("6_w")]
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

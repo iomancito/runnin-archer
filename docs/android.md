@@ -26,20 +26,20 @@ G=/mnt/ARC100/Godot/Godot_v4.7.1-stable_linux.x86_64
 A=~/Android/Sdk/platform-tools/adb
 $G --headless --path . --export-debug "Android" /tmp/RunningArcher.apk
 $A install -r /tmp/RunningArcher.apk
-$A shell monkey -p com.example.runningarcher -c android.intent.category.LAUNCHER 1   # abrir
+$A shell monkey -p com.ioman.runningarcher -c android.intent.category.LAUNCHER 1   # abrir
 $A logcat -s godot:*                                                                   # ver errores
 ```
 
 - Desde el editor también funciona el botón de *one-click deploy* de Android.
 - Tras añadir scripts con `class_name` nuevos, ejecutar antes `$G --headless --path . --import` para actualizar la caché de clases.
-- Paquete: `com.example.runningarcher` (cambiar `package/unique_name` antes de publicar en Google Play, que no acepta `com.example`).
+- Paquete: `com.ioman.runningarcher` (`package/unique_name`). **No se puede cambiar una vez publicado en Google Play.** Nombre bajo el icono: `application/config/name` ("Running Archer").
 
 ## Preset de exportación (`export_presets.cfg`)
 
 - Solo `arm64-v8a`.
 - **Exporta solo las escenas necesarias** (`export_filter="scenes"`) más todos los `*.gd` (`include_filter`). El APK pasó de 440 MB a ~86 MB.
 - Lista `export_files`: `main.tscn`, los 3 mapas, `panel.tscn`, `zombi_escupidor.tscn`, la piedra `Pebble_Square_3.gltf` (proyectil del troll), `shop_card.tscn`, `bow_card.tscn`, los 4 efectos de BinbunVFX, `icon.svg`.
-- `include_filter`: `*.gd,assets/images/bows/*.png`.
+- `include_filter`: `*.gd,assets/images/bows/*.png,scenes/otros/aviso.gdshader`; `exclude_filter`: `addons/*` (los plugins de editor no van en el APK).
 
 > **Importante:** Godot no sigue los `load()`/`preload()` de los scripts al calcular dependencias. Lo que **solo se cargue desde código** hay que añadirlo a mano, o en el móvil faltará (pasó con `shop_card.tscn`: pantalla negra):
 > - **escenas** → `export_files` (esta lista **solo admite escenas**: los PNG puestos ahí se ignoran);
@@ -66,7 +66,7 @@ $G --headless --path . --script /ruta/test.gd
 - Cargar `res://main.tscn` con `change_scene_to_file` y esperar ~1 s; acceder a autoloads con `root.get_node("Progreso")`.
 - En modo `--script` los autoloads no existen al compilar el test: no referenciar desde el test clases que usen `Progreso` (p. ej. `Boss`); usar `has_method()`.
 - Sin pantalla, `VisibleOnScreenEnabler3D` desactiva a los enemigos: para probar combate, forzar `process_mode = ALWAYS`.
-- La partida de prueba se guarda en `~/.local/share/godot/app_userdata/RunningArcher/save.json`; bórrala al terminar.
+- La partida de prueba se guarda en `~/.local/share/godot/app_userdata/Running Archer/save.json`; bórrala al terminar.
 
 ## Probar en el móvil con adb
 
@@ -74,7 +74,7 @@ $G --headless --path . --script /ruta/test.gd
 $A exec-out screencap -p > captura.png          # captura
 $A shell input tap X Y                          # tocar (coordenadas de 1080×2400)
 $A shell input keyevent 4                       # botón atrás
-$A shell run-as com.example.runningarcher cat files/save.json   # leer el guardado
+$A shell run-as com.ioman.runningarcher cat files/save.json   # leer el guardado
 ```
 
 Las coordenadas de los botones del menú cambian si se añaden elementos: comprobar con una captura antes de automatizar toques (ahora PLAY está en y≈1365 y SHOP en y≈1567).
@@ -82,10 +82,10 @@ Las coordenadas de los botones del menú cambian si se añaden elementos: compro
 Para probar con una partida concreta sin perder la del móvil: copiar `files/save.json`, escribir la de prueba con ruta absoluta y restaurarla al terminar:
 
 ```bash
-F=/data/data/com.example.runningarcher/files/save.json
-$A shell run-as com.example.runningarcher cat $F > copia.json
-echo '{...}' | $A shell "run-as com.example.runningarcher sh -c 'cat > $F'"
-cat copia.json | $A shell "run-as com.example.runningarcher sh -c 'cat > $F'"
+F=/data/data/com.ioman.runningarcher/files/save.json
+$A shell run-as com.ioman.runningarcher cat $F > copia.json
+echo '{...}' | $A shell "run-as com.ioman.runningarcher sh -c 'cat > $F'"
+cat copia.json | $A shell "run-as com.ioman.runningarcher sh -c 'cat > $F'"
 ```
 
 El **ahorro de batería** (`adb shell settings get global low_power` = 1) limita la CPU a menos de la mitad: el arranque pasa de ~7 s a ~15-19 s. Tenerlo en cuenta al medir.

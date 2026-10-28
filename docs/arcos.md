@@ -7,16 +7,17 @@ Además del arco original hay 4 arcos con una habilidad propia. Cada uno se comp
 - **Un solo arco a la vez.** Comprar el arco equipado lo sube de nivel (máximo `ARCO_NIVEL_MAX = 5`).
 - Comprar **otro** arco lo equipa en nivel 1 y **se pierden las mejoras del anterior**. La tienda pide un segundo toque ("TAP AGAIN: LOSE …").
 - El arquero usa el modelo del último arco comprado; con el original se ve `arco1` (y el arco integrado del modelo).
+- Modelos del "3D Fantasy Bows Pack" (CC0, `/mnt/D2T/GodotRecursos/models3d/bows`): `arco1` Ranger's Yew Longbow, `arco2` Paladin's Sun Bow, `arco3` Thorn Bramble Bow, `arco4` Dragon-Rib Greatbow, `arco5` Frost Ice Bow.
 - Un arco superior es mejor a igual nivel, pero un arco inferior mejorado puede superarlo (por ejemplo Thorn nivel 5 atraviesa filas enteras, Sunfire nivel 1 apenas alcanza al carril vecino). La excepción es Dragonbone: ya al nivel 1 iguala o supera a Storm al nivel 5, y solo él permite los logros del mapa 3 de Hell.
 
 ## Los arcos
 
 | Arco | Modelo | Se compra tras | Habilidad (nivel 1 → 5) | Daño | Precio (nivel 1 → 5) |
 |---|---|---|---|---|---|
-| **Thorn Bow** | `arco3` (púas) | Easy | **Perforación**: atraviesa 1 → 5 enemigos | ×1,10 → ×1,30 | 150 → 983 |
-| **Sunfire Bow** | `arco2` (llamas) | Medium | **Explosión**: radio 1,5 → 2,5 m, 40 % → 100 % del daño a los de alrededor | ×1,20 → ×1,40 | 400 → 2621 |
-| **Storm Bow** | `arco5` (gemas azules) | Hard | **Rayo en cadena** a 2 → 6 enemigos en 7 m con el 50 % → 90 % del daño; cadencia ×1,15 | ×1,30 → ×1,50 | 1000 → 6554 |
-| **Dragonbone Bow** | `arco4` (hueso) | Hell | **Todo a la vez**: atraviesa 2 → 6 enemigos; explosión de fuego de 2 → 3 m (llega al carril de al lado) con el 60 % → 100 % del daño; quema 3 s al objetivo y a los de la explosión con el 50 % → 110 % del daño por segundo; +50 % → +150 % contra bosses; cadencia ×1,20 → ×1,40 | ×2,00 → ×3,00 | 2500 → 16384 |
+| **Thorn Bow** | `arco3` (zarzas con espinas) | Easy | **Perforación**: atraviesa 1 → 5 enemigos | ×1,10 → ×1,30 | 150 → 983 |
+| **Sunfire Bow** | `arco2` (dorado con un sol) | Medium | **Explosión**: radio 1,5 → 2,5 m, 40 % → 100 % del daño a los de alrededor | ×1,20 → ×1,40 | 400 → 2621 |
+| **Storm Bow** | `arco5` (hielo azul) | Hard | **Rayo en cadena** a 2 → 6 enemigos en 7 m con el 50 % → 90 % del daño; cadencia ×1,15 | ×1,30 → ×1,50 | 1000 → 6554 |
+| **Dragonbone Bow** | `arco4` (costillas de dragón) | Hell | **Todo a la vez**: atraviesa 2 → 6 enemigos; explosión de fuego de 2 → 3 m (llega al carril de al lado) con el 60 % → 100 % del daño; quema 3 s al objetivo y a los de la explosión con el 50 % → 110 % del daño por segundo; +50 % → +150 % contra bosses; cadencia ×1,20 → ×1,40 | ×2,00 → ×3,00 | 2500 → 16384 |
 
 Los números están en `Balance.ARCOS` ([`scripts/balance.gd`](../scripts/balance.gd)). Cada parámetro es `[valor a nivel 1, suma por nivel]`, y `Balance.arco_valor(id, clave, nivel)` lo calcula. Precio: `coste[0] × coste[1]^(nivel-1)`.
 
@@ -52,7 +53,7 @@ Simulación (`python3 tools/simular_balance.py --fin`), Hell con la tienda al m�
 | Quemadura | `Enemy.quemar(dps, segundos)` | Temporizador de 0,5 s que se detiene en pausa |
 | Efectos visuales | [`scenes/player/arco_efectos.gd`](../scenes/player/arco_efectos.gd) | Pool de efectos, búsqueda de enemigos cercanos (grupo `enemigos`) |
 | Tienda | [`shop.gd`](../scenes/gui/shop.gd), [`bow_card.tscn`](../scenes/gui/bow_card.tscn) | Pestañas UPGRADES / BOWS y tarjetas de arco |
-| Imágenes | `assets/images/bows/*.png` | Renders de los modelos con Blender (contorno dorado) |
+| Modelos e imágenes | `assets/weapons/arcoN.glb`, `assets/images/bows/*.png` | [`tools/preparar_armas.py`](../tools/preparar_armas.py) (Blender) orienta cada arco del pack como el que sustituye, renderiza la imagen con el modelo completo y exporta una versión de 4000 triángulos y texturas de 512/256. El contorno dorado de las imágenes se añade con ImageMagick (`-morphology Dilate Disk:6`, color `#e8c66a`) |
 
 Al vencer al boss del mapa 3 por primera vez en una dificultad, la pantalla de victoria anuncia el arco nuevo.
 
@@ -82,3 +83,11 @@ Las partículas tardan ~1-2 s en compilarse en el móvil la primera vez. Por eso
 2. Añadir su texto en `Balance.arco_descripcion()` y su habilidad en `Normal_Arrow._habilidades()`.
 3. Si tiene efecto nuevo: función en `ArcoEfectos` y caso en `ArcoEfectos.precalentar()`; si es una escena, añadirla a `export_files`.
 4. Render del icono en `assets/images/bows/<id>.png` (ya entra por `include_filter`).
+
+## Cambiar el modelo de un arco
+
+1. Elegir el `.glb` del pack y ponerlo en `ARCOS` de [`tools/preparar_armas.py`](../tools/preparar_armas.py).
+2. Copiar los `arcoN.glb` y `arrow.glb` actuales (de git) a `<renders>/viejos/`: son la referencia de orientación, tamaño y posición de la empuñadura.
+3. `blender -b --python tools/preparar_armas.py -- <carpeta del pack> <renders> <Skeleton_Arrow.gltf>`.
+4. Añadir el contorno a los renders y dejarlos en `assets/images/bows/` (256×256).
+5. Comprobarlo en la mano del arquero: la colocación de `arcoN` en `player.tscn` no cambia.

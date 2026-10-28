@@ -48,7 +48,7 @@ Al arrancar se llama a `comprueba()` sin avisos, así una partida antigua recibe
 ## Guardado
 
 `user://logros.json` (aparte de `save.json`): `{"version", "conseguidos": {id: fecha unix}, "stats": {bajas, oro, bosses, minijefes, horda, arcos}}`. **RESET PROGRESS no lo borra**. En el móvil:
-`adb shell run-as com.example.runningarcher cat files/logros.json`
+`adb shell run-as com.ioman.runningarcher cat files/logros.json`
 
 ## Interfaz
 

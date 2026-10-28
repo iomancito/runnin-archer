@@ -26,7 +26,7 @@
 ## Guardado
 
 - Archivo: `user://save.json` (en Android, `files/save.json` del paquete). Se puede leer en el móvil con:
-  `adb shell run-as com.example.runningarcher cat files/save.json`
+  `adb shell run-as com.ioman.runningarcher cat files/save.json`
 - Se guarda al comprar, al morir, al matar un boss, al cambiar de dificultad, al resetear, al cerrar la app y al pasarla a segundo plano.
 - Se guardan los **niveles** de las mejoras, no los stats finales: si cambian los incrementos en `Balance`, las partidas viejas usan los valores nuevos.
 
