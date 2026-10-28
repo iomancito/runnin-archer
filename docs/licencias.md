@@ -35,7 +35,7 @@ Estado: ✅ confirmado (hay fichero de licencia o metadatos) · ❓ pendiente de
 | Textura de hierba | `assets/textures/terrain/grass.jpg` | ? | ? | ? | ❓ |
 | Texturas de ruido para efectos (`T_*`) | `assets/textures/noise/` | ? | ? | ? | ❓ |
 | Sonido `bullet_explode.wav` | `assets/weapons/bullet/` | ? | ? | ? | ❓ |
-| Ilustración del splash, iconos e imágenes de los arcos | `assets/images/` | ¿Propios o generados con IA? Si son de IA, apuntar la herramienta y revisar sus términos de uso comercial | — | — | ❓ |
+| Ilustración del splash, logo, iconos e imágenes de los arcos; gráfico destacado de Play | `assets/images/`, `docs/tienda/` | Logo y gráfico destacado: generados con ChatGPT (OpenAI). El resto, ¿propios o de IA? Si son de IA, apuntar la herramienta y revisar sus términos de uso comercial | — | — | ❓ |
 
 ## Pendiente
 

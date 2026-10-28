@@ -58,6 +58,7 @@ Componentes reutilizables en `scenes/gui/components/`: `gold_pill.tscn` (oro con
 ## Pantalla de inicio e icono
 
 - `assets/images/splash.png`: splash de arranque de Godot (`application/boot_splash`, modo *cover*, fondo negro) y fondo de la pantalla de carga. Se muestra al menos `SPLASH_MIN = 3 s` (en `main.gd`); después se oscurece y entra el menú con un fundido.
+- `assets/images/logo.png`: logo "Running Archer" (fondo transparente) que hace de título en el menú principal (`Title`, un `TextureRect`).
 - Iconos en `assets/images/icons/` (ver [android.md](android.md)).
 
 ## Añadir una pantalla

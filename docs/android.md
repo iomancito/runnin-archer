@@ -77,7 +77,7 @@ $A shell input keyevent 4                       # botón atrás
 $A shell run-as com.example.runningarcher cat files/save.json   # leer el guardado
 ```
 
-Las coordenadas de los botones del menú cambian si se añaden elementos: comprobar con una captura antes de automatizar toques (ahora PLAY está en y≈1437 y SHOP en y≈1640).
+Las coordenadas de los botones del menú cambian si se añaden elementos: comprobar con una captura antes de automatizar toques (ahora PLAY está en y≈1365 y SHOP en y≈1567).
 
 Para probar con una partida concreta sin perder la del móvil: copiar `files/save.json`, escribir la de prueba con ruta absoluta y restaurarla al terminar:
 

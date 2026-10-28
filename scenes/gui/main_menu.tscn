@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scenes/gui/main_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" path="res://scenes/gui/components/gold_pill.tscn" id="2_pill"]
+[ext_resource type="Texture2D" path="res://assets/images/logo.png" id="3_logo"]
 
 [sub_resource type="Gradient" id="Gradient_bg"]
 colors = PackedColorArray(0.18, 0.33, 0.21, 1, 0.05, 0.1, 0.07, 1)
@@ -42,13 +43,13 @@ grow_vertical = 2
 theme_override_constants/separation = 18
 alignment = 1
 
-[node name="Title" type="Label" parent="Center"]
+[node name="Title" type="TextureRect" parent="Center"]
+custom_minimum_size = Vector2(640, 225)
 layout_mode = 2
-theme_type_variation = &"TitleLabel"
-theme_override_font_sizes/font_size = 100
-text = "RUNNING
-ARCHER"
-horizontal_alignment = 1
+size_flags_horizontal = 4
+texture = ExtResource("3_logo")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Subtitle" type="Label" parent="Center"]
 layout_mode = 2

@@ -26,6 +26,7 @@ Runner vertical en Godot 4.7 para **móviles Android** (retrato, renderer Mobile
 | [docs/rendimiento.md](docs/rendimiento.md) | Medidas en el móvil, optimizaciones aplicadas, cómo medir |
 | [docs/licencias.md](docs/licencias.md) | Origen y licencia de cada recurso de terceros, pendientes, pantalla de créditos |
 | [docs/android.md](docs/android.md) | Herramientas, compilar e instalar, preset de exportación, icono, tests sin pantalla, adb |
+| [docs/roadmap-publicacion.md](docs/roadmap-publicacion.md) | Plan para AdMob, compra "Remove Ads" y publicación en Google Play y App Store |
 
 ## Comandos rápidos
 
