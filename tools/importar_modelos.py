@@ -15,9 +15,8 @@ PROYECTO = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 TEX_MAX = 1024
 
 #nombre: (glb de origen, carpeta de destino, alto en m, animaciones que se conservan)
+#El dragón rojo ya no sale de aquí: lo monta tools/dragon_rojo.py con otro modelo.
 MODELOS = {
-	"red_dragon": ("red_dragon/red_dragon.glb", "scenes/enemies/map1/red_dragon", 5.5,
-		["idle", "bite", "breath", "roar", "death"]),
 	"fire_whelp": ("fire_whelp/fire_whelp.glb", "scenes/enemies/map1/fire_whelp", 1.3,
 		["idle", "walk", "spit"]),
 	"zombie_bloater": ("zombie/zombie_bloater.glb", "scenes/enemies/map2/bloater", 2.6,
