@@ -1,5 +1,8 @@
 class_name BowCard extends PanelContainer
 
+## Tarjeta de arco de la tienda. Deja pasar el arrastre al ScrollContainer (mouse_filter PASS en la
+## escena: un PanelContainer lo para por defecto); el botón sí lo para para no comprar al desplazar.
+
 signal buy_pressed
 
 @onready var imagen : TextureRect = %Imagen

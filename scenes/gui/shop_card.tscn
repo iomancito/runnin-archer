@@ -5,6 +5,7 @@
 
 [node name="ShopCard" type="PanelContainer"]
 size_flags_horizontal = 3
+mouse_filter = 1
 theme_type_variation = &"CardPanel"
 script = ExtResource("1_card")
 

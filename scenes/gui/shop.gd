@@ -84,6 +84,7 @@ func _muestra_pestaña(arcos : bool) -> void:
 	reset_button.visible = not arcos
 	%TabArcos.theme_type_variation = &"PrimaryButton" if arcos else &""
 	%TabMejoras.theme_type_variation = &"" if arcos else &"PrimaryButton"
+	%Scroll.scroll_vertical = 0
 
 func actualiza_arcos() -> void:
 	var actual = Progreso.arco
