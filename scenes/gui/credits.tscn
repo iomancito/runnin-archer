@@ -74,7 +74,12 @@ layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="Texto" type="RichTextLabel" parent="Margin/VBox/Scroll"]
+[node name="Lista" type="VBoxContainer" parent="Margin/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Texto" type="RichTextLabel" parent="Margin/VBox/Scroll/Lista"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -82,5 +87,17 @@ mouse_filter = 1
 bbcode_enabled = true
 fit_content = true
 scroll_active = false
+theme_override_font_sizes/normal_font_size = 26
+horizontal_alignment = 1
+
+[node name="Bibliotecas" type="RichTextLabel" parent="Margin/VBox/Scroll/Lista"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+threaded = true
 theme_override_font_sizes/normal_font_size = 26
 horizontal_alignment = 1
