@@ -4,6 +4,7 @@ signal play_pressed
 signal shop_pressed
 signal achievements_pressed
 signal credits_pressed
+signal settings_pressed
 signal exit_pressed
 
 @onready var progress_label : Label = %ProgressLabel
@@ -20,6 +21,7 @@ func _ready() -> void:
 	%ShopButton.pressed.connect(func(): shop_pressed.emit())
 	%AchievementsButton.pressed.connect(func(): achievements_pressed.emit())
 	%CreditsButton.pressed.connect(func(): credits_pressed.emit())
+	%SettingsButton.pressed.connect(func(): settings_pressed.emit())
 	%ExitButton.pressed.connect(func(): exit_pressed.emit())
 	#en web/iOS no se puede cerrar la app
 	%ExitButton.visible = OS.get_name() not in ["Web", "iOS"]

@@ -29,24 +29,25 @@ El tema está generado por un script; para retocarlo es más cómodo editar el `
 | Escena / script | Contenido | Señales |
 |---|---|---|
 | `Splash` (en `main.tscn`) | Imagen de inicio + barra "Loading %" | — |
-| `main_menu.tscn` | Título, oro, mapa más lejano, selector de dificultad (las bloqueadas deshabilitadas, con pista para desbloquear la siguiente), PLAY / SHOP + ACHIEVEMENTS / CREDITS + EXIT, RESET PROGRESS | `play_pressed`, `shop_pressed`, `achievements_pressed`, `credits_pressed`, `exit_pressed` |
+| `main_menu.tscn` | Título, oro, mapa más lejano, selector de dificultad (las bloqueadas deshabilitadas, con pista para desbloquear la siguiente), PLAY / SHOP + ACHIEVEMENTS / CREDITS + EXIT, RESET PROGRESS y engranaje de ajustes en la esquina inferior derecha | `play_pressed`, `shop_pressed`, `achievements_pressed`, `credits_pressed`, `exit_pressed`, `settings_pressed` |
 | `achievements.tscn` + `achievement_toast.gd` | Logros (pestañas GENERAL / CHALLENGES) y aviso al desbloquear. Ver [logros.md](logros.md) | `back_pressed` |
+| `settings.tscn` | Ajustes: pestañas AUDIO (barras de música y efectos, 0 % = silencio) y VIDEO (calidad AUTO / LOW / MEDIUM / HIGH / ULTRA y 30 / 60 FPS). Guarda al salir. Ver [ajustes.md](ajustes.md) | `back_pressed` |
 | `credits.tscn` | Créditos de terceros y licencia MIT de Godot (`Engine.get_license_text()`), con scroll. Ver [licencias.md](licencias.md) | `back_pressed` |
 | `shop.tscn` + `shop_card.tscn` + `bow_card.tscn` | Pestañas UPGRADES (tarjetas de mejora, reset) y BOWS (arcos con imagen, habilidad, nivel y estado) | `back_pressed`, `arco_equipado` |
 | `game_hud.tscn` | Vida, oro, barra de distancia al boss, barra del boss, botón de pausa, destello rojo al recibir daño | `pause_pressed` |
 | `pause_menu.tscn` | RESUME / QUIT RUN | `resume_pressed`, `menu_pressed` |
-| `results.tscn` | Derrota / mapa superado / victoria con distancia, bajas y oro | `next_pressed`, `retry_pressed`, `shop_pressed`, `menu_pressed` |
+| `results.tscn` | Derrota / mapa superado / victoria con distancia, bajas y oro. Los botones aparecen al soltar un toque nuevo (tras `ESPERA_TOQUE`, con aviso "TAP TO CONTINUE"): el dedo con el que se jugaba no elige una opción sin querer y la música de victoria o derrota suena | `next_pressed`, `retry_pressed`, `shop_pressed`, `menu_pressed` |
 | `fade.tscn` (`fade.gd`) | Fundidos a negro (`fade_in`, `fade_out`, `mostrar_negro`) | — |
 
 `pause_menu` y `results` heredan de `OverlayPanel` (`overlay_panel.gd`): fondo oscurecido y entrada animada del panel `%Panel`.
 
-Componentes reutilizables en `scenes/gui/components/`: `gold_pill.tscn` (oro con rebote al ganar) y `coin_icon.gd` (moneda dibujada).
+Componentes reutilizables en `scenes/gui/components/`: `gold_pill.tscn` (oro con rebote al ganar) `coin_icon.gd` (moneda dibujada) y `gear_icon.gd` (engranaje dibujado).
 
 ## Controles en el móvil
 
 - Arrastrar el dedo a izquierda/derecha mueve al arquero (`Player._input`).
 - **Pausa**: botón II del HUD, botón atrás de Android, o automática al salir de la app.
-- **Botón atrás**: en la tienda, los logros o los créditos vuelve al menú; en partida pausa; en el menú cierra el juego.
+- **Botón atrás**: en la tienda, los logros, los ajustes (guardándolos) o los créditos vuelve al menú; en partida pausa; en el menú cierra el juego.
 - En el editor, el ratón emula el táctil, Enter pausa y Escape hace de botón atrás.
 
 ## Feedback en el mundo 3D

@@ -119,15 +119,21 @@ func _on_comprar_arco(id : String) -> void:
 	arco_armado = ""
 	var era_otro = Progreso.arco != id
 	if Progreso.comprar_arco(id):
+		Sonidos.toca("compra")
 		arco_cards[id].pulse()
 		Logros.comprueba()
 		if era_otro:
 			arco_equipado.emit(id)
+	else:
+		Sonidos.toca("error")
 	actualiza_arcos()
 
 func _on_buy_pressed(i : int) -> void:
 	if subir_lvl_pasiva(pasivas_array[i]):
+		Sonidos.toca("compra")
 		cards[i].pulse()
+	else:
+		Sonidos.toca("error")
 
 func subir_lvl_pasiva(ref) -> bool:
 	var ret = false

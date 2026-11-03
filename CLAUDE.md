@@ -23,6 +23,9 @@ Runner vertical en Godot 4.7 para **móviles Android** (retrato, renderer Mobile
 | [docs/arcos.md](docs/arcos.md) | Arcos especiales: habilidades, precios, compra, efectos visuales, cómo añadir un arco |
 | [docs/progreso-y-tienda.md](docs/progreso-y-tienda.md) | Autoload `Progreso`, guardado y migraciones, tienda, resets |
 | [docs/logros.md](docs/logros.md) | Autoload `Logros`: lista de logros, detección, guardado, pantalla, cómo añadir uno |
+| [docs/musica.md](docs/musica.md) | Autoload `Musica`: pistas, cuándo suena cada una, formato de los OGG |
+| [docs/sonidos.md](docs/sonidos.md) | Autoload `Sonidos`: efectos sintetizados, cuándo suena cada uno, cómo añadir uno |
+| [docs/ajustes.md](docs/ajustes.md) | Autoload `Ajustes`: volúmenes, niveles de calidad, calidad automática, FPS |
 | [docs/interfaz.md](docs/interfaz.md) | Tema, escalado, pantallas y señales, controles, splash, cómo añadir una pantalla |
 | [docs/rendimiento.md](docs/rendimiento.md) | Medidas en el móvil, optimizaciones aplicadas, cómo medir |
 | [docs/licencias.md](docs/licencias.md) | Origen y licencia de cada recurso de terceros, pendientes, pantalla de créditos |

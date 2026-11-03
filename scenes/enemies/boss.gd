@@ -63,6 +63,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is Player and not combatiendo and vida > 0:
 		body.stats["p_speed"] = 0
 		combatiendo = true
+		Sonidos.toca("rugido")
 		body.reanuda_disparo()
 		#el primer ataque llega tras medio intervalo: lo justo para ver al dragón
 		_espera = intervalo * 0.5
@@ -181,6 +182,7 @@ func _fin_animacion(nombre : StringName) -> void:
 
 func die() -> void:
 	combatiendo = false
+	Sonidos.toca("muerte_boss")
 	recompensa(boss_gold)
 	#lo que queda en el aire desaparece: el combate ha terminado
 	get_tree().call_group(Proyectil.GRUPO, "cancelar")

@@ -56,6 +56,7 @@ func _siguiente() -> void:
 	mostrando = true
 	nombre.text = Logros.por_id[cola.pop_front()].nombre
 	panel.show()
+	Sonidos.toca("logro")
 	panel.reset_size()
 	await get_tree().process_frame
 	var x = (size.x - panel.size.x) * 0.5

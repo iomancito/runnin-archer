@@ -38,6 +38,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		queue_free()
 		return
 	golpeados.append(body)
+	Sonidos.toca("impacto")
 	var d = daño
 	if body is Boss:
 		d = roundi(d * (1.0 + Balance.arco_valor(arco, "daño_boss", nivel)))
@@ -55,10 +56,12 @@ func _habilidades(objetivo : Enemy, d : int) -> void:
 		"sunfire":
 			var radio = v.call("explosion_radio")
 			ArcoEfectos.explosion(get_parent(), objetivo.global_position, radio)
+			Sonidos.toca("explosion")
 			for e in ArcoEfectos.enemigos_cerca(objetivo, radio, 99):
 				e.recibe_daño(max(1, roundi(d * v.call("explosion_daño"))))
 		"storm":
 			var desde = objetivo.global_position
+			Sonidos.toca("rayo")
 			for e in ArcoEfectos.enemigos_cerca(objetivo, v.call("cadena_radio"), int(v.call("cadena_saltos"))):
 				ArcoEfectos.rayo(get_parent(), desde, e.global_position)
 				desde = e.global_position
@@ -68,6 +71,7 @@ func _habilidades(objetivo : Enemy, d : int) -> void:
 			var radio = v.call("explosion_radio")
 			var quemadura = d * v.call("quemadura_dps")
 			ArcoEfectos.impacto_fuego(get_parent(), objetivo.global_position)
+			Sonidos.toca("explosion")
 			ArcoEfectos.explosion(get_parent(), objetivo.global_position, radio)
 			objetivo.quemar(quemadura, v.call("quemadura_seg"))
 			for e in ArcoEfectos.enemigos_cerca(objetivo, radio, 99):

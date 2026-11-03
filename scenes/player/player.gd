@@ -214,6 +214,7 @@ func recibe_daño(d : int) -> void:
 	vida -= d
 	if d > 0:
 		Logros.golpe()
+		Sonidos.toca("muerte_jugador" if vida <= 0 else "herido")
 	vida_changed.emit(vida, stats["p_vida"])
 	if vida <= 0:
 		is_dead = true
@@ -226,6 +227,7 @@ func recibe_daño(d : int) -> void:
 func attack() -> void:
 	if not dispara:
 		return
+	Sonidos.toca("disparo")
 	for i in range (0, stats["f_cantidad"]):
 		var flecha_instancia = normal_arrow.instantiate()
 		get_parent().find_child("ArrowContainer").add_child(flecha_instancia)

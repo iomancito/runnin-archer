@@ -117,7 +117,12 @@ horizontal_alignment = 2
 custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
 
-[node name="NextButton" type="Button" parent="Panel/VBox"]
+[node name="Botones" type="VBoxContainer" parent="Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="NextButton" type="Button" parent="Panel/VBox/Botones"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
@@ -125,7 +130,7 @@ focus_mode = 0
 theme_type_variation = &"PrimaryButton"
 text = "NEXT MAP"
 
-[node name="RetryButton" type="Button" parent="Panel/VBox"]
+[node name="RetryButton" type="Button" parent="Panel/VBox/Botones"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
@@ -133,16 +138,32 @@ focus_mode = 0
 theme_type_variation = &"PrimaryButton"
 text = "RETRY"
 
-[node name="ShopButton" type="Button" parent="Panel/VBox"]
+[node name="ShopButton" type="Button" parent="Panel/VBox/Botones"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 focus_mode = 0
 text = "SHOP"
 
-[node name="MenuButton" type="Button" parent="Panel/VBox"]
+[node name="MenuButton" type="Button" parent="Panel/VBox/Botones"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 focus_mode = 0
 text = "MAIN MENU"
+
+[node name="TapLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -150.0
+offset_bottom = -90.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 34
+text = "TAP TO CONTINUE"
+horizontal_alignment = 1
+vertical_alignment = 1

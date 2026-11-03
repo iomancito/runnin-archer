@@ -12,6 +12,7 @@ signal mapa_cargado
 @onready var menu_mejoras : Shop = %Shop
 @onready var menu_logros : AchievementsScreen = %Achievements
 @onready var menu_creditos : CreditsScreen = %Credits
+@onready var menu_ajustes : SettingsScreen = %Settings
 @onready var pause_menu : PauseMenu = %PauseMenu
 @onready var results : Results = %Results
 @onready var fade = %fade
@@ -74,6 +75,10 @@ func _ready() -> void:
 	menu_logros.back_pressed.connect(show_principal)
 	menu_principal.credits_pressed.connect(show_creditos)
 	menu_creditos.back_pressed.connect(show_principal)
+	menu_principal.settings_pressed.connect(show_ajustes)
+	menu_ajustes.back_pressed.connect(show_principal)
+	#la calidad automática puede quitar las sombras en plena partida
+	Ajustes.calidad_cambiada.connect(func(): if is_instance_valid(current_map): Ajustes.aplica_a_mapa(current_map))
 	menu_principal.exit_pressed.connect(salir)
 	menu_mejoras.back_pressed.connect(show_principal)
 	menu_mejoras.arco_equipado.connect(_precalentar_arco)
@@ -115,6 +120,8 @@ func _carga_inicial() -> void:
 		await get_tree().process_frame
 		var mapa = escenas_mapas[n].instantiate()
 		map_container.add_child(mapa)
+		#los shaders se compilan con las sombras de la calidad elegida
+		Ajustes.aplica_a_mapa(mapa)
 		mapa.precalentar()
 		$Camera3D.global_position = Vector3(0, camara_inicial.y, mapa.get_spawn_point().z - CAMARA_DETRAS)
 		#unos frames dibujando el mapa (tapado por la pantalla negra): las partículas compilan
@@ -130,6 +137,7 @@ func _carga_inicial() -> void:
 	#se oscurece la imagen y el menú principal entra con un fundido
 	await fade.fade_in(0.6)
 	splash.hide()
+	Musica.toca("menu")
 	await get_tree().create_timer(0.2).timeout
 	fade.fade_out(0.8)
 
@@ -160,6 +168,7 @@ func load_map(map_index: int):
 	if map_scene == null:
 		map_scene = load("res://scenes/mapas/mapa{index}.tscn".format({"index": map_index}))
 	current_map = map_scene.instantiate()
+	Ajustes.aplica_a_mapa(current_map)
 	map_container.add_child(current_map)
 	spawn_player()
 	current_map.call_deferred("set_boss", self)
@@ -175,6 +184,8 @@ func muere_boss(s : Node3D) -> void :
 	s.disconnect("muere_boss", muere_boss)
 	s.queue_free()
 	partida_iniciada = false
+	Sonidos.en_partida = false
+	Ajustes.mide(false)
 	var stats = run_stats(100)
 	game_hud.hide()
 	get_tree().paused = true
@@ -191,12 +202,14 @@ func muere_boss(s : Node3D) -> void :
 			for id in Balance.ORDEN_ARCOS:
 				if Balance.ARCOS[id].dificultad == Progreso.dificultad:
 					arco_nuevo = id
+		Musica.toca("final")
 		results.show_victory(stats, nueva, arco_nuevo)
 		return
 	Progreso.current_map += 1
 	Progreso.max_map = max(Progreso.max_map, Progreso.current_map)
 	Progreso.save_game()
 	Logros.comprueba()
+	Musica.toca("victoria")
 	results.show_cleared(Progreso.current_map - 1, stats)
 
 func siguiente_mapa() -> void:
@@ -224,6 +237,9 @@ func _physics_process(delta: float) -> void:
 		#la cámara del boss se queda hasta el final del combate (también durante la muerte del dragón)
 		if not _camara_boss and is_instance_valid(current_map):
 			_camara_boss = not player.dispara or current_map.get_boss().combatiendo
+			#la música del boss entra con el cambio de cámara, antes de llegar al dragón
+			if _camara_boss:
+				Musica.toca("boss%d" % Progreso.current_map)
 		if _camara_boss and not get_tree().paused:
 			_mezcla_boss = move_toward(_mezcla_boss, 1.0, delta / CAMARA_BOSS_TRANSICION)
 		_coloca_camara(player.global_position.z)
@@ -246,12 +262,15 @@ func on_player_position_updated(player_pos) -> void:
 func player_dead() -> void:
 	Progreso.current_map = 1
 	partida_iniciada = false
+	Sonidos.en_partida = false
+	Ajustes.mide(false)
 	Progreso.save_game()
 	Logros.termina_partida()
 	var stats = run_stats(game_hud.distance_bar.value)
 	game_hud.hide()
 	#congela la escena detrás de la pantalla de resultados
 	get_tree().paused = true
+	Musica.toca("derrota")
 	results.show_defeat(stats)
 
 func run_stats(distancia : float) -> Dictionary:
@@ -262,6 +281,7 @@ func limpiar_mundo() -> void:
 	get_tree().paused = false
 	results.hide()
 	pause_menu.hide()
+	Musica.atenua(false)
 	game_hud.hide()
 	if is_instance_valid(player):
 		player.queue_free()
@@ -273,6 +293,8 @@ func limpiar_mundo() -> void:
 #salir de la partida desde el menú de pausa
 func abandonar_partida() -> void:
 	partida_iniciada = false
+	Sonidos.en_partida = false
+	Ajustes.mide(false)
 	Progreso.current_map = 1
 	Progreso.save_game()
 	Logros.termina_partida()
@@ -284,6 +306,7 @@ func pause_game() -> void:
 		return
 	get_tree().paused = not get_tree().paused
 	pause_menu.visible = get_tree().paused
+	Musica.atenua(get_tree().paused)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
@@ -301,7 +324,10 @@ func _notification(what: int) -> void:
 
 #botón atrás de android / escape
 func _on_back() -> void:
-	if menu_mejoras.visible or menu_logros.visible or menu_creditos.visible:
+	if menu_ajustes.visible:
+		Ajustes.guarda()
+		show_principal()
+	elif menu_mejoras.visible or menu_logros.visible or menu_creditos.visible:
 		show_principal()
 	elif is_playing():
 		pause_game()
@@ -321,28 +347,40 @@ func show_principal() -> void:
 	menu_mejoras.hide()
 	menu_logros.hide()
 	menu_creditos.hide()
+	menu_ajustes.hide()
 	menu_principal.show()
+	Musica.toca("menu")
 
 func show_mejoras() -> void:
+	Musica.toca("tienda")
 	menu_mejoras.show()
 	menu_principal.hide()
 
 func show_logros() -> void:
+	Musica.toca("tienda")
 	menu_logros.show()
 	menu_principal.hide()
 
+func show_ajustes() -> void:
+	menu_ajustes.show()
+	menu_principal.hide()
+
 func show_creditos() -> void:
+	Musica.toca("creditos")
 	menu_creditos.show()
 	menu_principal.hide()
 
 func show_game() -> void:
 	#el mapa se monta con la pantalla en negro: el parón de construirlo no se ve
+	Musica.toca("mapa%d" % Progreso.current_map)
 	await fade.fade_in(0.25)
 	menu_mejoras.hide()
 	menu_principal.hide()
 	load_map(Progreso.current_map)
 	game_hud.show()
 	partida_iniciada = true
+	Sonidos.en_partida = true
+	Ajustes.mide(true)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	fade.fade_out(0.6)

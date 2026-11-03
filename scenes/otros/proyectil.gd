@@ -69,6 +69,7 @@ static func lanzar(padre : Node, de : Vector3, a : Vector3, t : float, d : int, 
 
 func _ready() -> void:
 	add_to_group(GRUPO)
+	Sonidos.toca(Sonidos.PROYECTILES[estilo][0])
 	top_level = true
 	global_position = Vector3.ZERO
 	var e = ESTILOS[estilo]
@@ -136,6 +137,7 @@ func _impacto() -> void:
 		p.recibe_daño(daño)
 		texto_daño(get_parent(), p.global_position, daño)
 	efecto_impacto(get_parent(), hasta, estilo, radio)
+	Sonidos.toca(Sonidos.PROYECTILES[estilo][1])
 	_marca.reparent(get_parent())
 	_marca.set_instance_shader_parameter("progreso", 1.0)
 	var color : Color = ESTILOS[estilo][3]

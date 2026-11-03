@@ -30,6 +30,7 @@ func upgrade_skill_player(body : Node3D, valor : int) -> void:
 	if cogido:
 		return
 	cogido = true
+	Sonidos.toca("puerta")
 	body.mejora(Balance.PUERTAS[valor][1], Balance.PUERTAS[valor][2])
 	Logros.puerta(body)
 	queue_free()

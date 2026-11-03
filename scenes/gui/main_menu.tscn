@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scenes/gui/main_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" path="res://scenes/gui/components/gold_pill.tscn" id="2_pill"]
 [ext_resource type="Texture2D" path="res://assets/images/logo.png" id="3_logo"]
+[ext_resource type="Script" path="res://scenes/gui/components/gear_icon.gd" id="4_engranaje"]
 
 [sub_resource type="Gradient" id="Gradient_bg"]
 colors = PackedColorArray(0.18, 0.33, 0.21, 1, 0.05, 0.1, 0.07, 1)
@@ -143,10 +144,41 @@ layout_mode = 2
 
 [node name="ResetButton" type="Button" parent="Center"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(460, 76)
+custom_minimum_size = Vector2(420, 76)
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 theme_type_variation = &"DangerButton"
 theme_override_font_sizes/font_size = 26
 text = "RESET PROGRESS"
+
+[node name="SettingsButton" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -104.0
+offset_top = -104.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+focus_mode = 0
+
+[node name="Engranaje" type="Control" parent="SettingsButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 16.0
+offset_right = -20.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_engranaje")

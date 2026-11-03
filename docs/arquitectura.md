@@ -36,6 +36,9 @@ El player se instancia como hijo de `Main` con `process_mode = PAUSABLE` (si no,
 |---|---|---|
 | `Progreso` | [`scripts/progreso.gd`](../scripts/progreso.gd) | Oro, mejoras, dificultad, mapas superados, guardado. Ver [progreso-y-tienda.md](progreso-y-tienda.md) |
 | `Logros` | [`scripts/logros.gd`](../scripts/logros.gd) | Logros, estadísticas totales y cronómetro del mapa. Ver [logros.md](logros.md) |
+| `Musica` | [`scripts/musica.gd`](../scripts/musica.gd) | Música de fondo con fundido cruzado. Ver [musica.md](musica.md) |
+| `Sonidos` | [`scripts/sonidos.gd`](../scripts/sonidos.gd) | Efectos de sonido (partida e interfaz) en el bus `Effects`. Ver [sonidos.md](sonidos.md) |
+| `Ajustes` | [`scripts/ajustes.gd`](../scripts/ajustes.gd) | Volúmenes, calidad gráfica (con modo automático) y FPS; `user://ajustes.cfg`. Ver [ajustes.md](ajustes.md) |
 | `SignalLens` | addon | Depurador de señales del editor (pasivo) |
 
 ## Clases estáticas de configuración

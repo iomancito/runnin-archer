@@ -1,0 +1,205 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/gui/settings.gd" id="1_ajustes"]
+
+[sub_resource type="Gradient" id="Gradient_bg"]
+colors = PackedColorArray(0.16, 0.14, 0.27, 1, 0.05, 0.04, 0.09, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bg"]
+gradient = SubResource("Gradient_bg")
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ajustes")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_bg")
+expand_mode = 1
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 32
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="Header" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BackButton" type="Button" parent="Margin/VBox/Header"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 84)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+text = "BACK"
+
+[node name="Title" type="Label" parent="Margin/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
+theme_override_font_sizes/font_size = 38
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="Hueco" type="Control" parent="Margin/VBox/Header"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="Pestanas" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="AudioTab" type="Button" parent="Margin/VBox/Pestanas"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+text = "AUDIO"
+
+[node name="VideoTab" type="Button" parent="Margin/VBox/Pestanas"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+text = "VIDEO"
+
+[node name="Audio" type="PanelContainer" parent="Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CardPanel"
+
+[node name="Filas" type="VBoxContainer" parent="Margin/VBox/Audio"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MusicaTitulo" type="Label" parent="Margin/VBox/Audio/Filas"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "MUSIC"
+
+[node name="MusicaFila" type="HBoxContainer" parent="Margin/VBox/Audio/Filas"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MusicaBarra" type="HSlider" parent="Margin/VBox/Audio/Filas/MusicaFila"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 0
+step = 5.0
+
+[node name="MusicaValor" type="Label" parent="Margin/VBox/Audio/Filas/MusicaFila"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "50%"
+horizontal_alignment = 2
+
+[node name="Gap" type="Control" parent="Margin/VBox/Audio/Filas"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="EfectosTitulo" type="Label" parent="Margin/VBox/Audio/Filas"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "SOUND EFFECTS"
+
+[node name="EfectosFila" type="HBoxContainer" parent="Margin/VBox/Audio/Filas"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="EfectosBarra" type="HSlider" parent="Margin/VBox/Audio/Filas/EfectosFila"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 0
+step = 5.0
+
+[node name="EfectosValor" type="Label" parent="Margin/VBox/Audio/Filas/EfectosFila"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "50%"
+horizontal_alignment = 2
+
+[node name="Video" type="PanelContainer" parent="Margin/VBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"CardPanel"
+
+[node name="Filas" type="VBoxContainer" parent="Margin/VBox/Video"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="CalidadTitulo" type="Label" parent="Margin/VBox/Video/Filas"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "GRAPHICS QUALITY"
+
+[node name="CalidadFila" type="VBoxContainer" parent="Margin/VBox/Video/Filas"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CalidadInfo" type="Label" parent="Margin/VBox/Video/Filas"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+theme_override_font_sizes/font_size = 24
+autowrap_mode = 3
+
+[node name="Gap" type="Control" parent="Margin/VBox/Video/Filas"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="FpsTitulo" type="Label" parent="Margin/VBox/Video/Filas"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "FRAME RATE"
+
+[node name="FpsFila" type="HBoxContainer" parent="Margin/VBox/Video/Filas"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="FpsInfo" type="Label" parent="Margin/VBox/Video/Filas"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+theme_override_font_sizes/font_size = 24
+autowrap_mode = 3

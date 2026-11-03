@@ -61,6 +61,7 @@ func recibe_daño(d : int) -> void:
 
 
 func die() -> void:
+	Sonidos.toca("muerte")
 	recompensa()
 	var moneda_i = moneda.instantiate()
 	get_parent().add_child(moneda_i)
@@ -76,6 +77,7 @@ func recompensa(cantidad : int = gold) -> void:
 	Progreso.run_gold += cantidad
 	Progreso.run_kills += 1
 	Logros.baja(self, cantidad)
+	Sonidos.toca("moneda")
 	popup_texto("+%d" % cantidad, Color(1.0, 0.84, 0.3))
 
 #texto flotante que sube y se desvanece

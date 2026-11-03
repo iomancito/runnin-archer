@@ -8,29 +8,36 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="Running Archer"
 run/main_scene="res://main.tscn"
-config/features=PackedStringArray("4.5", "Mobile")
-config/icon="res://assets/images/icons/icon.png"
+config/features=PackedStringArray("4.7", "Mobile")
 boot_splash/bg_color=Color(0, 0, 0, 1)
-boot_splash/image="res://assets/images/splash.png"
 boot_splash/stretch_mode=4
+boot_splash/image="res://assets/images/splash.png"
+config/icon="res://assets/images/icons/icon.png"
 
 [autoload]
 
 Progreso="*res://scripts/progreso.gd"
 Logros="*res://scripts/logros.gd"
+Musica="*res://scripts/musica.gd"
+Sonidos="*res://scripts/sonidos.gd"
+Ajustes="*res://scripts/ajustes.gd"
 
 [display]
 
 window/size/viewport_width=720
 window/size/viewport_height=1280
-window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
 window/size/window_width_override=405
 window/size/window_height_override=900
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 window/handheld/orientation=1
 
 [editor_plugins]
@@ -54,9 +61,9 @@ pointing/emulate_touch_from_mouse=true
 
 [rendering]
 
-mesh_lod/lod_change/threshold_pixels=8.0
+renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true
 lights_and_shadows/directional_shadow/size=1024
 lights_and_shadows/directional_shadow/size.mobile=1024
-renderer/rendering_method="mobile"
 scaling_3d/scale=0.75
-textures/vram_compression/import_etc2_astc=true
+mesh_lod/lod_change/threshold_pixels=8.0
