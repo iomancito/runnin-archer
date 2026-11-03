@@ -25,7 +25,7 @@ const CREDITOS : Array = [
 		"Characters and animations from Adobe Mixamo",
 	]],
 	["MUSIC", ["Created with Suno (suno.com)"]],
-	["TEXTURES", ["Poly Haven (polyhaven.com)\nCC0 1.0"]],
+	["TEXTURES", ["Poly Haven (polyhaven.com)\nCC0 1.0", "ambientCG (ambientcg.com)\nCC0 1.0"]],
 	["VISUAL EFFECTS", ["BinbunVFX Vol.2 by Binbun3D (bun3d.com)\nCC0 1.0"]],
 	["FONT", ["Nunito by Vernon Adams, Cyreal, Jacques Le Bailly\nSIL Open Font License 1.1"]],
 	["ENGINE", ["Made with Godot Engine (godotengine.org)\nMIT License"]],

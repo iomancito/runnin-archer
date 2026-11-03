@@ -11,12 +11,12 @@ El dragón negro (boss del mapa 2) tiene licencia **CC BY-NC 4.0**, que prohíbe
 ## Fase 0 — Bloqueos que hay que resolver antes de publicar nada
 
 - [x] Dragón rojo sustituido por "Red Dragon 3D" (CC BY 4.0).
-- [ ] **Licencias** (ver [licencias.md](licencias.md)): confirmar la textura de hierba y el splash/iconos. Sin esto, la app se puede retirar por denuncia de copyright.
+- [x] **Licencias** (ver [licencias.md](licencias.md)): todos los recursos confirmados; la hierba del mapa 1 se cambió por una CC0 de ambientCG.
 - [x] Dragón negro: se puede usar porque el juego no da dinero. Crédito CC BY-NC ya en la pantalla de créditos.
 - [x] **Nombre del paquete**: `com.ioman.runningarcher` (`package/unique_name`). **No se puede cambiar una vez publicado.**
 - [x] Quitar el autoload de depuración `SignalLens` y `settings/stdout/verbose_stdout`; `addons/*` excluido de la exportación.
 - [ ] Revisar textos en inglés, icono, splash y créditos (aviso MIT de Godot ya incluido).
-- [ ] **Política de privacidad** publicada en una URL (Play la pide a todas las apps): el juego no recoge ni envía datos, el progreso se guarda solo en el dispositivo, contacto. Basta una página mínima (GitHub Pages sirve).
+- [x] **Política de privacidad**: publicada en <https://iomancito.github.io/runnin-archer/> (GitHub Pages, rama `gh-pages`, que solo contiene esa página). Contacto: issues del repositorio. Si el juego cambia (red, datos, permisos), actualizarla y cambiar su fecha.
 
 ## Fase 1 — Cuenta (se puede empezar ya)
 

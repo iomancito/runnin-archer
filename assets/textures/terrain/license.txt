@@ -1,0 +1,14 @@
+Texturas del suelo de los mapas (todas CC0 1.0, dominio público: https://creativecommons.org/publicdomain/zero/1.0/)
+
+grass004_color.jpg (mapa 1)
+  "Grass 004" de ambientCG (Lennart Demes) - https://ambientcg.com/view?id=Grass004
+  Archivo Grass004_1K-JPG_Color.jpg, sin cambios.
+
+rock_face_diff_4k.jpg, rock_face_disp_4k.png (mapa 2)
+  "Rock Face" de Poly Haven - foto: Greg Zaal, procesado: Dario Barresi - https://polyhaven.com/a/rock_face
+
+ganges_river_pebbles_diff_4k.jpg, ganges_river_pebbles_disp_4k.png (mapa 3)
+  "Ganges River Pebbles" de Poly Haven - Amal Kumar - https://polyhaven.com/a/ganges_river_pebbles
+
+rocky_terrain_diff_4k.jpg, rocky_terrain_disp_4k.png
+  "Rocky Terrain" de Poly Haven - Amal Kumar - https://polyhaven.com/a/rocky_terrain (ahora no se usa en ninguna escena)

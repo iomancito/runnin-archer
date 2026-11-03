@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://b628ejv37o24i" path="res://scenes/enemies/map1/ogre/Ogro.tscn" id="11_mvyri"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/map1/fire_whelp/whelp.tscn" id="16_whelp"]
 [ext_resource type="PackedScene" uid="uid://e2oh4cirifon" path="res://scenes/enemies/map1/red_dragon/Dragon_Rojo.tscn" id="12_4ter5"]
-[ext_resource type="Texture2D" uid="uid://jtwyakh2jf4l" path="res://assets/textures/terrain/grass.jpg" id="14_u1ve2"]
+[ext_resource type="Texture2D" path="res://assets/textures/terrain/grass004_color.jpg" id="14_u1ve2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_11ey0"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
