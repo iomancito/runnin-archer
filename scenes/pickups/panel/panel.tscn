@@ -1,23 +1,61 @@
-[gd_scene load_steps=7 format=3 uid="uid://mis3o761onwi"]
+[gd_scene load_steps=14 format=3 uid="uid://mis3o761onwi"]
 
 [ext_resource type="Script" path="res://scenes/pickups/panel/panel.gd" id="1_5hh6m"]
+[ext_resource type="Shader" path="res://scenes/pickups/panel/panel.gdshader" id="2_shd"]
+[ext_resource type="FontFile" path="res://assets/fonts/Nunito-Black.ttf" id="3_fnt"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_edyjv"]
-albedo_color = Color(0, 0.705882, 0.0235294, 1)
-emission_enabled = true
-emission = Color(0.904351, 0.904351, 0, 1)
-emission_energy_multiplier = 0.61
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_panel"]
+render_priority = 0
+shader = ExtResource("2_shd")
+shader_parameter/aspecto = 2.5
 
 [sub_resource type="QuadMesh" id="QuadMesh_dmfhd"]
-material = SubResource("StandardMaterial3D_edyjv")
+material = SubResource("ShaderMaterial_panel")
 size = Vector2(5, 2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_t607p"]
 size = Vector3(5, 2, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_madera"]
+albedo_color = Color(0.48, 0.31, 0.17, 1)
+roughness = 0.85
+
 [sub_resource type="CylinderMesh" id="CylinderMesh_cu3ey"]
-top_radius = 0.3
-bottom_radius = 0.3
+material = SubResource("StandardMaterial3D_madera")
+top_radius = 0.26
+bottom_radius = 0.32
+height = 2.3
+radial_segments = 10
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_poste"]
+material = SubResource("StandardMaterial3D_madera")
+top_radius = 0.14
+bottom_radius = 0.18
+height = 2.2
+radial_segments = 8
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oro"]
+albedo_color = Color(1, 0.76, 0.22, 1)
+roughness = 0.35
+emission_enabled = true
+emission = Color(1, 0.7, 0.2, 1)
+emission_energy_multiplier = 0.25
+
+[sub_resource type="SphereMesh" id="SphereMesh_remate"]
+material = SubResource("StandardMaterial3D_oro")
+radius = 0.36
+height = 0.72
+radial_segments = 12
+rings = 6
+
+[sub_resource type="SphereMesh" id="SphereMesh_remate_poste"]
+material = SubResource("StandardMaterial3D_oro")
+radius = 0.22
+height = 0.44
+radial_segments = 10
+rings = 5
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_cuna"]
 points = PackedVector3Array(0, -1, 0.6, 0, 1, 0.6, 0.3, -1, 0, 0.3, 1, 0, -0.3, -1, 0, -0.3, 1, 0, 0.3, -1, -0.9, 0.3, 1, -0.9, -0.3, -1, -0.9, -0.3, 1, -0.9)
@@ -27,54 +65,109 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 script = ExtResource("1_5hh6m")
 
 [node name="left_mesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 1.05, 0)
+cast_shadow = 0
 mesh = SubResource("QuadMesh_dmfhd")
 
+[node name="left_titulo" type="Label3D" parent="left_mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0.04)
+cast_shadow = 0
+render_priority = 1
+outline_render_priority = 0
+modulate = Color(1, 1, 1, 1)
+outline_modulate = Color(0.08, 0.06, 0.12, 0.85)
+text = "DAMAGE"
+font = ExtResource("3_fnt")
+font_size = 58
+outline_size = 18
+
 [node name="left_label" type="Label3D" parent="left_mesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0350037)
-modulate = Color(0, 0, 0, 1)
-outline_modulate = Color(1, 1, 1, 1)
-text = "Texto1"
-font_size = 100
-outline_size = 20
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.22, 0.04)
+cast_shadow = 0
+render_priority = 1
+outline_render_priority = 0
+modulate = Color(1, 1, 1, 1)
+outline_modulate = Color(0.08, 0.06, 0.12, 0.85)
+text = "+1"
+font = ExtResource("3_fnt")
+font_size = 150
+outline_size = 26
 
 [node name="left_area" type="Area3D" parent="left_mesh"]
 
 [node name="left_collision" type="CollisionShape3D" parent="left_mesh/left_area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, -0.4)
 shape = SubResource("BoxShape3D_t607p")
 
 [node name="right_mesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 1.05, 0)
+cast_shadow = 0
 mesh = SubResource("QuadMesh_dmfhd")
 
+[node name="right_titulo" type="Label3D" parent="right_mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0.04)
+cast_shadow = 0
+render_priority = 1
+outline_render_priority = 0
+modulate = Color(1, 1, 1, 1)
+outline_modulate = Color(0.08, 0.06, 0.12, 0.85)
+text = "RANGE"
+font = ExtResource("3_fnt")
+font_size = 58
+outline_size = 18
+
 [node name="right_label" type="Label3D" parent="right_mesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0350037)
-modulate = Color(0, 0, 0, 1)
-outline_modulate = Color(1, 1, 1, 1)
-text = "Texto2"
-font_size = 100
-outline_size = 20
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.22, 0.04)
+cast_shadow = 0
+render_priority = 1
+outline_render_priority = 0
+modulate = Color(1, 1, 1, 1)
+outline_modulate = Color(0.08, 0.06, 0.12, 0.85)
+text = "+3 m"
+font = ExtResource("3_fnt")
+font_size = 150
+outline_size = 26
 
 [node name="right_area" type="Area3D" parent="right_mesh"]
 
 [node name="right_collision" type="CollisionShape3D" parent="right_mesh/right_area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, -0.4)
 shape = SubResource("BoxShape3D_t607p")
 
 [node name="pilon_central" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0)
 mesh = SubResource("CylinderMesh_cu3ey")
 
+[node name="remate" type="MeshInstance3D" parent="pilon_central"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+mesh = SubResource("SphereMesh_remate")
+
 [node name="StaticBody3D" type="StaticBody3D" parent="pilon_central"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
 collision_layer = 8
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="pilon_central/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_cuna")
 
+[node name="poste_izq" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.45, 1.1, 0)
+mesh = SubResource("CylinderMesh_poste")
+
+[node name="remate" type="MeshInstance3D" parent="poste_izq"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+mesh = SubResource("SphereMesh_remate_poste")
+
+[node name="poste_der" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.45, 1.1, 0)
+mesh = SubResource("CylinderMesh_poste")
+
+[node name="remate" type="MeshInstance3D" parent="poste_der"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+mesh = SubResource("SphereMesh_remate_poste")
+
 [node name="VisibleOnScreenEnabler3D" type="VisibleOnScreenEnabler3D" parent="."]
-transform = Transform3D(10, 0, 0, 0, 2, 0, 0, 0, 1, 0, 1.06514, 0)
+transform = Transform3D(11.5, 0, 0, 0, 2.5, 0, 0, 0, 1, 0, 1.2, 0)
 
 [connection signal="body_entered" from="left_mesh/left_area" to="." method="_on_left_area_body_entered"]
 [connection signal="body_entered" from="right_mesh/right_area" to="." method="_on_right_area_body_entered"]

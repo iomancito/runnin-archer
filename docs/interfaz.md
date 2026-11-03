@@ -54,7 +54,7 @@ Componentes reutilizables en `scenes/gui/components/`: `gold_pill.tscn` (oro con
 
 - "+N" dorado flotante al matar (`Enemy.popup_texto`), "-N" rojo al recibir golpes del boss.
 - Número de vida de cada enemigo coloreado según si lo puedes matar.
-- Las puertas muestran el valor de la mejora ("Damage +1").
+- **Puertas de mejora** (`scenes/pickups/panel/`): dos paneles de energía translúcidos (shader `panel.gdshader`: borde claro y rayas que suben, sin luz) con el nombre de la mejora y su valor en grande (Nunito Black), entre postes de madera con remate dorado. El color depende de la mejora (`PanelSkills.COLORES`, solo visual; los textos y valores siguen en `Balance.PUERTAS`) y va por instancia (`instance uniform`), así todas comparten material. El texto va centrado en cada panel y se encoge si no cabe (`ANCHO_TEXTO`). Al cogerla, el panel elegido destella en blanco y crece y los dos se desvanecen (`ANIM_COGER`).
 
 ## Pantalla de inicio e icono
 
