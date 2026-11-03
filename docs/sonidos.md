@@ -5,7 +5,7 @@ Autoload `Sonidos` ([`scripts/sonidos.gd`](../scripts/sonidos.gd)): `Sonidos.toc
 - Un `AudioStreamPlayer` por efecto, sin posición 3D (la cámara va pegada al player), con `max_polyphony` = voces y un `AudioStreamRandomizer` que elige variante y varía el tono.
 - `intervalo`: segundos mínimos entre dos del mismo efecto. Evita la avalancha de disparos, impactos, bajas y monedas en las hordas.
 - Los de partida solo suenan con `Sonidos.en_partida` (lo pone `main.gd` al empezar y acabar la partida): así no suenan los precalentados de la carga ni de la tienda. Los de interfaz (`"interfaz": true`) suenan siempre, también en pausa.
-- Todos los botones hacen clic sin conectar nada: `Sonidos` escucha `node_added`. Los que se llaman `BackButton` suenan a "atrás", y tocar un botón desactivado (sin oro para comprar, dificultad bloqueada) suena a error.
+- Todos los botones hacen clic sin conectar nada: `Sonidos` escucha `node_added` y, al acabar su primer frame, conecta también los que ya existen (al arrancar, Godot mete la escena principal en el árbol **antes** del `_ready` de los autoloads, así que sus botones no pasan por `node_added`). Los que se llaman `BackButton` suenan a "atrás", y tocar un botón desactivado (sin oro para comprar, dificultad bloqueada) suena a error.
 
 ## Lista
 
@@ -29,7 +29,9 @@ Autoload `Sonidos` ([`scripts/sonidos.gd`](../scripts/sonidos.gd)): `Sonidos.toc
 
 ## Generar los sonidos
 
-[`tools/generar_sonidos.py`](../tools/generar_sonidos.py) los sintetiza (numpy y scipy) y escribe `assets/sonidos/*.wav` (mono, 44,1 kHz, normalizados a −1 dBFS; ~1,5 MB, Godot los comprime en QOA al importar). Cada sonido es una función: cuerda pulsada (Karplus-Strong) para el arco, ruido filtrado para golpes, soplidos y explosiones, campanas inarmónicas para monedas y logros, diente de sierra por formantes para los rugidos. Son propios: no hay licencia que cumplir.
+[`tools/generar_sonidos.py`](../tools/generar_sonidos.py) los sintetiza (numpy y scipy) y escribe `assets/sonidos/*.wav` (mono, 44,1 kHz; ~1,5 MB, Godot los comprime en QOA al importar).
+
+**Volumen pensado para el altavoz del móvil**, que casi no reproduce nada por debajo de ~900 Hz: el script normaliza cada sonido a la misma sonoridad medida por encima de 900 Hz (−14 dB, RMS de los 100 ms más fuertes; pico limitado a −1 dBFS) y los sonidos llevan contenido en 1-5 kHz aunque sean graves (clics a 1,8 kHz, chasquido en los impactos, crepitar en explosiones y rocas). La música, medida igual, da ~−25 dB. Con los volúmenes de `EFECTOS`, los clics quedan a ~−17 (por encima de la música), los sonidos constantes (disparo, moneda) a ~−22/−24 y los grandes momentos a ~−14. Cada sonido es una función: cuerda pulsada (Karplus-Strong) para el arco, ruido filtrado para golpes, soplidos y explosiones, campanas inarmónicas para monedas y logros, diente de sierra por formantes para los rugidos. Son propios: no hay licencia que cumplir.
 
 ## Ajustar o añadir
 

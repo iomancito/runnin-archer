@@ -5,7 +5,10 @@ Uso: python3 tools/generar_sonidos.py   -> escribe assets/sonidos/<nombre>.wav (
 
 Cada sonido es una función que devuelve un array de muestras; las variantes (_1, _2...) cambian la
 semilla y algún parámetro para que los sonidos repetidos (disparo, impacto...) no suenen idénticos.
-El volumen relativo entre sonidos se ajusta en el juego (Sonidos.EFECTOS), aquí se normaliza a -1 dBFS.
+Todos se normalizan a la misma sonoridad en un altavoz de móvil (SONORIDAD: RMS de los 100 ms más
+fuertes tras quitar lo que hay por debajo de 900 Hz, que ese altavoz casi no reproduce), con el pico
+limitado a -1 dBFS. Así el volumen de cada uno en Sonidos.EFECTOS (dB) es relativo y comparable.
+La música (assets/musica) da unos -25 dB medidos igual.
 """
 import os
 import numpy as np
@@ -13,6 +16,9 @@ from scipy import signal
 from scipy.io import wavfile
 
 SR = 44100
+#sonoridad objetivo en el altavoz del móvil (dBFS) y ganancia máxima para llegar a ella
+SONORIDAD = -14.0
+GANANCIA_MAX_DB = 18.0
 DESTINO = os.path.join(os.path.dirname(__file__), "..", "assets", "sonidos")
 rng = np.random.default_rng(1)
 
@@ -125,10 +131,29 @@ def guarda(nombre, x):
     f = min(len(x) // 4, int(SR * 0.003))
     x[:f] *= np.linspace(0, 1, f)
     x[-f:] *= np.linspace(1, 0, f)
-    pico = np.max(np.abs(x)) + 1e-9
-    x = x / pico * 10 ** (-1 / 20)
+    x = x / (np.max(np.abs(x)) + 1e-9)
+    ganancia = min(SONORIDAD - sonoridad_movil(x), GANANCIA_MAX_DB)
+    x = limita(x * 10 ** (ganancia / 20))
     wavfile.write(os.path.join(DESTINO, nombre + ".wav"), SR, (x * 32767).astype(np.int16))
-    print(f"{nombre:22s} {len(x) / SR:5.2f} s")
+    print(f"{nombre:22s} {len(x) / SR:5.2f} s  sonoridad {sonoridad_movil(x):6.1f} dB")
+
+def sonoridad_movil(x):
+    """RMS (dB) de los 100 ms más fuertes de lo que suena en un altavoz de móvil (>900 Hz)"""
+    y = filtro(x, "highpass", 900)
+    v = int(SR * 0.1)
+    if len(y) <= v:
+        return 10 * np.log10(np.sum(y ** 2) / v + 1e-12)
+    energia = np.convolve(y ** 2, np.ones(v) / v, mode="valid")
+    return 10 * np.log10(np.max(energia) + 1e-12)
+
+def limita(x, techo=10 ** (-1 / 20)):
+    """limitador suave: por debajo del 70 % del techo no toca nada"""
+    rodilla = techo * 0.7
+    y = x.copy()
+    m = np.abs(x) > rodilla
+    exceso = np.abs(x[m]) - rodilla
+    y[m] = np.sign(x[m]) * (rodilla + (techo - rodilla) * np.tanh(exceso / (techo - rodilla)))
+    return y
 
 
 # ---------- partida ----------
@@ -149,8 +174,10 @@ def impacto(var):
     dur = 0.14
     grave = tono([150, 135, 165][var], 55, dur) * env(dur, 0.001, curva=7)
     seco = filtro(ruido(0.05), "bandpass", [400, 2200]) * env(0.05, 0.0005, curva=8) * 0.8
-    chasquido = filtro(ruido(0.008), "highpass", 3000) * env(0.008, 0.0003, curva=5) * 0.4
-    return mezcla(grave, seco, chasquido)
+    #el "zas" de la flecha al clavarse: lo que se oye en el altavoz del móvil
+    zas = filtro(ruido(0.045), "bandpass", [1200, 4500]) * env(0.045, 0.0005, curva=7) * 0.9
+    chasquido = filtro(ruido(0.008), "highpass", 3000) * env(0.008, 0.0003, curva=5) * 0.5
+    return mezcla(grave * 0.35, seco * 0.8, zas, chasquido)
 
 def muerte(var):
     """enemigo que cae: soplo descendente con golpe grave"""
@@ -179,16 +206,18 @@ def daño():
     """golpe al jugador: impacto grave sucio"""
     dur = 0.3
     grave = tono(95, 38, dur) * env(dur, 0.001, curva=6)
-    crujido = satura(filtro(ruido(0.12), "lowpass", 1400) * env(0.12, 0.001, curva=6), 3) * 0.6
+    crujido = satura(filtro(ruido(0.12), "bandpass", [600, 3500]) * env(0.12, 0.001, curva=6), 3) * 0.7
     queja = filtro(tono(260, 150, 0.18, "saw"), "lowpass", 1200) * env(0.18, 0.01, curva=4) * 0.35
-    return mezcla(grave, crujido, queja)
+    return mezcla(grave * 0.5, crujido, queja)
 
 def muerte_jugador():
     """tono que se hunde con vibrato y golpe final"""
     dur = 1.1
     tt = t(dur)
-    f = 440 * (110 / 440) ** (tt / dur) * (1 + 0.03 * np.sin(2 * np.pi * 7 * tt))
-    voz = filtro(np.sin(2 * np.pi * np.cumsum(f) / SR) + 0.4 * tono(1, 1, dur, "tri"), "lowpass", 2000)
+    f = 660 * (165 / 660) ** (tt / dur) * (1 + 0.03 * np.sin(2 * np.pi * 7 * tt))
+    fase = 2 * np.pi * np.cumsum(f) / SR
+    #diente de sierra suavizado: sus armónicos llevan el tono al altavoz del móvil
+    voz = filtro(2 * ((fase / (2 * np.pi)) % 1) - 1, "lowpass", 3500)
     voz *= env(dur, 0.01, curva=2.5)
     golpe = tono(90, 35, 0.4) * env(0.4, 0.001, curva=5)
     return mezcla(voz * 0.7, retrasa(golpe, 0.0) * 0.8, retrasa(daño() * 0.5, 0.0))
@@ -199,7 +228,8 @@ def explosion(var):
     cuerpo = filtro_barrido(ruido_marron(dur) + 0.3 * ruido(dur), 4000, 150) * env(dur, 0.003, curva=4.5)
     sub = tono(70, 28, dur) * env(dur, 0.002, curva=5) * 0.9
     chasquido = filtro(ruido(0.03), "highpass", 1500) * env(0.03, 0.0005, curva=5) * 0.6
-    return satura(mezcla(cuerpo, sub, chasquido), 1.8)
+    chisporroteo = filtro(ruido(dur), "bandpass", [1200, 5000]) * env(dur, 0.002, curva=7) * 0.35
+    return satura(mezcla(cuerpo, sub, chasquido, chisporroteo), 1.8)
 
 def rayo():
     """chispazo eléctrico: crepitar entrecortado y zumbido"""
@@ -251,7 +281,7 @@ def salpicadura():
 def piedra():
     """lanzamiento pesado: soplido grave"""
     dur = 0.45
-    soplo = filtro(filtro_barrido(ruido(dur), 300, 900, "lowpass"), "highpass", 120)
+    soplo = filtro(filtro_barrido(ruido(dur), 500, 2000, "lowpass"), "highpass", 150)
     return soplo * env(dur, 0.15, curva=4)
 
 def golpe_piedra():
@@ -259,8 +289,11 @@ def golpe_piedra():
     dur = 0.55
     retumbo = tono(65, 30, dur) * env(dur, 0.001, curva=5)
     tierra = filtro(ruido_marron(dur), "lowpass", 600) * env(dur, 0.002, curva=5) * 0.8
-    crujido = filtro(ruido(0.06), "bandpass", [800, 3500]) * env(0.06, 0.0005, curva=6) * 0.5
-    return satura(mezcla(retumbo, tierra, crujido), 1.5)
+    crujido = filtro(ruido(0.06), "bandpass", [800, 3500]) * env(0.06, 0.0005, curva=6) * 0.7
+    #grava que salta: crepitar entrecortado
+    salto = (rng.uniform(0, 1, int(SR * dur) // 300 + 1) > 0.6).repeat(300)[:int(SR * dur)]
+    grava = filtro(ruido(dur), "bandpass", [1000, 4500]) * salto * env(dur, 0.002, curva=6) * 0.4
+    return satura(mezcla(retumbo * 0.45, tierra * 0.5, crujido, grava * 1.3), 1.5)
 
 def impacto_magia():
     """estallido mágico: destello agudo con campanas"""
@@ -295,18 +328,19 @@ def muerte_boss():
 
 # ---------- interfaz ----------
 
+def toque(f, dur=0.09):
+    """toque de madera: tono que baja un poco, su octava y un chasquido de ataque"""
+    return mezcla(tono(f, f * 0.85, dur) * env(dur, 0.0005, curva=8),
+                  tono(f * 2, f * 1.7, dur) * env(dur, 0.0005, curva=11) * 0.45,
+                  filtro(ruido(0.01), "bandpass", [2000, 7000]) * env(0.01, 0.0002, curva=4) * 0.5)
+
 def click():
-    """botón: toque de madera corto"""
-    dur = 0.06
-    return mezcla(tono(1100, 900, dur) * env(dur, 0.0005, curva=9),
-                  tono(2300, 2000, dur) * env(dur, 0.0005, curva=12) * 0.3,
-                  filtro(ruido(0.006), "highpass", 3000) * env(0.006, 0.0002, curva=4) * 0.3)
+    """botón: toque corto y brillante (1,5-4 kHz: el altavoz del móvil no da graves)"""
+    return toque(1800)
 
 def atras():
     """volver: dos toques descendentes"""
-    a = tono(900, 750, 0.05) * env(0.05, 0.0005, curva=9)
-    b = tono(650, 520, 0.07) * env(0.07, 0.0005, curva=8)
-    return mezcla(a, retrasa(b, 0.05))
+    return mezcla(toque(1700, 0.07), retrasa(toque(1250), 0.06))
 
 def compra():
     """compra: monedas que caen y campanilla"""
@@ -317,7 +351,7 @@ def compra():
 
 def error():
     """sin oro: zumbido doble"""
-    zumbido = filtro(tono(196, 196, 0.12, "sq") + tono(208, 208, 0.12, "sq"), "lowpass", 1500) * env(0.12, 0.003, curva=2)
+    zumbido = filtro(tono(196, 196, 0.12, "sq") + tono(208, 208, 0.12, "sq"), "lowpass", 3500) * env(0.12, 0.003, curva=2)
     return mezcla(zumbido * 0.5, retrasa(zumbido * 0.5, 0.15))
 
 def logro():
