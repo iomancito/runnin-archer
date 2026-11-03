@@ -8,6 +8,21 @@ El dragón negro (boss del mapa 2) tiene licencia **CC BY-NC 4.0**, que prohíbe
 
 > **Si algún día se quiere monetizar**, antes hay que sustituir el dragón negro o comprarle una licencia comercial a su autor (3DHaupt, [3dhaupt.com](http://3dhaupt.com)), y revisar que el resto de licencias lo permiten (ver [licencias.md](licencias.md)). El plan anterior con AdMob y "Remove Ads" está en el historial de git de este archivo.
 
+## Estado actual (03-11-2026) y próximos pasos
+
+Trabajo en la rama `licencias-publicacion` (subida a `origin`, último commit `d628ea1`; aún sin fusionar en `master`).
+
+Hecho el 03-11-2026:
+- Licencias: todo confirmado (música Suno con plan de pago; splash, logo e iconos de ChatGPT). La hierba del mapa 1, de origen desconocido, se cambió por **Grass004 de ambientCG** (CC0) y se añadió `assets/textures/terrain/license.txt`.
+- Política de privacidad publicada en GitHub Pages (rama `gh-pages`).
+
+Siguiente sesión, por orden:
+1. **Probar la hierba nueva en el móvil** (APK de depuración en `/tmp/RunningArcher.apk`; si ya no está, volver a exportarlo). Tiene un detalle más fino que la anterior: si se ve como ruido o demasiado lisa, ajustar `uv1_scale` del material del suelo en `scenes/mapas/mapa1.tscn` (ahora `1.5, 1010`). El material tiene emisión anaranjada que tiñe el color.
+2. Repasar textos en inglés, icono, splash y créditos (último punto de la fase 0).
+3. **Fase 1**: abrir la cuenta de Play Console y empezar a reunir testers (lo que más tarda: 14 días de prueba cerrada).
+4. **Fase 2** (preset Android en `export_presets.cfg`, hoy sin tocar): `gradle_build/use_gradle_build=true` + plantilla de Android instalada, `gradle_build/export_format=1` (AAB), `version/name="1.0.0"` (ahora vacío), crear la *upload key* fuera del repo, medir el AAB (el APK de depuración pesa 118 MB).
+5. Fusionar `licencias-publicacion` en `master`.
+
 ## Fase 0 — Bloqueos que hay que resolver antes de publicar nada
 
 - [x] Dragón rojo sustituido por "Red Dragon 3D" (CC BY 4.0).
