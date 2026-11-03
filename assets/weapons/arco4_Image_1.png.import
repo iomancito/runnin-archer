@@ -3,9 +3,11 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b4y2eq4ynilb4"
-path="res://.godot/imported/arco4_Image_1.png-7d3e1531cc2ce955d5128e61c42c8edf.ctex"
+path.s3tc="res://.godot/imported/arco4_Image_1.png-7d3e1531cc2ce955d5128e61c42c8edf.s3tc.ctex"
+path.etc2="res://.godot/imported/arco4_Image_1.png-7d3e1531cc2ce955d5128e61c42c8edf.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "bfc3160f12b11d322c42e6a948a8b2da"
@@ -14,11 +16,11 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/weapons/arco4_Image_1.png"
-dest_files=["res://.godot/imported/arco4_Image_1.png-7d3e1531cc2ce955d5128e61c42c8edf.ctex"]
+dest_files=["res://.godot/imported/arco4_Image_1.png-7d3e1531cc2ce955d5128e61c42c8edf.s3tc.ctex", "res://.godot/imported/arco4_Image_1.png-7d3e1531cc2ce955d5128e61c42c8edf.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +42,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0
